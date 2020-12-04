@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-12-04T05:43:28.568Z</updated>
+  <updated>2020-12-04T13:04:59.836Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>zhe dream&#39;s begin</title>
+    <link href="http://example.com/2020/12/04/zhe-dream-s-begin/"/>
+    <id>http://example.com/2020/12/04/zhe-dream-s-begin/</id>
+    <published>2020-12-04T12:20:20.000Z</published>
+    <updated>2020-12-04T13:04:59.836Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">今天才把博客弄好！！！以后请多多指教了（弄的还凑合把😄）！！！</span><br><span class="line">本来打算寒假弄呢！可以最近不想做题了！</span><br><span class="line">有点累！又加上有女朋友了！超级开心！！！加油！</span><br><span class="line">以后这里将是我学习和生活分享的地方！！！</span><br><span class="line">加油，tcy!</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">开始每天写博客学习了！加油！</summary>
+    
+    
+    
+    <category term="加油！！" scheme="http://example.com/categories/%E5%8A%A0%E6%B2%B9%EF%BC%81%EF%BC%81/"/>
+    
+    
+    <category term="热爱" scheme="http://example.com/tags/%E7%83%AD%E7%88%B1/"/>
+    
+  </entry>
   
   <entry>
     <title>My New Post</title>
