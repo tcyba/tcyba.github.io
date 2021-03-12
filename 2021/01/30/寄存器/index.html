@@ -1,0 +1,429 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>寄存器 | Tcy👦♥QQ👧</title><meta name="author" content="uploads"><meta name="copyright" content="uploads"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="CPU内部工作(内部通信) 外部有总线和网卡什么的相连！ 内部也有线！ 寄存器(CPU) 通用寄存器X86  16位寄存器   怎么兼容8位寄存器 AH high高填0 AL low 低填正常的8位  字 1个字是两个字节！ 一个字节是8位！ 进制转换calc 111 –》 是0到7 所以二进制转8进制   每次看3位就可以了！ 1111 –》 是0到15    所以每次看4位就可以了！ 1111">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寄存器">
+<meta property="og:url" content="https://tanchiyu.top/2021/01/30/%E5%AF%84%E5%AD%98%E5%99%A8/index.html">
+<meta property="og:site_name" content="Tcy👦♥QQ👧">
+<meta property="og:description" content="CPU内部工作(内部通信) 外部有总线和网卡什么的相连！ 内部也有线！ 寄存器(CPU) 通用寄存器X86  16位寄存器   怎么兼容8位寄存器 AH high高填0 AL low 低填正常的8位  字 1个字是两个字节！ 一个字节是8位！ 进制转换calc 111 –》 是0到7 所以二进制转8进制   每次看3位就可以了！ 1111 –》 是0到15    所以每次看4位就可以了！ 1111">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tanchiyu.top/image/ttt.jpg">
+<meta property="article:published_time" content="2021-01-30T08:51:37.000Z">
+<meta property="article:modified_time" content="2021-01-31T09:00:30.966Z">
+<meta property="article:author" content="uploads">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tanchiyu.top/image/ttt.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="https://tanchiyu.top/2021/01/30/%E5%AF%84%E5%AD%98%E5%99%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-01-31 17:00:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Tcy👦♥QQ👧" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tcy👦♥QQ👧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">寄存器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-30T08:51:37.000Z" title="发表于 2021-01-30 16:51:37">2021-01-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-01-31T09:00:30.966Z" title="更新于 2021-01-31 17:00:30">2021-01-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6/">二进制</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">448</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="CPU内部工作-内部通信"><a href="#CPU内部工作-内部通信" class="headerlink" title="CPU内部工作(内部通信)"></a>CPU内部工作(内部通信)</h1><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130165524982.png" alt="image-20210130165524982"></p>
+<p>外部有总线和网卡什么的相连！</p>
+<p>内部也有线！</p>
+<h2 id="寄存器-CPU"><a href="#寄存器-CPU" class="headerlink" title="寄存器(CPU)"></a>寄存器(CPU)</h2><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130170603859.png" alt="image-20210130170603859"></p>
+<h3 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h3><h4 id="X86-16位寄存器"><a href="#X86-16位寄存器" class="headerlink" title="X86  16位寄存器"></a>X86  16位寄存器</h4><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130171013363.png" alt="image-20210130171013363"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130171221497.png" alt="image-20210130171221497"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130171621768.png" alt="image-20210130171621768"></p>
+<h4 id="怎么兼容8位寄存器"><a href="#怎么兼容8位寄存器" class="headerlink" title="怎么兼容8位寄存器"></a>怎么兼容8位寄存器</h4><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130172134508.png" alt="image-20210130172134508"></p>
+<p>AH high高填0</p>
+<p>AL low 低填正常的8位</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130172538044.png" alt="image-20210130172538044"></p>
+<h3 id="字"><a href="#字" class="headerlink" title="字"></a>字</h3><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130172830793.png" alt="image-20210130172830793"></p>
+<p>1个字是两个字节！</p>
+<p>一个字节是8位！</p>
+<h4 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h4><p>calc</p>
+<p>111 –》 是0到7</p>
+<p>所以二进制转8进制   每次看3位就可以了！</p>
+<p>1111 –》 是0到15    所以每次看4位就可以了！</p>
+<p>1111 转换8进制   先看成3的倍数！ 001 111    就是 17 </p>
+<p>1111 转成16进制   先写出4的倍数   0000 1111  0F–》F</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130174439860.png" alt="image-20210130174439860"></p>
+<h3 id="汇编指令"><a href="#汇编指令" class="headerlink" title="汇编指令"></a>汇编指令</h3><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130173619649.png" alt="image-20210130173619649"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130175007748.png" alt="image-20210130175007748"></p>
+<p>最后AX是1044C 寄存器最多存16位！</p>
+<p>最后AX里是044CH！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130175346991.png" alt="image-20210130175346991"></p>
+<p>AL是8位的！所以 最后应该是0058H  </p>
+<p>AH和AL 不能相加！</p>
+<h4 id="丢弃的位去哪了！"><a href="#丢弃的位去哪了！" class="headerlink" title="丢弃的位去哪了！"></a>丢弃的位去哪了！</h4><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130175534550.png" alt="image-20210130175534550"></p>
+<h3 id="物理地址-存储单元的地址"><a href="#物理地址-存储单元的地址" class="headerlink" title="物理地址(存储单元的地址)"></a>物理地址(存储单元的地址)</h3><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130182320532.png" alt="image-20210130182320532"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130182454565.png" alt="image-20210130182454565"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130184004794.png" alt="image-20210130184004794"></p>
+<p>个人理解：</p>
+<p>这里16位是16位字节</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130195658007.png" alt="image-20210130195658007"></p>
+<h4 id="怎么加的呢？"><a href="#怎么加的呢？" class="headerlink" title="怎么加的呢？"></a>怎么加的呢？</h4><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130195750941.png" alt="image-20210130195750941"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130195814533.png" alt="image-20210130195814533"></p>
+<p>段地址左移1位      2进制的话！左移4位！</p>
+<p>CPU规定了组合的方式！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130200025600.png" alt="image-20210130200025600"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130200209752.png" alt="image-20210130200209752"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130195451902.png" alt="image-20210130195451902"></p>
+<h3 id="段"><a href="#段" class="headerlink" title="段"></a>段</h3><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130200742073.png" alt="image-20210130200742073"></p>
+<p>2^16=64k这个是没有问题的，16跟地du址线能够表zhi示64K种状态，这个每一种dao状态表示内存里的的一zhuan块区域，这里shu的这块区域应该指的的字节（B），我们要知道应该是某个字节所在的位置，而不是位（b）。所以64K指的是字节，即64KB。</p>
+<p>大概啥意思呢？</p>
+<p>就是寻址能力的16位！</p>
+<p>寻址是寻的 字节(B)！不是位数(b)！</p>
+<p>2 16次方  = 64 KB  </p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130203316664.png" alt="image-20210130203316664"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130203607797.png" alt="image-20210130203607797"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130203921958.png" alt="image-20210130203921958"></p>
+<p>CPU只看物理地址!它不管段地址和偏移地址！</p>
+<h3 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h3><p>8086外部提供20位的！</p>
+<p>内部通过段地址和偏移地址 来提供20位！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130205326672.png" alt="image-20210130205326672"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130210614648.png" alt="image-20210130210614648"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130211307163.png" alt="image-20210130211307163"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130211430485.png" alt="image-20210130211430485"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130211654120.png" alt="image-20210130211654120"></p>
+<p>就感觉CS和IP是段地址和偏移地址！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130210945549.png" alt="image-20210130210945549"></p>
+<h4 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h4><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130212316058.png" alt="image-20210130212316058"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130212402193.png" alt="image-20210130212402193"></p>
+<h3 id="代码段"><a href="#代码段" class="headerlink" title="代码段"></a>代码段</h3><h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210130221823184.png" alt="image-20210130221823184"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">uploads</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://tanchiyu.top/2021/01/30/%E5%AF%84%E5%AD%98%E5%99%A8/">https://tanchiyu.top/2021/01/30/%E5%AF%84%E5%AD%98%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://tanchiyu.top" target="_blank">Tcy👦♥QQ👧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/image/ttt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/01/31/HGAME/"><img class="prev-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">HGAME</div></div></a></div><div class="next-post pull-right"><a href="/2021/01/30/BUUCTF-20/"><img class="next-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BUUCTF</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">uploads</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CPU%E5%86%85%E9%83%A8%E5%B7%A5%E4%BD%9C-%E5%86%85%E9%83%A8%E9%80%9A%E4%BF%A1"><span class="toc-number">1.</span> <span class="toc-text">CPU内部工作(内部通信)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8-CPU"><span class="toc-number">1.1.</span> <span class="toc-text">寄存器(CPU)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">通用寄存器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#X86-16%E4%BD%8D%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">X86  16位寄存器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%85%BC%E5%AE%B98%E4%BD%8D%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">怎么兼容8位寄存器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97"><span class="toc-number">1.1.2.</span> <span class="toc-text">字</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">进制转换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4"><span class="toc-number">1.1.3.</span> <span class="toc-text">汇编指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A2%E5%BC%83%E7%9A%84%E4%BD%8D%E5%8E%BB%E5%93%AA%E4%BA%86%EF%BC%81"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">丢弃的位去哪了！</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80-%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83%E7%9A%84%E5%9C%B0%E5%9D%80"><span class="toc-number">1.1.4.</span> <span class="toc-text">物理地址(存储单元的地址)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%8A%A0%E7%9A%84%E5%91%A2%EF%BC%9F"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">怎么加的呢？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AE%B5"><span class="toc-number">1.1.5.</span> <span class="toc-text">段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.1.6.</span> <span class="toc-text">段寄存器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.1.6.1.</span> <span class="toc-text">例题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%AE%B5"><span class="toc-number">1.1.7.</span> <span class="toc-text">代码段</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C"><span class="toc-number">2.</span> <span class="toc-text">实验</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hackme靶场"/></a><div class="content"><a class="title" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场">hackme靶场</a><time datetime="2021-02-06T13:26:18.000Z" title="发表于 2021-02-06 21:26:18">2021-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Pikachu靶场"/></a><div class="content"><a class="title" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场">Pikachu靶场</a><time datetime="2021-02-05T06:35:59.000Z" title="发表于 2021-02-05 14:35:59">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具学习"/></a><div class="content"><a class="title" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习">工具学习</a><time datetime="2021-02-05T03:48:26.000Z" title="发表于 2021-02-05 11:48:26">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/02/BUUCTF-22/" title="无题"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2021/02/02/BUUCTF-22/" title="无题">无题</a><time datetime="2021-02-02T03:00:17.000Z" title="发表于 2021-02-02 11:00:17">2021-02-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUCTF21"/></a><div class="content"><a class="title" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21">BUUCTF21</a><time datetime="2021-02-01T06:14:07.000Z" title="发表于 2021-02-01 14:14:07">2021-02-01</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By uploads</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://tanchiyu.top/2021/01/30/%E5%AF%84%E5%AD%98%E5%99%A8/'
+    this.page.identifier = '2021/01/30/寄存器/'
+    this.page.title = '寄存器'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

