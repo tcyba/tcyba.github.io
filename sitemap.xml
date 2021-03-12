@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tanchiyu.top/2021/02/02/BUUCTF-22/</loc>
+    
+    <lastmod>2021-03-12</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://tanchiyu.top/2021/01/05/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/</loc>
     
     <lastmod>2021-03-12</lastmod>
@@ -75,13 +82,6 @@
     <loc>https://tanchiyu.top/about/index.html</loc>
     
     <lastmod>2021-03-11</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://tanchiyu.top/2021/02/02/BUUCTF-22/</loc>
-    
-    <lastmod>2021-03-07</lastmod>
     
   </url>
   
