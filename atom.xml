@@ -6,7 +6,7 @@
   <link href="http://upload.love/atom.xml" rel="self"/>
   
   <link href="http://upload.love/"/>
-  <updated>2021-07-13T14:07:50.838Z</updated>
+  <updated>2021-07-17T03:25:04.092Z</updated>
   <id>http://upload.love/</id>
   
   <author>
@@ -18,10 +18,29 @@
   
   <entry>
     <title>暑假</title>
+    <link href="http://upload.love/2021/07/17/%E6%9A%91%E5%81%87-2/"/>
+    <id>http://upload.love/2021/07/17/%E6%9A%91%E5%81%87-2/</id>
+    <published>2021-07-17T03:21:04.000Z</published>
+    <updated>2021-07-17T03:25:04.092Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="tp"><a href="#tp" class="headerlink" title="tp"></a>tp</h1><p>学完php没多久 再看看他的框架！ 补习补习！☺☺☺ </p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717112501.png" alt="image-20210717112501223"></p>]]></content>
+    
+    
+    <summary type="html">tp</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>暑假</title>
     <link href="http://upload.love/2021/07/13/%E6%9A%91%E5%81%87-1/"/>
     <id>http://upload.love/2021/07/13/%E6%9A%91%E5%81%87-1/</id>
     <published>2021-07-13T13:51:46.000Z</published>
-    <updated>2021-07-13T14:07:50.838Z</updated>
+    <updated>2021-07-17T03:20:40.257Z</updated>
+    
+    <content type="html"><![CDATA[<p>先记住一句话”一切存在用户输入的地方都有可能存在漏洞”。</p><h1 id="先来看php代码审计吧！"><a href="#先来看php代码审计吧！" class="headerlink" title="先来看php代码审计吧！"></a>先来看php代码审计吧！</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715110925.png" alt="image-20210715110925538"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715200337.png" alt="image-20210715200337194"></p><p>1 直接硬刚！ </p><p>2 直接找关键回溯！  system| eval</p><p>3  根据程序的业务逻辑来审计！</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715200733.png" alt="image-20210715200733417"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715200945.png" alt="image-20210715200945029"></p><h2 id="php配置文件"><a href="#php配置文件" class="headerlink" title="php配置文件"></a>php配置文件</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715201147.png" alt="image-20210715201147636"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715201627.png" alt="image-20210715201626880"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715202020.png" alt="image-20210715202020473"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715202511.png" alt="image-20210715202511105"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203034.png" alt="image-20210715203034733"></p><h2 id="危险函数"><a href="#危险函数" class="headerlink" title="危险函数***"></a>危险函数***</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203531.png" alt="image-20210715203531722"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203657.png" alt="image-20210715203657730"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203728.png" alt="image-20210715203728796"></p><p>上面老师总结的挺全的！😁😁😁</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715204035.png" alt="image-20210715204035135"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715204521.png" alt="image-20210715204520943"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715204845.png" alt="image-20210715204844946"></p><h3 id="特殊函数"><a href="#特殊函数" class="headerlink" title="特殊函数"></a>特殊函数</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715205206.png" alt="image-20210715205206757"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715205415.png" alt="image-20210715205415381"></p><p><code>in_arrray</code>是弱比较！😶😑😑  记好了！</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715210235.png" alt="image-20210715210235134"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715211347.png" alt="image-20210715211347760"></p><h2 id="配置phpstorm-xdebug"><a href="#配置phpstorm-xdebug" class="headerlink" title="配置phpstorm+xdebug"></a>配置phpstorm+xdebug</h2><p>这个配置就就算了 不写了！ 网上太多了！现在 都phpstudy都自己带了！</p><p><a href="https://segmentfault.com/q/1010000012452141">php xdebug trace 调试的问题</a></p><p>他这个调试有一个文件！ 可以看整个流程！😁</p><h1 id="top10"><a href="#top10" class="headerlink" title="top10"></a>top10</h1><h2 id="注入攻击"><a href="#注入攻击" class="headerlink" title="注入攻击"></a>注入攻击</h2><h3 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716072116.png" alt="image-20210716072116658"></p><h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><p>把握大局(了解函数功能|知道程序逻辑)+特殊函数定位</p><h3 id="安装漏洞"><a href="#安装漏洞" class="headerlink" title="安装漏洞"></a>安装漏洞</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716073829.png" alt="image-20210716073829729"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716080512.png" alt="image-20210716080512609"></p><h3 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716080604.png" alt="image-20210716080604626"></p><h3 id="xss"><a href="#xss" class="headerlink" title="xss"></a>xss</h3><p>这个漏洞吧！ 我我我不是很会！ 必进js是没咋学过！ 反正有输出的地方就可能有！ 也可能有数据库操作的地方也可能有存储型的xss！</p><h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717093007.png" alt="image-20210717093007246"></p><p>截断现在不咋用了！</p><p>修复漏洞：</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717094824.png" alt="image-20210717094824036"></p><h3 id="任意文件读取"><a href="#任意文件读取" class="headerlink" title="任意文件读取"></a>任意文件读取</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717095436.png" alt="image-20210717095436812"></p><p>ssrf怎么理解呢 就是 file_get_concents 是可以自己读取 http协议的！</p><p>修复的话！因为他这个是在数据库里更改的！只要限制数据库操作就行！</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717102821.png"></p><h3 id="越权操作"><a href="#越权操作" class="headerlink" title="越权操作"></a>越权操作</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717103107.png" alt="image-20210717103106957"></p><h3 id="登录密码爆破"><a href="#登录密码爆破" class="headerlink" title="登录密码爆破"></a>登录密码爆破</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717103929.png" alt="image-20210717103929149"></p><p>np 学到了!</p><p>直接把验证码绕过了！因为验证码和seesion里值做比较！ 所以直接删了session就可以了！</p><p>现在都有知道匹配验证码爆破工具了！ </p><p>修复：</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717104832.png" alt="image-20210717104832066"></p><h3 id="截断注入-二次注入"><a href="#截断注入-二次注入" class="headerlink" title="截断注入 二次注入"></a>截断注入 二次注入</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717104940.png" alt="image-20210717104940820"></p><p>这个嘛！ </p><h1 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">怎么说呢！ </span><br><span class="line"></span><br><span class="line">感觉把 ！就是要多看看项目！cms！ 啥东西看多了！ 就会了！</span><br><span class="line">可能top10，php语言的特性不是很熟悉！ </span><br><span class="line">但慢慢来把！  </span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">现在对代码什么的挺感兴趣的！ </span><br><span class="line">学习把 ！ 你现在处于学习截断 ！你感兴趣啥就学啥最好了！</span><br><span class="line">这个暑假要把自己以前找的好视频都刷一般!!!啦啦啦啦！☺☺☺</span><br></pre></td></tr></table></figure>]]></content>
     
     
     <summary type="html">Welcome to my blog 😁😁😁😁</summary>
@@ -53,9 +72,9 @@
     <link href="http://upload.love/2021/07/12/%E6%9A%91%E5%81%87/"/>
     <id>http://upload.love/2021/07/12/%E6%9A%91%E5%81%87/</id>
     <published>2021-07-12T14:16:45.000Z</published>
-    <updated>2021-07-13T14:04:08.568Z</updated>
+    <updated>2021-07-14T04:20:01.647Z</updated>
     
-    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">今天开个头啥也没干 </span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">那就定个目标！ 我的方向就行 php和java代码审计！ 学学！</span><br><span class="line">有目标了！ 就学吧 ！冲！！！！！ 😁</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>一天不学习，自己知道；两天不学习，朋友知道；三天不学习，老师知道；一周不学习，考试知道</p><p>看大佬的格言！ 冲压！！！！！！😁😁😁😁😁</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">今天开个头啥也没干 </span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">那就定个目标！ 我的方向就行 php和java代码审计！ 学学！</span><br><span class="line">有目标了！ 就学吧 ！冲！！！！！ 😁</span><br></pre></td></tr></table></figure>]]></content>
     
     
     <summary type="html">Welcome to my blog 😁😁😁😁</summary>
@@ -331,23 +350,6 @@
     
     
     <summary type="html">cry3</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>DozerCTF 2021</title>
-    <link href="http://upload.love/2021/05/29/DozerCTF-2021/"/>
-    <id>http://upload.love/2021/05/29/DozerCTF-2021/</id>
-    <published>2021-05-29T11:29:17.000Z</published>
-    <updated>2021-06-04T10:04:42.661Z</updated>
-    
-    <content type="html"><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">  <script id="hbeData" type="hbeData" data-hmacdigest="e99b42e6217580aaa75622ab68ba16e0ec0ee3d3158b7d5e233ff98f590b3e4e">bd3972b2f1d8b4a8c60dbd643b57ed4097e64c42ee0708c735adcbe51889fd174113e5d87d7bae58a3e31f407409826cdb8dcac53a8bf8048c93d57da7fc8bfcfae6b684548b55e897bf6057bf22a556704359c150cd9bfccc78d649678ce0b0906ee3b77b3de1196115d25d0ff3338deffed58e69670e7d9cbc303bdf2b08f9db6a3b3533a8aa092f351c296dae84276f60b05327ebb7d59f9e6debd2375ee4809b676e0a0719a0842ab268096271e2</script>  <div class="hbe hbe-content">    <div class="hbe hbe-input hbe-input-default">      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好, 这里需要密码.</span>      </label>    </div>  </div></div><script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-    
-    
-    <summary type="html">Welcome to my blog 😁😁😁😁</summary>
     
     
     
