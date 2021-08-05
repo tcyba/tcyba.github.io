@@ -6,7 +6,7 @@
   <link href="http://upload.love/atom.xml" rel="self"/>
   
   <link href="http://upload.love/"/>
-  <updated>2021-08-04T16:02:24.721Z</updated>
+  <updated>2021-08-05T02:36:26.681Z</updated>
   <id>http://upload.love/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>BUU WEB PWN</title>
+    <link href="http://upload.love/2021/08/05/BUU-WEB-PWN-1/"/>
+    <id>http://upload.love/2021/08/05/BUU-WEB-PWN-1/</id>
+    <published>2021-08-05T02:33:10.000Z</published>
+    <updated>2021-08-05T02:36:26.681Z</updated>
+    
+    
+    <summary type="html">😶😶😶</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>food</title>
+    <link href="http://upload.love/2021/08/05/food/"/>
+    <id>http://upload.love/2021/08/05/food/</id>
+    <published>2021-08-05T01:34:42.000Z</published>
+    <updated>2021-08-05T02:38:41.796Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="food"><a href="#food" class="headerlink" title="food"></a>food</h1><h2 id="闷鸡腿"><a href="#闷鸡腿" class="headerlink" title="闷鸡腿"></a>闷鸡腿</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210805101114.gif" alt="WeChat_20210805093349"></p><p>奥日 太大还上传不了！哭哭！</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">记录下过程！肉腌不腌都行！</span><br><span class="line">倒入油，把肉炒熟!放入  姜片|料酒|花椒|鸡精|盐|蚝油|老抽|什么料什么的 味及鲜| 最后啤酒汤底</span><br><span class="line">炒熟后 放入土豆|胡萝卜|蒜葱 闷一会！ 水少了再倒入啤酒！😈😈😈😈    </span><br><span class="line">我怕辣！就不放辣椒了！ 弟弟做的！学习一波！</span><br></pre></td></tr></table></figure><h2 id="西红柿鸡蛋就简单了"><a href="#西红柿鸡蛋就简单了" class="headerlink" title="西红柿鸡蛋就简单了"></a>西红柿鸡蛋就简单了</h2><p>注意一点把！鸡蛋任意炒碎！</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">就是把 油烧热后！放入鸡蛋！ 变成鸡蛋饼！小火把！再放入西红柿！把西红柿汁炒出来！ 放入糖|蚝油</span><br></pre></td></tr></table></figure><h2 id="炒肉"><a href="#炒肉" class="headerlink" title="炒肉"></a>炒肉</h2><p>炒肉的化</p><p>记录下腌制过程！</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">把肉洗干净！ 到入料酒|葱姜蒜|盐|鸡精|蚝油|味及鲜|老抽还有什么</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">料酒去腥！ 蚝油 提鲜 |味及鲜 加味 |老抽 可以改善口感和增加色彩</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">腌个10分钟就可以了！ easy</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">配着 黄瓜|冬瓜|胡萝卜|土豆|丝瓜|蒜坦|青菜</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">炒的时候肯定粘锅！没事</span><br></pre></td></tr></table></figure><h2 id="炒面"><a href="#炒面" class="headerlink" title="炒面"></a>炒面</h2><p>这炒面太难的 ！去年在家学 ！最后炒的就吃面了！哈哈哈！</p><p>而且我炒的时候面条粘锅！😶😶😶 笨笨了！太笨了!</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p><p>水了一篇博客😏😏😏😏😏😏😏😏😏😏</p>]]></content>
+    
+    
+    <summary type="html">闷鸡腿</summary>
+    
+    
+    
+    <category term="food" scheme="http://upload.love/categories/food/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>BUU WEB PWN</title>
@@ -313,40 +347,6 @@
     <updated>2021-07-17T03:20:40.257Z</updated>
     
     <content type="html"><![CDATA[<p>先记住一句话”一切存在用户输入的地方都有可能存在漏洞”。</p><h1 id="先来看php代码审计吧！"><a href="#先来看php代码审计吧！" class="headerlink" title="先来看php代码审计吧！"></a>先来看php代码审计吧！</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715110925.png" alt="image-20210715110925538"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715200337.png" alt="image-20210715200337194"></p><p>1 直接硬刚！ </p><p>2 直接找关键回溯！  system| eval</p><p>3  根据程序的业务逻辑来审计！</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715200733.png" alt="image-20210715200733417"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715200945.png" alt="image-20210715200945029"></p><h2 id="php配置文件"><a href="#php配置文件" class="headerlink" title="php配置文件"></a>php配置文件</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715201147.png" alt="image-20210715201147636"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715201627.png" alt="image-20210715201626880"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715202020.png" alt="image-20210715202020473"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715202511.png" alt="image-20210715202511105"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203034.png" alt="image-20210715203034733"></p><h2 id="危险函数"><a href="#危险函数" class="headerlink" title="危险函数***"></a>危险函数***</h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203531.png" alt="image-20210715203531722"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203657.png" alt="image-20210715203657730"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715203728.png" alt="image-20210715203728796"></p><p>上面老师总结的挺全的！😁😁😁</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715204035.png" alt="image-20210715204035135"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715204521.png" alt="image-20210715204520943"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715204845.png" alt="image-20210715204844946"></p><h3 id="特殊函数"><a href="#特殊函数" class="headerlink" title="特殊函数"></a>特殊函数</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715205206.png" alt="image-20210715205206757"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715205415.png" alt="image-20210715205415381"></p><p><code>in_arrray</code>是弱比较！😶😑😑  记好了！</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715210235.png" alt="image-20210715210235134"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210715211347.png" alt="image-20210715211347760"></p><h2 id="配置phpstorm-xdebug"><a href="#配置phpstorm-xdebug" class="headerlink" title="配置phpstorm+xdebug"></a>配置phpstorm+xdebug</h2><p>这个配置就就算了 不写了！ 网上太多了！现在 都phpstudy都自己带了！</p><p><a href="https://segmentfault.com/q/1010000012452141">php xdebug trace 调试的问题</a></p><p>他这个调试有一个文件！ 可以看整个流程！😁</p><h1 id="top10"><a href="#top10" class="headerlink" title="top10"></a>top10</h1><h2 id="注入攻击"><a href="#注入攻击" class="headerlink" title="注入攻击"></a>注入攻击</h2><h3 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716072116.png" alt="image-20210716072116658"></p><h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><p>把握大局(了解函数功能|知道程序逻辑)+特殊函数定位</p><h3 id="安装漏洞"><a href="#安装漏洞" class="headerlink" title="安装漏洞"></a>安装漏洞</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716073829.png" alt="image-20210716073829729"></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716080512.png" alt="image-20210716080512609"></p><h3 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210716080604.png" alt="image-20210716080604626"></p><h3 id="xss"><a href="#xss" class="headerlink" title="xss"></a>xss</h3><p>这个漏洞吧！ 我我我不是很会！ 必进js是没咋学过！ 反正有输出的地方就可能有！ 也可能有数据库操作的地方也可能有存储型的xss！</p><h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717093007.png" alt="image-20210717093007246"></p><p>截断现在不咋用了！</p><p>修复漏洞：</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717094824.png" alt="image-20210717094824036"></p><h3 id="任意文件读取"><a href="#任意文件读取" class="headerlink" title="任意文件读取"></a>任意文件读取</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717095436.png" alt="image-20210717095436812"></p><p>ssrf怎么理解呢 就是 file_get_concents 是可以自己读取 http协议的！</p><p>修复的话！因为他这个是在数据库里更改的！只要限制数据库操作就行！</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717102821.png"></p><h3 id="越权操作"><a href="#越权操作" class="headerlink" title="越权操作"></a>越权操作</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717103107.png" alt="image-20210717103106957"></p><h3 id="登录密码爆破"><a href="#登录密码爆破" class="headerlink" title="登录密码爆破"></a>登录密码爆破</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717103929.png" alt="image-20210717103929149"></p><p>np 学到了!</p><p>直接把验证码绕过了！因为验证码和seesion里值做比较！ 所以直接删了session就可以了！</p><p>现在都有知道匹配验证码爆破工具了！ </p><p>修复：</p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717104832.png" alt="image-20210717104832066"></p><h3 id="截断注入-二次注入"><a href="#截断注入-二次注入" class="headerlink" title="截断注入 二次注入"></a>截断注入 二次注入</h3><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210717104940.png" alt="image-20210717104940820"></p><p>这个嘛！ </p><h1 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">怎么说呢！ </span><br><span class="line"></span><br><span class="line">感觉把 ！就是要多看看项目！cms！ 啥东西看多了！ 就会了！</span><br><span class="line">可能top10，php语言的特性不是很熟悉！ </span><br><span class="line">但慢慢来把！  </span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">现在对代码什么的挺感兴趣的！ </span><br><span class="line">学习把 ！ 你现在处于学习截断 ！你感兴趣啥就学啥最好了！</span><br><span class="line">这个暑假要把自己以前找的好视频都刷一般!!!啦啦啦啦！☺☺☺</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">Welcome to my blog 😁😁😁😁</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>upload&#39;s 小秘密</title>
-    <link href="http://upload.love/2021/07/12/upload-s-%E5%B0%8F%E7%A7%98%E5%AF%86/"/>
-    <id>http://upload.love/2021/07/12/upload-s-%E5%B0%8F%E7%A7%98%E5%AF%86/</id>
-    <published>2021-07-12T14:19:56.000Z</published>
-    <updated>2021-07-13T13:50:30.409Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">我这个怪人！好怪啊！！！</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">我以前总是想的很多！但慢慢我发现！把握好现在才行！</span><br><span class="line">越想变强，反而越变不强，慢慢的。😀</span><br><span class="line">就发现自己的目标变了好多！人生嘛！尤其是男生！自己最想要的只有自己知道。</span><br><span class="line">我呢？就当遇见那个女孩后！</span><br><span class="line">我喜欢上这个女孩子！那种感觉我也不知道，</span><br><span class="line">怎么说呢！自己变了！变得会照顾人了！ 我以前可是可是笨蛋冷血upload!</span><br><span class="line">妈妈咪的！</span><br><span class="line">怎么就慢慢变变变热了！  说暖还不合适！必进再变也不是暖男！😁</span><br><span class="line">啦啦啦啦！</span><br><span class="line">不知道为什么就是有她在身边的时候，就好开心！</span><br><span class="line">无论干什么，做什么，有她陪着就是挺开心的！</span><br><span class="line">当然，学习可不能拉下，你你你你你是要做好榜样的！</span><br><span class="line">女孩可不会喜欢比自己差劲的男生！</span><br><span class="line">我真的想天天陪着那个小可爱！😁</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">当然，自己可不能变弱了！</span><br><span class="line">因为喜欢她是要对人家负责的！</span><br><span class="line">那就对自己狠点吧！ upload!</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">暑假1</span><br><span class="line">暑假2</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">Welcome to my blog 😁😁😁😁</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>暑假</title>
-    <link href="http://upload.love/2021/07/12/%E6%9A%91%E5%81%87/"/>
-    <id>http://upload.love/2021/07/12/%E6%9A%91%E5%81%87/</id>
-    <published>2021-07-12T14:16:45.000Z</published>
-    <updated>2021-07-14T04:20:01.647Z</updated>
-    
-    <content type="html"><![CDATA[<p>一天不学习，自己知道；两天不学习，朋友知道；三天不学习，老师知道；一周不学习，考试知道</p><p>看大佬的格言！ 冲压！！！！！！😁😁😁😁😁</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">今天开个头啥也没干 </span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">那就定个目标！ 我的方向就行 php和java代码审计！ 学学！</span><br><span class="line">有目标了！ 就学吧 ！冲！！！！！ 😁</span><br></pre></td></tr></table></figure>]]></content>
     
     
     <summary type="html">Welcome to my blog 😁😁😁😁</summary>
